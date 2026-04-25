@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Show Tracker</title>
+    <style>
+       :root {
+            /* Основная палитра */
+            --bg: #121212;           /* Очень темный серый (основной фон страницы) */
+            --card-bg: #1e1e1e;      /* Темно-серый (фон карточек и панелей) */
+            --text: #e0e0e0;         /* Светло-серый (основной цвет текста) */
+            --accent: #ff9800;       /* Ярко-оранжевый (акценты: кнопки, важные заголовки) */
+            --watched: #fb8c00;      /* Насыщенный оранжевый (статус просмотренных серий) */
+            --border: #333;          /* Графитовый (границы элементов и разделители) */
+            --progress-bg: #333;     /* Темно-графитовый (фон полоски прогресса) */
+
+            /* Дополнительные цвета для элементов */
+            --header-bg: #252525;    /* Фон заголовка карточки */
+            --header-hover: #2d2d2d; /* Фон заголовка при наведении */
+            --badge-bg: #333;        /* Фон плашки с прогрессом */
+            --episode-bg: #2a2a2a;   /* Фон квадратика серии */
+            --btn-add: #2e7d32;      /* Зеленый для кнопки добавления */
+            --btn-delete: #cf6679;   /* Розово-красный для удаления */
+            --text-dark: #000000;    /* Темный текст для контрастных кнопок */
+        }
+
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent);
+        }
+
+        .season-percent-text { 
+			font-size: 0.8em; opacity: 0.8; 
+		}
+
+        .controls {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            border: 1px solid var(--border);
+        }
+
+        .series-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .series-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: var(--header-bg);
+        }
+
+        .series-header:hover {
+            background: var(--header-hover);
+        }
+
+        .series-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .series-progress-badge {
+            font-size: 0.85em;
+            background: var(--badge-bg);
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: var(--watched);
+        }
+
+        .series-content {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .series-card.open .series-content {
+            display: block;
+        }
+
+        .season-block {
+            margin-bottom: 20px;
+        }
+
+        .season-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 8px;
+        }
+
+        .season-title {
+            font-size: 0.9em;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .season-progress-container {
+            height: 4px;
+            background: var(--progress-bg);
+            width: 100%;
+            border-radius: 2px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .season-progress-bar {
+            height: 100%;
+            background: var(--watched);
+            transition: width 0.3s ease;
+        }
+
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 8px;
+        }
+
+        .episode {
+            border: 1px solid var(--border);
+            padding: 10px 0;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.2s;
+            user-select: none;
+            background: var(--episode-bg);
+        }
+
+        .episode:hover {
+            border-color: var(--accent);
+        }
+
+        .episode.watched {
+            background: var(--watched);
+            color: var(--text-dark);
+            border-color: var(--watched);
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-save {
+            background: var(--accent);
+            color: var(--text-dark);
+        }
+
+        .btn-add {
+            background: var(--btn-add); 
+            color: white;
+        }
+
+        .btn-delete {
+            background: transparent;
+            color: var(--btn-delete);
+            border: 1px solid var(--btn-delete);
+            padding: 5px 10px;
+        }
+
+        input[type="file"] {
+            color: var(--text);
+        }
+
+        .arrow {
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .open .arrow {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎬 TV Show Tracker</h1>
+
+    <div class="controls">
+        <input type="file" id="fileInput" accept=".json">
+        <button class="btn btn-add" onclick="addSeries()">+ Добавить сериал</button>
+        <button class="btn btn-save" onclick="saveJSON()">💾 Сохранить JSON</button>
+    </div>
+
+    <div id="seriesList"></div>
+
+    <script>
+        let data = [];
+
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    data = JSON.parse(event.target.result);
+                    render();
+                } catch (e) { alert("Ошибка в файле JSON"); }
+            };
+            reader.readAsText(e.target.files[0]);
+        });
+
+        function addSeries() {
+            const title = prompt("Название сериала:");
+            if (!title) return;
+            const seasonsCount = parseInt(prompt("Сколько сезонов?", "1"));
+            if (isNaN(seasonsCount)) return;
+
+            let seasons = [];
+            for (let i = 1; i <= seasonsCount; i++) {
+                const epCount = parseInt(prompt(`Количество серий в ${i} сезоне:`, "10"));
+                seasons.push({
+                    number: i,
+                    episodes: new Array(epCount || 0).fill(false)
+                });
+            }
+
+            data.push({ title, seasons, isOpen: false });
+            render();
+        }
+
+        function toggleEpisode(sIdx, seaIdx, epIdx) {
+            const episodes = data[sIdx].seasons[seaIdx].episodes;
+            const currentState = episodes[epIdx];
+
+            if (!currentState) {
+                for (let i = 0; i <= epIdx; i++) {
+                    episodes[i] = true;
+                }
+            } else {
+                episodes[epIdx] = false;
+            }
+
+            render();
+        }
+
+
+        function toggleCard(idx) {
+            data[idx].isOpen = !data[idx].isOpen;
+            render();
+        }
+
+        function deleteSeries(e, idx) {
+            e.stopPropagation();
+            if (confirm('Удалить этот сериал?')) {
+                data.splice(idx, 1);
+                render();
+            }
+        }
+
+        function render() {
+            const container = document.getElementById('seriesList');
+            container.innerHTML = '';
+
+            data.forEach((series, sIdx) => {
+                let totalEpisodes = 0;
+                let watchedEpisodes = 0;
+
+                let seasonsHtml = '';
+                series.seasons.forEach((season, seaIdx) => {
+                    const seasonTotal = season.episodes.length;
+                    const seasonWatched = season.episodes.filter(ep => ep).length;
+                    const seasonPercent = seasonTotal > 0 ? Math.round((seasonWatched / seasonTotal) * 100) : 0;
+
+                    totalEpisodes += seasonTotal;
+                    watchedEpisodes += seasonWatched;
+
+                    let episodesHtml = season.episodes.map((watched, epIdx) => `
+                        <div class="episode ${watched ? 'watched' : ''}" 
+                             onclick="event.stopPropagation(); toggleEpisode(${sIdx}, ${seaIdx}, ${epIdx})">
+                            ${epIdx + 1}
+                        </div>`).join('');
+
+                    seasonsHtml += `
+                        <div class="season-block">
+                            <div class="season-header">
+                                <div class="season-title">Сезон ${season.number}</div>
+                                <div class="season-percent-text">${seasonPercent}%</div>
+                            </div>
+                            <div class="season-progress-container">
+                                <div class="season-progress-bar" style="width: ${seasonPercent}%"></div>
+                            </div>
+                            <div class="episodes-grid">${episodesHtml}</div>
+                        </div>`;
+                });
+
+                const totalPercent = totalEpisodes > 0 ? Math.round((watchedEpisodes / totalEpisodes) * 100) : 0;
+
+                const card = document.createElement('div');
+                card.className = `series-card ${series.isOpen ? 'open' : ''}`;
+                card.innerHTML = `
+                    <div class="series-header" onclick="toggleCard(${sIdx})">
+                        <div class="series-info">
+                            <span class="arrow">▼</span>
+                            <strong>${series.title}</strong>
+                            <span class="series-progress-badge">${totalPercent}% (${watchedEpisodes}/${totalEpisodes})</span>
+                        </div>
+                        <button class="btn-delete" onclick="deleteSeries(event, ${sIdx})">Удалить</button>
+                    </div>
+                    <div class="series-content">${seasonsHtml}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function saveJSON() {
+            if (data.length === 0) return alert("Нечего сохранять");
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'series_progress.json';
+            a.click();
+        }
+    </script>
+</body>
+</html>
