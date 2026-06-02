@@ -22,10 +22,10 @@
             --badge-bg: #333;        /* Фон плашки с прогрессом */
             --episode-bg: #2a2a2a;   /* Фон квадратика серии */
             --btn-add: #2e7d32;      /* Зеленый для кнопки добавления */
+            --btn-edit: #2196f3;     /* Синий цвет для редактирования */
             --btn-delete: #cf6679;   /* Розово-красный для удаления */
             --text-dark: #000000;    /* Темный текст для контрастных кнопок */
         }
-
 
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -172,14 +172,31 @@
             transition: 0.3s;
         }
 
-        .btn-save {
+		.btn-save {
             background: var(--accent);
             color: var(--text-dark);
         }
-
+	   
         .btn-add {
             background: var(--btn-add); 
             color: white;
+        }
+
+        .btn-edit {
+            background: transparent;
+            color: var(--btn-edit);
+            border: 1px solid var(--btn-edit);
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-right: 5px;
+        }
+
+        .btn-edit:hover {
+            background: var(--btn-edit);
+            color: var(--text-dark);
         }
 
         .btn-delete {
@@ -187,6 +204,15 @@
             color: var(--btn-delete);
             border: 1px solid var(--btn-delete);
             padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-delete:hover {
+            background: var(--btn-delete);
+            color: var(--text-dark);
         }
 
         input[type="file"] {
@@ -219,6 +245,16 @@
     <script>
         let data = [];
 
+        // Проверяем наличие данных в памяти браузера при запуске
+        const savedData = localStorage.getItem('tvShowData');
+        if (savedData) {
+            try {
+                data = JSON.parse(savedData);
+            } catch (e) {
+                console.error("Ошибка чтения данных из localStorage", e);
+            }
+        }
+
         document.getElementById('fileInput').addEventListener('change', function (e) {
             const reader = new FileReader();
             reader.onload = (event) => {
@@ -249,6 +285,46 @@
             render();
         }
 
+        // --- НОВОЕ: Функция редактирования названия и сезонов ---
+        function editSeries(e, idx) {
+            e.stopPropagation(); // Чтобы карточка не сворачивалась/разворачивалась при клике на кнопку
+            const series = data[idx];
+            
+            // 1. Изменение названия
+            const newTitle = prompt("Изменить название сериала:", series.title);
+            if (newTitle !== null && newTitle.trim() !== "") {
+                series.title = newTitle.trim();
+            }
+
+            // 2. Изменение количества сезонов
+            const currentSeasonsCount = series.seasons.length;
+            const newSeasonsCountInput = prompt(`Текущее количество сезонов: ${currentSeasonsCount}.\nВведите новое общее количество сезонов:`, currentSeasonsCount);
+            
+            if (newSeasonsCountInput !== null) {
+                const newSeasonsCount = parseInt(newSeasonsCountInput);
+                
+                if (!isNaN(newSeasonsCount) && newSeasonsCount >= 0) {
+                    if (newSeasonsCount > currentSeasonsCount) {
+                        // Если сезонов стало больше — добавляем новые
+                        for (let i = currentSeasonsCount + 1; i <= newSeasonsCount; i++) {
+                            const epCount = parseInt(prompt(`Количество серий в новом ${i} сезоне:`, "10"));
+                            series.seasons.push({
+                                number: i,
+                                episodes: new Array(epCount || 0).fill(false)
+                            });
+                        }
+                    } else if (newSeasonsCount < currentSeasonsCount) {
+                        // Если сезонов стало меньше — удаляем с подтверждением
+                        if (confirm(`Вы собираетесь уменьшить количество сезонов с ${currentSeasonsCount} до ${newSeasonsCount}.\nПоследние сезоны и их прогресс будут удалены! Продолжить?`)) {
+                            series.seasons.splice(newSeasonsCount);
+                        }
+                    }
+                }
+            }
+            
+            render();
+        }
+
         function toggleEpisode(sIdx, seaIdx, epIdx) {
             const episodes = data[sIdx].seasons[seaIdx].episodes;
             const currentState = episodes[epIdx];
@@ -263,7 +339,6 @@
 
             render();
         }
-
 
         function toggleCard(idx) {
             data[idx].isOpen = !data[idx].isOpen;
@@ -325,12 +400,18 @@
                             <strong>${series.title}</strong>
                             <span class="series-progress-badge">${totalPercent}% (${watchedEpisodes}/${totalEpisodes})</span>
                         </div>
-                        <button class="btn-delete" onclick="deleteSeries(event, ${sIdx})">Удалить</button>
+                        <div>
+                            <button class="btn-edit" onclick="editSeries(event, ${sIdx})">Редактировать</button>
+                            <button class="btn-delete" onclick="deleteSeries(event, ${sIdx})">Удалить</button>
+                        </div>
                     </div>
                     <div class="series-content">${seasonsHtml}</div>
                 `;
                 container.appendChild(card);
             });
+
+            // Сохраняем в localStorage при каждом обновлении интерфейса
+            localStorage.setItem('tvShowData', JSON.stringify(data));
         }
 
         function saveJSON() {
@@ -341,6 +422,10 @@
             a.download = 'series_progress.json';
             a.click();
         }
+
+        // Отрисовываем интерфейс сразу при запуске скрипта
+        render();
+
     </script>
 </body>
 </html>
