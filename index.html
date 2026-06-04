@@ -341,6 +341,37 @@
             resize: vertical;
         }
 
+        /* НОВОЕ: Стили для оранжевой кнопки прокрутки страницы наверх */
+        .btn-scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: var(--text-dark);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s, transform 0.2s, visibility 0.3s;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .btn-scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .btn-scroll-top:hover {
+            background: var(--watched);
+            transform: scale(1.1);
+        }
+
         /* =========================================================
            АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (СМАРТФОНОВ)
            ========================================================= */
@@ -404,13 +435,22 @@
                 padding: 6px;
                 font-size: 0.9em;
             }
+
+            /* НОВОЕ: Оптимизация размера кнопки наверх для смартфонов */
+            .btn-scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.2.3</span></h1>
+    <h1>🎬 TV Show Tracker <span class="app-version">v1.2.4</span></h1>
 
     <div class="controls">
         <button class="btn btn-info" onclick="showInstructions()">ℹ️ Инструкция</button>
@@ -476,6 +516,8 @@
             </div>
         </div>
     </div>
+
+    <button id="scrollToTopBtn" class="btn-scroll-top" onclick="scrollToTop()">▲</button>
 
     <script>
         let data = [];
@@ -822,6 +864,24 @@
             a.href = URL.createObjectURL(blob);
             a.download = 'series_progress.json';
             a.click();
+        }
+
+        // НОВОЕ: Логика отслеживания прокрутки страницы для отображения/скрытия кнопки "Наверх"
+        const scrollTopBtn = document.getElementById('scrollToTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        // НОВОЕ: Функция для плавной прокрутки страницы к самому верху
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
 
         // Отрисовываем интерфейс сразу при запуске скрипта
