@@ -345,16 +345,37 @@
 
 <body>
 
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.2.0</span></h1>
+    <h1>🎬 TV Show Tracker <span class="app-version">v1.2.1</span></h1>
 
     <div class="controls">
         <button class="btn btn-info" onclick="showInstructions()">ℹ️ Инструкция</button>
-        <input type="file" id="fileInput" accept=".json">
+        <button class="btn btn-save" onclick="showDataModal()">💾 Управление данными (JSON)</button>
         <button class="btn btn-add" onclick="addSeries()">+ Добавить сериал</button>
-        <button class="btn btn-save" onclick="saveJSON()">💾 Сохранить JSON</button>
     </div>
 
     <div id="seriesList"></div>
+
+    <div id="dataModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>💾 Данные (Резервная копия)</span>
+                <span class="close-modal" onclick="closeModal('dataModal')">✖</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--accent);">Загрузить из файла</h4>
+                    <p style="font-size: 0.9em; margin-bottom: 10px; color: #aaa;">Выберите ранее сохраненный файл .json, чтобы восстановить список сериалов.</p>
+                    <input type="file" id="fileInput" accept=".json" style="color: var(--text); width: 100%;">
+                </div>
+                <hr style="border: none; border-top: 1px solid var(--border); width: 100%; margin: 0;">
+                <div>
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--accent);">Сохранить на устройство</h4>
+                    <p style="font-size: 0.9em; margin-bottom: 10px; color: #aaa;">Скачайте текущий прогресс в виде файла .json на ваш компьютер или телефон.</p>
+                    <button class="btn btn-save" style="width: 100%;" onclick="saveAndCloseModal()">💾 Скачать JSON файл</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="instructionModal" class="modal-overlay">
         <div class="modal-content">
@@ -370,7 +391,7 @@
                     <li><b>Редактирование:</b> В окне редактирования (кнопка "Редактировать") используется удобная таблица, где можно быстро менять число серий в сезоне или отмечать весь сезон галочкой как полностью просмотренный.</li>
                     <li><b>Прогресс:</b> Кликайте на отдельные квадратики-серии, чтобы отметить их как просмотренные.</li>
                     <li><b>Сортировка:</b> Зажмите левую кнопку мыши на карточке сериала и перетащите её вверх или вниз (появится пунктирная рамка-подсветка зоны).</li>
-                    <li><b>Сохранение:</b> Ваши данные сохраняются в браузере автоматически. Кнопка "💾 Сохранить JSON" нужна для создания файла-резервной копии на ваш компьютер.</li>
+                    <li><b>Сохранение:</b> Ваши данные сохраняются в браузере автоматически. Окно "Управление данными" нужно для создания файла-резервной копии на ваш компьютер.</li>
                 </ul>
             </div>
             <button class="btn btn-save" style="margin-top:15px; width:100%" onclick="closeModal('instructionModal')">Понятно</button>
@@ -412,9 +433,11 @@
                 try {
                     data = JSON.parse(event.target.result);
                     render();
+                    closeModal('dataModal'); // НОВОЕ: Закрываем модальное окно после загрузки
                 } catch (e) { alert("Ошибка в файле JSON"); }
             };
             reader.readAsText(e.target.files[0]);
+            e.target.value = ''; // НОВОЕ: Очищаем input для возможности повторной загрузки
         });
 
         // НОВОЕ: Вспомогательная функция для безопасности ввода текста
@@ -429,6 +452,13 @@
         }
         function showInstructions() {
             document.getElementById('instructionModal').classList.add('active');
+        }
+        function showDataModal() {
+            document.getElementById('dataModal').classList.add('active');
+        }
+        function saveAndCloseModal() {
+            saveJSON();
+            closeModal('dataModal');
         }
 
         function addSeries() {
