@@ -26,6 +26,9 @@
             --btn-link: #9c27b0;     /* Фиолетовый цвет для кнопки-ссылки */
             --btn-delete: #cf6679;   /* Розово-красный для удаления */
             --text-dark: #000000;    /* Темный текст для контрастных кнопок */
+            
+            /* НОВОЕ: цвета для новых кнопок */
+            --btn-info: #0288d1;     /* Синий для кнопки инструкции */
         }
 
         body {
@@ -65,7 +68,7 @@
             border: 1px solid var(--border);
             overflow: hidden;
             cursor: grab;            /* Курсор руки для перетаскивания */
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, border-color 0.2s; /* НОВОЕ: Плавный переход границы */
         }
 
         .series-card:active {
@@ -75,6 +78,12 @@
         .series-card.dragging {
             opacity: 0.5;            /* Полупрозрачность для перетаскиваемого элемента */
             border: 1px dashed var(--accent);
+        }
+
+        /* НОВОЕ: Подсветка зоны, куда приземлится сериал */
+        .series-card.drag-over {
+            border: 2px dashed var(--accent);
+            background: #232323; 
         }
 
         .series-header {
@@ -195,6 +204,12 @@
             background: var(--btn-add); 
             color: white;
         }
+        
+        /* НОВОЕ: Стиль для кнопки инструкции */
+        .btn-info {
+            background: var(--btn-info);
+            color: white;
+        }
 
         .btn-action {
             background: transparent;
@@ -254,24 +269,86 @@
         }
 		
 		.app-version {
-    font-size: 0.35em;         /* Делаем текст маленьким */
-    color: #888;               /* Серый неброский цвет */
-    font-weight: normal;       /* Убираем жирность */
-    vertical-align: middle;    /* Выравниваем по центру строки */
-    margin-left: 10px;         /* Отступ от названия */
-    background: #252525;       /* Фон как у заголовков карточек */
-    padding: 2px 8px;          /* Внутренние отступы */
-    border-radius: 4px;        /* Скругление углов */
-    border: 1px solid #333;    /* Тонкая граница */
-}
+            font-size: 0.35em;         /* Делаем текст маленьким */
+            color: #888;               /* Серый неброский цвет */
+            font-weight: normal;       /* Убираем жирность */
+            vertical-align: middle;    /* Выравниваем по центру строки */
+            margin-left: 10px;         /* Отступ от названия */
+            background: #252525;       /* Фон как у заголовков карточек */
+            padding: 2px 8px;          /* Внутренние отступы */
+            border-radius: 4px;        /* Скругление углов */
+            border: 1px solid #333;    /* Тонкая граница */
+        }
+
+        /* НОВОЕ: Стили для модальных окон (таблица редактирования и инструкция) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid var(--border);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            font-size: 1.2em;
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .close-modal {
+            cursor: pointer;
+            color: var(--text);
+        }
+        .edit-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .edit-table th, .edit-table td {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: left;
+        }
+        .edit-table th {
+            background: var(--header-bg);
+            color: var(--accent);
+        }
+        .edit-input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 5px;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea.edit-input {
+            resize: vertical;
+        }
     </style>
 </head>
 
 <body>
 
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.1.0</span></h1>
+    <h1>🎬 TV Show Tracker <span class="app-version">v1.2.0</span></h1>
 
     <div class="controls">
+        <button class="btn btn-info" onclick="showInstructions()">ℹ️ Инструкция</button>
         <input type="file" id="fileInput" accept=".json">
         <button class="btn btn-add" onclick="addSeries()">+ Добавить сериал</button>
         <button class="btn btn-save" onclick="saveJSON()">💾 Сохранить JSON</button>
@@ -279,11 +356,47 @@
 
     <div id="seriesList"></div>
 
+    <div id="instructionModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>📖 Инструкция по использованию</span>
+                <span class="close-modal" onclick="closeModal('instructionModal')">✖</span>
+            </div>
+            <div>
+                <p>Добро пожаловать в TV Show Tracker! Здесь вы можете удобно отслеживать свой прогресс просмотра.</p>
+                <ul>
+                    <li><b>Добавление:</b> Нажмите "+ Добавить сериал", чтобы создать новую карточку. Сразу откроется окно детальной настройки.</li>
+                    <li><b>Несколько сайтов:</b> При редактировании вы можете вставить несколько ссылок для просмотра, по одной на строке.</li>
+                    <li><b>Редактирование:</b> В окне редактирования (кнопка "Редактировать") используется удобная таблица, где можно быстро менять число серий в сезоне или отмечать весь сезон галочкой как полностью просмотренный.</li>
+                    <li><b>Прогресс:</b> Кликайте на отдельные квадратики-серии, чтобы отметить их как просмотренные.</li>
+                    <li><b>Сортировка:</b> Зажмите левую кнопку мыши на карточке сериала и перетащите её вверх или вниз (появится пунктирная рамка-подсветка зоны).</li>
+                    <li><b>Сохранение:</b> Ваши данные сохраняются в браузере автоматически. Кнопка "💾 Сохранить JSON" нужна для создания файла-резервной копии на ваш компьютер.</li>
+                </ul>
+            </div>
+            <button class="btn btn-save" style="margin-top:15px; width:100%" onclick="closeModal('instructionModal')">Понятно</button>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>✏️ Настройка сериала</span>
+                <span class="close-modal" onclick="closeModal('editModal')">✖</span>
+            </div>
+            <div id="editModalBody"></div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn btn-save" onclick="saveEdit()">Сохранить изменения</button>
+                <button class="btn btn-delete" onclick="closeModal('editModal')">Отмена</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let data = [];
         let draggedItemIndex = null; // Переменная для хранения индекса перетаскиваемого сериала
+        let currentEditingIndex = null; // НОВОЕ: индекс текущего редактируемого сериала для модального окна
 
-        // Проверяем наличие данных в памяти браузера при запуске[cite: 1]
+        // Проверяем наличие данных в памяти браузера при запуске
         const savedData = localStorage.getItem('tvShowData');
         if (savedData) {
             try {
@@ -304,76 +417,167 @@
             reader.readAsText(e.target.files[0]);
         });
 
-        function addSeries() {
-            const title = prompt("Название сериала:");
-            if (!title) return;
-            
-            // Запрос ссылки на сайт при добавлении сериала[cite: 1]
-            const link = prompt("Ссылка на сайт с сериалом (необязательно):", "");
-            
-            const seasonsCount = parseInt(prompt("Сколько сезонов?", "1"));
-            if (isNaN(seasonsCount)) return;
-
-            let seasons = [];
-            for (let i = 1; i <= seasonsCount; i++) {
-                const epCount = parseInt(prompt(`Количество серий в ${i} сезоне:`, "10"));
-                seasons.push({
-                    number: i,
-                    episodes: new Array(epCount || 0).fill(false)
-                });
-            }
-
-            data.push({ title, link: link || "", seasons, isOpen: false });
-            render();
+        // НОВОЕ: Вспомогательная функция для безопасности ввода текста
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
         }
 
-        // --- Функция редактирования названия, ссылки и сезонов ---[cite: 1]
+        // НОВОЕ: Функции управления модальными окнами
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        function showInstructions() {
+            document.getElementById('instructionModal').classList.add('active');
+        }
+
+        function addSeries() {
+            // Запрос ссылки на сайт при добавлении сериала
+            // НОВОЕ: Теперь мы сразу создаем пустую карточку и открываем таблицу для заполнения с галочками
+            data.push({ 
+                title: "Новое шоу", 
+                links: [], 
+                seasons: [{ number: 1, episodes: new Array(10).fill(false) }], 
+                isOpen: true 
+            });
+            render();
+            // Сразу открываем модальное окно редактирования для свежесозданного элемента
+            editSeries({ stopPropagation: () => {} }, data.length - 1);
+        }
+
+        // --- Функция редактирования названия, ссылки и сезонов ---
+        // НОВОЕ: Переделано под использование таблицы заполнения внутри модального окна
         function editSeries(e, idx) {
-            e.stopPropagation(); // Чтобы карточка не сворачивалась/разворачивалась при клике на кнопку[cite: 1]
+            if (e && e.stopPropagation) e.stopPropagation(); // Чтобы карточка не сворачивалась/разворачивалась при клике на кнопку
+            currentEditingIndex = idx;
             const series = data[idx];
             
-            // 1. Изменение названия[cite: 1]
-            const newTitle = prompt("Изменить название сериала:", series.title);
-            if (newTitle !== null && newTitle.trim() !== "") {
-                series.title = newTitle.trim();
-            }
+            // Миграция старого свойства link в массив links для совместимости
+            let links = series.links || (series.link ? [series.link] : []);
 
-            // Изменение ссылки на сайт[cite: 1]
-            const newLink = prompt("Изменить ссылку на сайт:", series.link || "");
-            if (newLink !== null) {
-                series.link = newLink.trim();
-            }
-
-            // 2. Изменение количества сезонов[cite: 1]
-            const currentSeasonsCount = series.seasons.length;
-            const newSeasonsCountInput = prompt(`Текущее количество сезонов: ${currentSeasonsCount}.\nВведите новое общее количество сезонов:`, currentSeasonsCount);
+            let html = `
+                <table class="edit-table">
+                    <tr>
+                        <td width="30%"><strong>Название</strong></td>
+                        <td><input type="text" id="editTitle" class="edit-input" value="${escapeHtml(series.title)}"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Сайты</strong><br><small>(каждый с новой строки)</small></td>
+                        <td><textarea id="editLinks" class="edit-input" rows="3" placeholder="https://site1.com\nhttps://site2.com">${links.join('\n')}</textarea></td>
+                    </tr>
+                </table>
+                <h4 style="margin-bottom: 10px; color: var(--accent);">Сезоны</h4>
+                <table class="edit-table" id="editSeasonsTable">
+                    <thead>
+                        <tr>
+                            <th>Сезон</th>
+                            <th>Кол-во серий</th>
+                            <th style="text-align: center;">Всё просмотрено <br><small>(галочка)</small></th>
+                            <th style="text-align: center;">Удалить</th>
+                        </tr>
+                    </thead>
+                    <tbody id="editSeasonsBody">
+            `;
             
-            if (newSeasonsCountInput !== null) {
-                const newSeasonsCount = parseInt(newSeasonsCountInput);
+            series.seasons.forEach((season, sIdx) => {
+                const allWatched = season.episodes.length > 0 && season.episodes.every(ep => ep === true);
+                html += `
+                    <tr data-season-idx="${sIdx}">
+                        <td>${season.number}</td>
+                        <td><input type="number" class="edit-input season-count" value="${season.episodes.length}" min="1"></td>
+                        <td style="text-align: center;"><input type="checkbox" class="season-watched-cb" ${allWatched ? 'checked' : ''}></td>
+                        <td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+                <button class="btn btn-add" style="padding: 5px 10px; font-size: 0.9em;" onclick="addSeasonRow()">+ Добавить сезон</button>
+            `;
+
+            document.getElementById('editModalBody').innerHTML = html;
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        // НОВОЕ: Вспомогательные функции для таблицы редактирования сезонов
+        function addSeasonRow() {
+            const tbody = document.getElementById('editSeasonsBody');
+            const newSeasonNum = tbody.children.length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${newSeasonNum}</td>
+                <td><input type="number" class="edit-input season-count" value="10" min="1"></td>
+                <td style="text-align: center;"><input type="checkbox" class="season-watched-cb"></td>
+                <td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td>
+            `;
+            tbody.appendChild(tr);
+            updateSeasonNumbers();
+        }
+
+        function removeSeasonRow(btn) {
+            btn.closest('tr').remove();
+            updateSeasonNumbers();
+        }
+
+        function updateSeasonNumbers() {
+            const rows = document.getElementById('editSeasonsBody').querySelectorAll('tr');
+            rows.forEach((row, idx) => {
+                row.cells[0].innerText = idx + 1;
+            });
+        }
+
+        // НОВОЕ: Функция сохранения из модального окна, заменяющая старую цепочку prompt
+        function saveEdit() {
+            const series = data[currentEditingIndex];
+            
+            // 1. Изменение названия
+            series.title = document.getElementById('editTitle').value.trim() || "Без названия";
+            
+            // Изменение ссылки на сайт
+            const linksText = document.getElementById('editLinks').value;
+            series.links = linksText.split('\n').map(l => l.trim()).filter(l => l !== '');
+            delete series.link; // Очищаем старое поле
+
+            // 2. Изменение количества сезонов
+            const rows = document.getElementById('editSeasonsBody').querySelectorAll('tr');
+            const newSeasons = [];
+            
+            rows.forEach((row, idx) => {
+                const countInput = parseInt(row.querySelector('.season-count').value) || 10;
+                const isWatched = row.querySelector('.season-watched-cb').checked;
                 
-                if (!isNaN(newSeasonsCount) && newSeasonsCount >= 0) {
-                    if (newSeasonsCount > currentSeasonsCount) {
-                        // Если сезонов стало больше — добавляем новые[cite: 1]
-                        for (let i = currentSeasonsCount + 1; i <= newSeasonsCount; i++) {
-                            const epCount = parseInt(prompt(`Количество серий в новом ${i} сезоне:`, "10"));
-                            series.seasons.push({
-                                number: i,
-                                episodes: new Array(epCount || 0).fill(false)
-                            });
-                        }
-                    } else if (newSeasonsCount < currentSeasonsCount) {
-                        // Если сезонов стало меньше — удаляем с подтверждением[cite: 1]
-                        if (confirm(`Вы собираетесь уменьшить количество сезонов с ${currentSeasonsCount} до ${newSeasonsCount}.\nПоследние сезоны и их прогресс будут удалены! Продолжить?`)) {
-                            series.seasons.splice(newSeasonsCount);
-                        }
+                let oldEpisodes = [];
+                // Если сезонов стало больше — добавляем новые
+                // Если сезонов стало меньше — удаляем с подтверждением
+                // Вся логика теперь обрабатывается извлечением строк из таблицы:
+                if (series.seasons[idx]) {
+                    oldEpisodes = series.seasons[idx].episodes;
+                }
+
+                let newEpisodes = new Array(countInput).fill(false);
+                for (let i = 0; i < countInput; i++) {
+                    if (isWatched) {
+                        newEpisodes[i] = true; // Применили галочку ко всему сезону
+                    } else if (i < oldEpisodes.length) {
+                        newEpisodes[i] = oldEpisodes[i]; // Восстановили старый прогресс
                     }
                 }
-            }
+
+                newSeasons.push({
+                    number: idx + 1,
+                    episodes: newEpisodes
+                });
+            });
+
+            series.seasons = newSeasons;
             
+            closeModal('editModal');
             render();
         }
 
-        // --- НОВОЕ: Функции для поддержки Drag-and-Drop ---[cite: 1]
+        // --- НОВОЕ: Функции для поддержки Drag-and-Drop ---
         function onDragStart(idx) {
             draggedItemIndex = idx;
             // Небольшая задержка, чтобы карточка визуально «оторвалась», но не исчезла сразу под курсором
@@ -382,14 +586,23 @@
             }, 0);
         }
 
-        function onDragOver(e) {
+        function onDragOver(e, element, idx) {
             e.preventDefault(); // Разрешаем сброс элементов в эту зону
+            // НОВОЕ: Добавляем подсветку зоны приземления
+            if (draggedItemIndex !== idx) {
+                element.classList.add('drag-over');
+            }
+        }
+
+        // НОВОЕ: Функция очистки подсветки, когда мышка покидает карточку
+        function onDragLeave(e, element) {
+            element.classList.remove('drag-over');
         }
 
         function onDrop(idx) {
             if (draggedItemIndex === null || draggedItemIndex === idx) return;
             
-            // Вырезаем перетаскиваемый элемент и вставляем его на новую позицию[cite: 1]
+            // Вырезаем перетаскиваемый элемент и вставляем его на новую позицию
             const movedItem = data.splice(draggedItemIndex, 1)[0];
             data.splice(idx, 0, movedItem);
             
@@ -466,22 +679,34 @@
                 const card = document.createElement('div');
                 card.className = `series-card ${series.isOpen ? 'open' : ''}`;
                 
-                // Навешиваем события перетаскивания на карточку[cite: 1]
+                // Навешиваем события перетаскивания на карточку
                 card.draggable = true;
                 card.ondragstart = () => onDragStart(sIdx);
-                card.ondragover = (e) => onDragOver(e);
+                card.ondragover = (e) => onDragOver(e, card, sIdx); // Обновлено для подсветки
+                card.ondragleave = (e) => onDragLeave(e, card);    // Обновлено для подсветки
                 card.ondrop = () => onDrop(sIdx);
                 card.ondragend = () => render(); // Корректный сброс стилей dragging через полный рендер
+
+                // НОВОЕ: Генерация кнопок для нескольких ссылок
+                let linksHtml = '';
+                const currentLinks = series.links || (series.link ? [series.link] : []);
+                if (currentLinks.length > 0) {
+                    currentLinks.forEach((link, lIdx) => {
+                        if (link.trim()) {
+                            linksHtml += `<a href="${link}" target="_blank" class="btn-action btn-link" onclick="event.stopPropagation()">Сайт ${currentLinks.length > 1 ? lIdx + 1 : ''}</a>`;
+                        }
+                    });
+                }
 
                 card.innerHTML = `
                     <div class="series-header">
                         <div class="series-info" onclick="toggleCard(${sIdx})">
                             <span class="arrow">▼</span>
-                            <strong>${series.title}</strong>
+                            <strong>${escapeHtml(series.title)}</strong>
                             <span class="series-progress-badge">${totalPercent}% (${watchedEpisodes}/${totalEpisodes})</span>
                         </div>
                         <div class="series-actions">
-                            ${series.link ? `<a href="${series.link}" target="_blank" class="btn-action btn-link" onclick="event.stopPropagation()">Сайт</a>` : ''}
+                            ${linksHtml}
                             <button class="btn-action btn-edit" onclick="editSeries(event, ${sIdx})">Редактировать</button>
                             <button class="btn-action btn-delete" onclick="deleteSeries(event, ${sIdx})">Удалить</button>
                         </div>
@@ -491,7 +716,7 @@
                 container.appendChild(card);
             });
 
-            // Сохраняем в localStorage при каждом обновлении интерфейса[cite: 1]
+            // Сохраняем в localStorage при каждом обновлении интерфейса
             localStorage.setItem('tvShowData', JSON.stringify(data));
         }
 
@@ -504,7 +729,7 @@
             a.click();
         }
 
-        // Отрисовываем интерфейс сразу при запуске скрипта[cite: 1]
+        // Отрисовываем интерфейс сразу при запуске скрипта
         render();
 
     </script>
