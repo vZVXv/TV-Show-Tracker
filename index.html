@@ -391,7 +391,35 @@
             background: var(--watched);
             transform: scale(1.1);
         }
+/* НОВОЕ: Стили для свернутого блока просмотренных сезонов */
+        .watched-seasons-spoiler {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .watched-seasons-spoiler summary {
+            padding: 12px 15px;
+            cursor: pointer;
+            color: var(--watched);
+            font-weight: bold;
+            font-size: 0.9em;
+            outline: none;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.2);
+            transition: background 0.2s;
+        }
 
+        .watched-seasons-spoiler summary:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .watched-seasons-wrapper {
+            padding: 15px 15px 0 15px;
+            border-top: 1px solid var(--border);
+        }
         /* =========================================================
            АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (СМАРТФОНОВ)
            ========================================================= */
@@ -470,7 +498,7 @@
 
 <body>
 
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.2.5</span></h1>
+    <h1>🎬 TV Show Tracker <span class="app-version">v1.2.6</span></h1>
 
     <div class="controls">
         <button class="btn btn-info" onclick="showInstructions()">ℹ️ Инструкция</button>
@@ -795,7 +823,7 @@
             }
         }
 
-        function render() {
+function render() {
             const container = document.getElementById('seriesList');
             container.innerHTML = '';
 
@@ -803,7 +831,11 @@
                 let totalEpisodes = 0;
                 let watchedEpisodes = 0;
 
-                let seasonsHtml = '';
+                // Переменные для разделения сезонов
+                let activeSeasonsHtml = '';
+                let watchedSeasonsHtml = '';
+                let watchedCount = 0;
+
                 series.seasons.forEach((season, seaIdx) => {
                     const seasonTotal = season.episodes.length;
                     const seasonWatched = season.episodes.filter(ep => ep).length;
@@ -818,7 +850,7 @@
                             ${epIdx + 1}
                         </div>`).join('');
 
-                    seasonsHtml += `
+                    let seasonHtml = `
                         <div class="season-block">
                             <div class="season-header">
                                 <div class="season-title">Сезон ${season.number}</div>
@@ -829,7 +861,33 @@
                             </div>
                             <div class="episodes-grid">${episodesHtml}</div>
                         </div>`;
+
+                    // Проверяем, просмотрен ли сезон полностью
+                    if (seasonTotal > 0 && seasonWatched === seasonTotal) {
+                        watchedSeasonsHtml += seasonHtml;
+                        watchedCount++;
+                    } else {
+                        activeSeasonsHtml += seasonHtml;
+                    }
                 });
+
+                // Формируем итоговый контент сериала
+                let finalContentHtml = '';
+                
+                // Если есть полностью просмотренные сезоны, оборачиваем их в спойлер
+                if (watchedCount > 0) {
+                    finalContentHtml += `
+                        <details class="watched-seasons-spoiler">
+                            <summary>✅ Просмотренные сезоны (${watchedCount})</summary>
+                            <div class="watched-seasons-wrapper">
+                                ${watchedSeasonsHtml}
+                            </div>
+                        </details>
+                    `;
+                }
+                
+                // Добавляем активные сезоны ниже
+                finalContentHtml += activeSeasonsHtml;
 
                 const totalPercent = totalEpisodes > 0 ? Math.round((watchedEpisodes / totalEpisodes) * 100) : 0;
 
@@ -839,12 +897,12 @@
                 // Навешиваем события перетаскивания на карточку
                 card.draggable = true;
                 card.ondragstart = () => onDragStart(sIdx);
-                card.ondragover = (e) => onDragOver(e, card, sIdx); // Обновлено для подсветки
-                card.ondragleave = (e) => onDragLeave(e, card);    // Обновлено для подсветки
+                card.ondragover = (e) => onDragOver(e, card, sIdx); 
+                card.ondragleave = (e) => onDragLeave(e, card);    
                 card.ondrop = () => onDrop(sIdx);
-                card.ondragend = () => render(); // Корректный сброс стилей dragging через полный рендер
+                card.ondragend = () => render(); 
 
-                // НОВОЕ: Генерация кнопок для нескольких ссылок
+                // Генерация кнопок для нескольких ссылок
                 let linksHtml = '';
                 const currentLinks = series.links || (series.link ? [series.link] : []);
                 if (currentLinks.length > 0) {
@@ -868,7 +926,7 @@
                             <button class="btn-action btn-delete" onclick="deleteSeries(event, ${sIdx})">Удалить</button>
                         </div>
                     </div>
-                    <div class="series-content">${seasonsHtml}</div>
+                    <div class="series-content">${finalContentHtml}</div>
                 `;
                 container.appendChild(card);
             });
