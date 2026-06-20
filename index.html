@@ -1,509 +1,188 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TV Show Tracker</title>
-    <style>
+   <style>
        :root {
-            /* Основная палитра */
-            --bg: #121212;           /* Очень темный серый (основной фон страницы) */
-            --card-bg: #1e1e1e;      /* Темно-серый (фон карточек и панелей) */
-            --text: #e0e0e0;         /* Светло-серый (основной цвет текста) */
-            --accent: #ff9800;       /* Ярко-оранжевый (акценты: кнопки, важные заголовки) */
-            --watched: #fb8c00;      /* Насыщенный оранжевый (статус просмотренных серий) */
-            --border: #333;          /* Графитовый (границы элементов и разделители) */
-            --progress-bg: #333;     /* Темно-графитовый (фон полоски прогресса) */
+            --bg: #121212;          
+            --card-bg: #1e1e1e;      
+            --text: #e0e0e0;         
+            --accent: #ff9800;       
+            --watched: #fb8c00;      
+            --border: #333;          
+            --progress-bg: #333;     
 
-            /* Дополнительные цвета для элементов */
-            --header-bg: #252525;    /* Фон заголовка карточки */
-            --header-hover: #2d2d2d; /* Фон заголовка при наведении */
-            --badge-bg: #333;        /* Фон плашки с прогрессом */
-            --episode-bg: #2a2a2a;   /* Фон квадратика серии */
-            --btn-add: #2e7d32;      /* Зеленый для кнопки добавления */
-            --btn-edit: #2196f3;     /* Синий цвет для редактирования */
-            --btn-link: #9c27b0;     /* Фиолетовый цвет для кнопки-ссылки */
-            --btn-delete: #cf6679;   /* Розово-красный для удаления */
-            --text-dark: #000000;    /* Темный текст для контрастных кнопок */
-            
-            /* НОВОЕ: цвета для новых кнопок */
-            --btn-info: #0288d1;     /* Синий для кнопки инструкции */
+            --header-bg: #252525;    
+            --header-hover: #2d2d2d; 
+            --badge-bg: #333;        
+            --episode-bg: #2a2a2a;   
+            --btn-add: #2e7d32;      
+            --btn-edit: #2196f3;     
+            --btn-link: #9c27b0;     
+            --btn-delete: #ff3333;   
+            --text-dark: #000000;    
+            --btn-info: #0288d1;     
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
+        html {
+            background-color: #121212; 
         }
 
-        h1 {
-            text-align: center;
-            color: var(--accent);
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            color: var(--text); 
+            max-width: 900px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            position: relative;
+            z-index: 1;
         }
 
-        .season-percent-text { 
-			font-size: 0.8em; opacity: 0.8; 
-		}
-
-        .controls {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-            border: 1px solid var(--border);
-        }
-
-        .series-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            cursor: grab;            /* Курсор руки для перетаскивания */
-            transition: opacity 0.2s, border-color 0.2s; /* НОВОЕ: Плавный переход границы */
-        }
-
-        .series-card:active {
-            cursor: grabbing;        /* Курсор сжатой руки при перетаскивании */
-        }
-
-        .series-card.dragging {
-            opacity: 0.5;            /* Полупрозрачность для перетаскиваемого элемента */
-            border: 1px dashed var(--accent);
-        }
-
-        /* НОВОЕ: Подсветка зоны, куда приземлится сериал */
-        .series-card.drag-over {
-            border: 2px dashed var(--accent);
-            background: #232323; 
-        }
-
-        .series-header {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--header-bg);
-        }
-
-        .series-header:hover {
-            background: var(--header-hover);
-        }
-
-        .series-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;         /* Клик для раскрытия работает на блоке с информацией */
-            flex-grow: 1;
-        }
-
-        .series-progress-badge {
-            font-size: 0.85em;
-            background: var(--badge-bg);
-            padding: 4px 8px;
-            border-radius: 4px;
-            color: var(--watched);
-        }
-
-        .series-content {
-            display: none;
-            padding: 15px;
-            border-top: 1px solid var(--border);
-            cursor: default;         /* Сброс курсора перетаскивания внутри контента */
-            
-            /* НОВОЕ: Прокрутка для большого списка сезонов */
-            max-height: 500px;       /* Ограничиваем максимальную высоту блока */
-            overflow-y: auto;        /* Добавляем вертикальную прокрутку */
-        }
-
-        /* НОВОЕ: Стилизация ползунка прокрутки внутри сезонов */
-        .series-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        .series-content::-webkit-scrollbar-track {
-            background: var(--bg);
-            border-radius: 4px;
-        }
-        .series-content::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-        .series-content::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-        }
-
-        .series-card.open .series-content {
-            display: block;
-        }
-
-        .season-block {
-            margin-bottom: 20px;
-        }
-
-        .season-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 8px;
-        }
-
-        .season-title {
-            font-size: 0.9em;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .season-progress-container {
-            height: 4px;
-            background: var(--progress-bg);
-            width: 100%;
-            border-radius: 2px;
-            margin-bottom: 12px;
-            overflow: hidden;
-        }
-
-        .season-progress-bar {
-            height: 100%;
-            background: var(--watched);
-            transition: width 0.3s ease;
-        }
-
-        .episodes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
-            gap: 8px;
-        }
-
-        .episode {
-            border: 1px solid var(--border);
-            padding: 10px 0;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: 0.2s;
-            user-select: none;
-            background: var(--episode-bg);
-        }
-
-        .episode:hover {
-            border-color: var(--accent);
-        }
-
-        .episode.watched {
-            background: var(--watched);
-            color: var(--text-dark);
-            border-color: var(--watched);
-            font-weight: bold;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-		.btn-save {
-            background: var(--accent);
-            color: var(--text-dark);
-        }
-	   
-        .btn-add {
-            background: var(--btn-add); /* Зеленый для кнопки добавления */
-            color: white;
-        }
-        
-        /* НОВОЕ: Стиль для кнопки инструкции */
-        .btn-info {
-            background: var(--btn-info);
-            color: white;
-        }
-
-        .btn-action {
-            background: transparent;
-            border: 1px solid;
-            padding: 5px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-            margin-left: 5px;
-            text-decoration: none;
-            font-size: 0.9em;
-            display: inline-block;
-        }
-
-        .btn-edit {
-            color: var(--btn-edit); /* Синий цвет для редактирования */
-            border-color: var(--btn-edit);
-        }
-
-        .btn-edit:hover {
-            background: var(--btn-edit);
-            color: var(--text-dark);
-        }
-
-        .btn-link {
-            color: var(--btn-link); /* Фиолетовый цвет для кнопки-ссылки */
-            border-color: var(--btn-link);
-        }
-
-        .btn-link:hover {
-            background: var(--btn-link);
-            color: white;
-        }
-
-        .btn-delete {
-            color: var(--btn-delete); /* Розово-красный для удаления */
-            border-color: var(--btn-delete);
-        }
-
-        .btn-delete:hover {
-            background: var(--btn-delete);
-            color: var(--text-dark);
-        }
-
-        input[type="file"] {
-            color: var(--text);
-        }
-
-        .arrow {
-            transition: 0.3s;
-            display: inline-block;
-        }
-
-        .open .arrow {
-            transform: rotate(180deg);
-        }
-		
-		.app-version {
-            font-size: 0.35em;         /* Делаем текст маленьким */
-            color: #888;               /* Серый неброский цвет */
-            font-weight: normal;       /* Убираем жирность */
-            vertical-align: middle;    /* Выравниваем по центру строки */
-            margin-left: 10px;         /* Отступ от названия */
-            background: #252525;       /* Фон как у заголовков карточек */
-            padding: 2px 8px;          /* Внутренние отступы */
-            border-radius: 4px;        /* Скругление углов */
-            border: 1px solid #333;    /* Тонкая граница */
-        }
-
-        /* НОВОЕ: Стили для модальных окон (таблица редактирования и инструкция) */
-        .modal-overlay {
-            display: none;
+        #particle-canvas {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .modal-content {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 600px;
-            border: 1px solid var(--border);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-header {
-            font-size: 1.2em;
-            color: var(--accent);
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .close-modal {
-            cursor: pointer;
-            color: var(--text);
-        }
-        .edit-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-        }
-        .edit-table th, .edit-table td {
-            border: 1px solid var(--border);
-            padding: 8px;
-            text-align: left;
-        }
-        .edit-table th {
-            background: var(--header-bg);
-            color: var(--accent);
-        }
-        .edit-input {
-            width: 100%;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 5px;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        textarea.edit-input {
-            resize: vertical;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none; 
         }
 
-        /* НОВОЕ: Стили для оранжевой кнопки прокрутки страницы наверх */
-        .btn-scroll-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--accent);
-            color: var(--text-dark);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 22px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.3s, transform 0.2s, visibility 0.3s;
-            opacity: 0;
-            visibility: hidden;
-        }
-        .btn-scroll-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        .btn-scroll-top:hover {
-            background: var(--watched);
-            transform: scale(1.1);
-        }
-/* НОВОЕ: Стили для свернутого блока просмотренных сезонов */
-        .watched-seasons-spoiler {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
+        h1 { text-align: center; color: var(--accent); }
+        .season-percent-text { font-size: 0.8em; opacity: 0.8; }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 1px; overflow-x: auto; }
+        .tab-btn { background: transparent; color: var(--text); border: 1px solid transparent; padding: 12px 20px; font-size: 1.1em; cursor: pointer; border-radius: 8px 8px 0 0; transition: 0.3s; white-space: nowrap; opacity: 0.7; }
+        .tab-btn:hover { background: var(--header-hover); opacity: 1; }
+        .tab-btn.active { background: var(--card-bg); color: var(--accent); border: 1px solid var(--border); border-bottom: 3px solid var(--accent); font-weight: bold; opacity: 1; }
+
+        .controls { background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center; border: 1px solid var(--border); }
+
+        .series-card { background: var(--card-bg); border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border); cursor: grab; transition: opacity 0.2s, border-color 0.2s; }
+        .series-card.no-drag { cursor: default; }
+        .series-card:active:not(.no-drag) { cursor: grabbing; }
+        .series-card.dragging { opacity: 0.5; border: 1px dashed var(--accent); }
+        .series-card.drag-over { border: 2px dashed var(--accent); background: #232323; }
+
+        .series-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); border-radius: 11px; transition: border-radius 0.2s; }
+        .series-card.open .series-header { border-radius: 11px 11px 0 0; }
+        .series-header:hover { background: var(--header-hover); }
         
-        .watched-seasons-spoiler summary {
-            padding: 12px 15px;
-            cursor: pointer;
-            color: var(--watched);
-            font-weight: bold;
-            font-size: 0.9em;
-            outline: none;
-            user-select: none;
-            background: rgba(0, 0, 0, 0.2);
-            transition: background 0.2s;
-        }
+        .series-info { display: flex; align-items: center; gap: 15px; cursor: pointer; flex-grow: 1; }
+        .series-progress-badge { font-size: 0.85em; background: var(--badge-bg); padding: 4px 8px; border-radius: 4px; color: var(--watched); }
+        .type-badge { font-size: 0.75em; background: #444; padding: 3px 6px; border-radius: 4px; color: #ddd; margin-left: 10px; }
 
-        .watched-seasons-spoiler summary:hover {
-            background: rgba(0, 0, 0, 0.4);
-        }
+        .series-content { display: none; padding: 15px; border-top: 1px solid var(--border); cursor: default; max-height: 500px; overflow-y: auto; border-radius: 0 0 11px 11px; }
+        .series-content::-webkit-scrollbar { width: 8px; }
+        
+        
+        .series-content::-webkit-scrollbar-track { background: var(--bg); border-radius: 4px; }
+        
+        .series-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        .series-content::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        .series-card.open .series-content { display: block; }
 
-        .watched-seasons-wrapper {
-            padding: 15px 15px 0 15px;
-            border-top: 1px solid var(--border);
-        }
-        /* =========================================================
-           АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (СМАРТФОНОВ)
-           ========================================================= */
+        .season-block { margin-bottom: 20px; }
+        .season-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+        .season-title { font-size: 0.9em; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        .season-progress-container { height: 4px; background: var(--progress-bg); width: 100%; border-radius: 2px; margin-bottom: 12px; overflow: hidden; }
+        .season-progress-bar { height: 100%; background: var(--watched); transition: width 0.3s ease; }
+
+        .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 8px; }
+        .episode { border: 1px solid var(--border); padding: 10px 0; text-align: center; cursor: pointer; border-radius: 6px; transition: 0.2s; user-select: none; background: var(--episode-bg); }
+        .episode:hover { border-color: var(--accent); }
+        .episode.watched { background: var(--watched); color: var(--text-dark); border-color: var(--watched); font-weight: bold; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-save { background: var(--accent); color: var(--text-dark); }
+        .btn-add { background: var(--btn-add); color: white; }
+        .btn-info { background: var(--btn-info); color: white; }
+
+        .series-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .btn-action { background: transparent; border: 1px solid; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-left: 0; text-decoration: none; font-size: 0.9em; display: inline-block; }
+        
+        .btn-add-ep { color: #4caf50; border-color: #4caf50; }
+        .btn-add-ep:hover { background: #4caf50; color: #fff; }
+
+        .btn-edit { color: var(--btn-edit); border-color: var(--btn-edit); }
+        .btn-edit:hover { background: var(--btn-edit); color: var(--text-dark); }
+        .btn-link { color: var(--btn-link); border-color: var(--btn-link); }
+        .btn-link:hover { background: var(--btn-link); color: white; }
+        .btn-delete { color: var(--btn-delete); border-color: var(--btn-delete); }
+        .btn-delete:hover { background: var(--btn-delete); color: var(--text-dark); }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { display: none; position: absolute; background-color: var(--card-bg); min-width: 140px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.6); z-index: 100; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; top: 100%; left: 0; margin-top: 5px; }
+        .dropdown-content a { color: var(--text); padding: 10px 15px; text-decoration: none; display: block; border-bottom: 1px solid var(--border); font-size: 0.9em; transition: 0.2s; text-align: left; }
+        .dropdown-content a:last-child { border-bottom: none; }
+        .dropdown-content a:hover { background-color: var(--btn-link); color: white; }
+        .dropdown.active .dropdown-content { display: block; }
+
+        input[type="file"] { color: var(--text); }
+        .arrow { transition: 0.3s; display: inline-block; }
+        .open .arrow { transform: rotate(180deg); }
+        .app-version { font-size: 0.35em; color: #888; font-weight: normal; vertical-align: middle; margin-left: 10px; background: #252525; padding: 2px 8px; border-radius: 4px; border: 1px solid #333; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--card-bg); padding: 20px; border-radius: 12px; width: 90%; max-width: 600px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
+        .modal-header { font-size: 1.2em; color: var(--accent); margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .close-modal { cursor: pointer; color: var(--text); }
+        .edit-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .edit-table th, .edit-table td { border: 1px solid var(--border); padding: 8px; text-align: left; }
+        .edit-table th { background: var(--header-bg); color: var(--accent); }
+        
+        
+        .edit-input { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 5px; border-radius: 4px; box-sizing: border-box; }
+        textarea.edit-input { resize: vertical; }
+
+        .btn-scroll-top { position: fixed; bottom: 30px; right: 30px; background: var(--accent); color: var(--text-dark); border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 22px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 999; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s, transform 0.2s, visibility 0.3s; opacity: 0; visibility: hidden; }
+        .btn-scroll-top.visible { opacity: 1; visibility: visible; }
+        .btn-scroll-top:hover { background: var(--watched); transform: scale(1.1); }
+
+        
+        .watched-seasons-spoiler { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+        
+        .watched-seasons-spoiler summary { padding: 12px 15px; cursor: pointer; color: var(--watched); font-weight: bold; font-size: 0.9em; outline: none; user-select: none; background: rgba(0, 0, 0, 0.4); transition: background 0.2s; }
+        .watched-seasons-spoiler summary:hover { background: rgba(0, 0, 0, 0.6); }
+        .watched-seasons-wrapper { padding: 15px 15px 0 15px; border-top: 1px solid var(--border); }
+        .movie-watched-toggle { display: block; width: 100%; text-align: center; padding: 15px; font-size: 1.1em; margin-top: 10px; }
+
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            /* Кнопки в самом верху делаем на всю ширину для удобного нажатия */
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-            .controls .btn {
-                width: 100%;
-            }
-
-            /* Шапка сериала: переносим кнопки под название */
-            .series-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-            .series-info {
-                width: 100%;
-                justify-content: flex-start;
-            }
-
-            /* Контейнер с кнопками Сайтов, Редактирования и Удаления */
-            .series-actions {
-                width: 100%;
-                display: flex;
-                flex-wrap: wrap; /* Разрешаем кнопкам переноситься на новые строки */
-                gap: 8px; /* Заменяем margin-left на gap */
-            }
-
-            /* Сами кнопки действий */
-            .btn-action {
-                margin-left: 0; /* Убираем старый отступ */
-                flex-grow: 1; /* Растягиваем кнопки для удобного тапа пальцем */
-                text-align: center;
-                padding: 8px 10px; /* Слегка увеличиваем область нажатия */
-            }
-
-            /* Адаптация таблиц в модальных окнах */
-            .modal-content {
-                width: 95%;
-                padding: 15px;
-            }
-            
-            /* Делаем таблицу скроллируемой по горизонтали, чтобы она не ломала верстку */
-            .edit-table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-            
-            .edit-table th, .edit-table td {
-                padding: 6px;
-                font-size: 0.9em;
-            }
-
-            /* НОВОЕ: Оптимизация размера кнопки наверх для смартфонов */
-            .btn-scroll-top {
-                bottom: 20px;
-                right: 20px;
-                width: 45px;
-                height: 45px;
-                font-size: 18px;
-            }
+            body { padding: 10px; }
+            .tabs { gap: 5px; }
+            .tab-btn { padding: 10px; font-size: 0.95em; }
+            .controls { flex-direction: column; align-items: stretch; gap: 10px; }
+            .controls .btn { width: 100%; }
+            .series-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .series-info { width: 100%; justify-content: flex-start; }
+            .series-actions { width: 100%; display: flex; flex-wrap: wrap; gap: 8px; }
+            .btn-action { margin-left: 0; flex-grow: 1; text-align: center; padding: 8px 10px; }
+            .modal-content { width: 95%; padding: 15px; }
+            .edit-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .edit-table th, .edit-table td { padding: 6px; font-size: 0.9em; }
+            .btn-scroll-top { bottom: 20px; right: 20px; width: 45px; height: 45px; font-size: 18px; }
         }
     </style>
 </head>
-
 <body>
 
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.2.6</span></h1>
+    <canvas id="particle-canvas"></canvas>
+
+    <h1>🎬 TV Show Tracker <span class="app-version">v1.3.0</span></h1>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-series" onclick="switchTab('series')">🎬 Сериалы</button>
+        <button class="tab-btn" id="tab-movies" onclick="switchTab('movies')">🎥 Фильмы</button>
+        <button class="tab-btn" id="tab-watched" onclick="switchTab('watched')">✅ Просмотрено</button>
+    </div>
 
     <div class="controls">
         <button class="btn btn-info" onclick="showInstructions()">ℹ️ Инструкция</button>
         <button class="btn btn-save" onclick="showDataModal()">💾 Управление данными (JSON)</button>
-        <button class="btn btn-add" onclick="addSeries()">+ Добавить сериал</button>
+        <button class="btn btn-add" id="mainAddBtn" onclick="addCurrentType()">+ Добавить</button>
     </div>
 
     <div id="seriesList"></div>
@@ -517,13 +196,13 @@
             <div style="display: flex; flex-direction: column; gap: 20px;">
                 <div>
                     <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--accent);">Загрузить из файла</h4>
-                    <p style="font-size: 0.9em; margin-bottom: 10px; color: #aaa;">Выберите ранее сохраненный файл .json, чтобы восстановить список сериалов.</p>
+                    <p style="font-size: 0.9em; margin-bottom: 10px; color: #aaa;">Выберите ранее сохраненный файл .json, чтобы восстановить список.</p>
                     <input type="file" id="fileInput" accept=".json" style="color: var(--text); width: 100%;">
                 </div>
                 <hr style="border: none; border-top: 1px solid var(--border); width: 100%; margin: 0;">
                 <div>
                     <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--accent);">Сохранить на устройство</h4>
-                    <p style="font-size: 0.9em; margin-bottom: 10px; color: #aaa;">Скачайте текущий прогресс в виде файла .json на ваш компьютер или телефон.</p>
+                    <p style="font-size: 0.9em; margin-bottom: 10px; color: #aaa;">Скачайте текущий прогресс в виде файла .json.</p>
                     <button class="btn btn-save" style="width: 100%;" onclick="saveAndCloseModal()">💾 Скачать JSON файл</button>
                 </div>
             </div>
@@ -537,14 +216,13 @@
                 <span class="close-modal" onclick="closeModal('instructionModal')">✖</span>
             </div>
             <div>
-                <p>Добро пожаловать в TV Show Tracker! Здесь вы можете удобно отслеживать свой прогресс просмотра.</p>
                 <ul>
-                    <li><b>Добавление:</b> Нажмите "+ Добавить сериал", чтобы создать новую карточку. Сразу откроется окно детальной настройки.</li>
-                    <li><b>Несколько сайтов:</b> При редактировании вы можете вставить несколько ссылок для просмотра, по одной на строке.</li>
-                    <li><b>Редактирование:</b> В окне редактирования (кнопка "Редактировать") используется удобная таблица, где можно быстро менять число серий в сезоне или отмечать весь сезон галочкой как полностью просмотренный.</li>
-                    <li><b>Прогресс:</b> Кликайте на отдельные квадратики-серии, чтобы отметить их как просмотренные.</li>
-                    <li><b>Сортировка:</b> Зажмите левую кнопку мыши на карточке сериала и перетащите её вверх или вниз (появится пунктирная рамка-подсветка зоны).</li>
-                    <li><b>Сохранение:</b> Ваши данные сохраняются в браузере автоматически. Окно "Управление данными" нужно для создания файла-резервной копии на ваш компьютер.</li>
+                    <li><b>Вкладки:</b> Переключайтесь между активными сериалами, фильмами и завершенными тайтлами.</li>
+                    <li><b>Автоматизация:</b> Как только вы отмечаете фильм просмотренным или досматриваете все сезоны сериала, они автоматически перемещаются во вкладку "Просмотрено".</li>
+                    <li><b>Добавление:</b> Нажмите "+ Добавить", чтобы создать карточку в текущем разделе.</li>
+                    <li><b>Редактирование:</b> В окне редактирования можно вставить несколько ссылок (по одной на строке), управлять сезонами и названием.</li>
+                    <li><b>Быстрая отметка:</b> Кнопка "+1 Серия" автоматически отмечает следующую непросмотренную серию.</li>
+                    <li><b>Сортировка:</b> Зажмите карточку и перетащите её вверх или вниз (работает только в разделах "Сериалы" и "Фильмы").</li>
                 </ul>
             </div>
             <button class="btn btn-save" style="margin-top:15px; width:100%" onclick="closeModal('instructionModal')">Понятно</button>
@@ -554,7 +232,7 @@
     <div id="editModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <span>✏️ Настройка сериала</span>
+                <span>✏️ Настройка</span>
                 <span class="close-modal" onclick="closeModal('editModal')">✖</span>
             </div>
             <div id="editModalBody"></div>
@@ -568,403 +246,386 @@
     <button id="scrollToTopBtn" class="btn-scroll-top" onclick="scrollToTop()">▲</button>
 
     <script>
-        let data = [];
-        let draggedItemIndex = null; // Переменная для хранения индекса перетаскиваемого сериала
-        let currentEditingIndex = null; // НОВОЕ: индекс текущего редактируемого сериала для модального окна
+        
+        let appData = { series: [], movies: [] };
+        let currentTab = 'series'; 
+        let draggedItemId = null; 
+        let draggedItemType = null;
+        let currentEditingId = null; 
+        let currentEditingType = null;
 
-        // Проверяем наличие данных в памяти браузера при запуске
+        const generateId = () => Math.random().toString(36).substr(2, 9);
+
         const savedData = localStorage.getItem('tvShowData');
         if (savedData) {
             try {
-                data = JSON.parse(savedData);
-            } catch (e) {
-                console.error("Ошибка чтения данных из localStorage", e);
-            }
+                let parsed = JSON.parse(savedData);
+                if (Array.isArray(parsed)) { appData.series = parsed; } 
+                else { appData = parsed; if (!appData.movies) appData.movies = []; }
+            } catch (e) { console.error("Ошибка чтения данных", e); }
         }
+        
+        appData.series.forEach(s => { if (!s.id) s.id = generateId(); });
+        appData.movies.forEach(m => { if (!m.id) m.id = generateId(); });
 
-        document.getElementById('fileInput').addEventListener('change', function (e) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    data = JSON.parse(event.target.result);
-                    render();
-                    closeModal('dataModal'); // НОВОЕ: Закрываем модальное окно после загрузки
-                } catch (e) { alert("Ошибка в файле JSON"); }
-            };
-            reader.readAsText(e.target.files[0]);
-            e.target.value = ''; // НОВОЕ: Очищаем input для возможности повторной загрузки
-        });
-
-        // НОВОЕ: Вспомогательная функция для безопасности ввода текста
         function escapeHtml(text) {
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
         }
 
-        // НОВОЕ: Функции управления модальными окнами
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-        function showInstructions() {
-            document.getElementById('instructionModal').classList.add('active');
-        }
-        function showDataModal() {
-            document.getElementById('dataModal').classList.add('active');
-        }
-        function saveAndCloseModal() {
-            saveJSON();
-            closeModal('dataModal');
+        function isSeriesWatched(series) {
+            if (!series.seasons || series.seasons.length === 0) return false;
+            return series.seasons.every(season => season.episodes.length > 0 && season.episodes.every(ep => ep === true));
         }
 
-        function addSeries() {
-            // Запрос ссылки на сайт при добавлении сериала
-            // НОВОЕ: Теперь мы сразу создаем пустую карточку и открываем таблицу для заполнения с галочками
-            data.push({ 
-                title: "Новое шоу", 
-                links: [], 
-                seasons: [{ number: 1, episodes: new Array(10).fill(false) }], 
-                isOpen: true 
-            });
-            render();
-            // Сразу открываем модальное окно редактирования для свежесозданного элемента
-            editSeries({ stopPropagation: () => {} }, data.length - 1);
-        }
+        function getItemById(id, type) { return (type === 'series' ? appData.series : appData.movies).find(item => item.id === id); }
 
-        // --- Функция редактирования названия, ссылки и сезонов ---
-        // НОВОЕ: Переделано под использование таблицы заполнения внутри модального окна
-        function editSeries(e, idx) {
-            if (e && e.stopPropagation) e.stopPropagation(); // Чтобы карточка не сворачивалась/разворачивалась при клике на кнопку
-            currentEditingIndex = idx;
-            const series = data[idx];
+        function switchTab(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
             
-            // Миграция старого свойства link в массив links для совместимости
-            let links = series.links || (series.link ? [series.link] : []);
+            const addBtn = document.getElementById('mainAddBtn');
+            if (tabName === 'series') { addBtn.style.display = 'inline-block'; addBtn.innerText = '+ Добавить сериал'; } 
+            else if (tabName === 'movies') { addBtn.style.display = 'inline-block'; addBtn.innerText = '+ Добавить фильм'; } 
+            else { addBtn.style.display = 'none'; }
+            render();
+        }
+
+        function addCurrentType() {
+            if (currentTab === 'series') {
+                const newSeries = { id: generateId(), title: "Новый сериал", links: [], seasons: [{ number: 1, episodes: new Array(10).fill(false) }], isOpen: true };
+                appData.series.push(newSeries); render(); editItem({ stopPropagation: () => {} }, newSeries.id, 'series');
+            } else if (currentTab === 'movies') {
+                const newMovie = { id: generateId(), title: "Новый фильм", links: [], isWatched: false, isOpen: true };
+                appData.movies.push(newMovie); render(); editItem({ stopPropagation: () => {} }, newMovie.id, 'movies');
+            }
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function showInstructions() { document.getElementById('instructionModal').classList.add('active'); }
+        function showDataModal() { document.getElementById('dataModal').classList.add('active'); }
+        function saveAndCloseModal() { saveJSON(); closeModal('dataModal'); }
+
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    let parsed = JSON.parse(event.target.result);
+                    if (Array.isArray(parsed)) { appData = { series: parsed, movies: [] }; } 
+                    else { appData = parsed; if (!appData.movies) appData.movies = []; }
+                    appData.series.forEach(s => { if (!s.id) s.id = generateId(); });
+                    appData.movies.forEach(m => { if (!m.id) m.id = generateId(); });
+                    render(); closeModal('dataModal'); 
+                } catch (e) { alert("Ошибка в файле JSON"); }
+            };
+            reader.readAsText(e.target.files[0]); e.target.value = ''; 
+        });
+
+        function editItem(e, id, type) {
+            if (e && e.stopPropagation) e.stopPropagation();
+            currentEditingId = id; currentEditingType = type;
+            const item = getItemById(id, type);
+            let links = item.links || (item.link ? [item.link] : []);
 
             let html = `
                 <table class="edit-table">
-                    <tr>
-                        <td width="30%"><strong>Название</strong></td>
-                        <td><input type="text" id="editTitle" class="edit-input" value="${escapeHtml(series.title)}"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Сайты</strong><br><small>(каждый с новой строки)</small></td>
-                        <td><textarea id="editLinks" class="edit-input" rows="3" placeholder="https://site1.comnhttps://site2.com">${links.join('\n')}</textarea></td>
-                    </tr>
-                </table>
-                <h4 style="margin-bottom: 10px; color: var(--accent);">Сезоны</h4>
-                <table class="edit-table" id="editSeasonsTable">
-                    <thead>
-                        <tr>
-                            <th>Сезон</th>
-                            <th>Кол-во серий</th>
-                            <th style="text-align: center;">Всё просмотрено <br><small>(галочка)</small></th>
-                            <th style="text-align: center;">Удалить</th>
-                        </tr>
-                    </thead>
-                    <tbody id="editSeasonsBody">
-            `;
-            
-            series.seasons.forEach((season, sIdx) => {
-                const allWatched = season.episodes.length > 0 && season.episodes.every(ep => ep === true);
-                html += `
-                    <tr data-season-idx="${sIdx}">
-                        <td>${season.number}</td>
-                        <td><input type="number" class="edit-input season-count" value="${season.episodes.length}" min="1"></td>
-                        <td style="text-align: center;"><input type="checkbox" class="season-watched-cb" ${allWatched ? 'checked' : ''}></td>
-                        <td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td>
-                    </tr>
-                `;
-            });
+                    <tr><td width="30%"><strong>Название</strong></td><td><input type="text" id="editTitle" class="edit-input" value="${escapeHtml(item.title)}"></td></tr>
+                    <tr><td><strong>Сайты</strong><br><small>(каждый с новой строки)</small></td><td><textarea id="editLinks" class="edit-input" rows="3" placeholder="https://site1.com">${links.join('\n')}</textarea></td></tr>
+                </table>`;
 
-            html += `
-                    </tbody>
-                </table>
-                <button class="btn btn-add" style="padding: 5px 10px; font-size: 0.9em; width: 100%;" onclick="addSeasonRow()">+ Добавить сезон</button>
-            `;
-
+            if (type === 'series') {
+                html += `<h4 style="margin-bottom: 10px; color: var(--accent);">Сезоны</h4><table class="edit-table" id="editSeasonsTable"><thead><tr><th>Сезон</th><th>Кол-во серий</th><th style="text-align: center;">Всё просмотрено</th><th style="text-align: center;">Удалить</th></tr></thead><tbody id="editSeasonsBody">`;
+                item.seasons.forEach((season, sIdx) => {
+                    const allWatched = season.episodes.length > 0 && season.episodes.every(ep => ep === true);
+                    html += `<tr data-season-idx="${sIdx}"><td>${season.number}</td><td><input type="number" class="edit-input season-count" value="${season.episodes.length}" min="1"></td><td style="text-align: center;"><input type="checkbox" class="season-watched-cb" ${allWatched ? 'checked' : ''}></td><td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td></tr>`;
+                });
+                html += `</tbody></table><button class="btn btn-add" style="padding: 5px 10px; font-size: 0.9em; width: 100%;" onclick="addSeasonRow()">+ Добавить сезон</button>`;
+            }
             document.getElementById('editModalBody').innerHTML = html;
             document.getElementById('editModal').classList.add('active');
         }
 
-        // НОВОЕ: Вспомогательные функции для таблицы редактирования сезонов
         function addSeasonRow() {
             const tbody = document.getElementById('editSeasonsBody');
             const newSeasonNum = tbody.children.length + 1;
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${newSeasonNum}</td>
-                <td><input type="number" class="edit-input season-count" value="10" min="1"></td>
-                <td style="text-align: center;"><input type="checkbox" class="season-watched-cb"></td>
-                <td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td>
-            `;
-            tbody.appendChild(tr);
-            updateSeasonNumbers();
+            tr.innerHTML = `<td>${newSeasonNum}</td><td><input type="number" class="edit-input season-count" value="10" min="1"></td><td style="text-align: center;"><input type="checkbox" class="season-watched-cb"></td><td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td>`;
+            tbody.appendChild(tr); updateSeasonNumbers();
         }
 
-        function removeSeasonRow(btn) {
-            btn.closest('tr').remove();
-            updateSeasonNumbers();
-        }
+        function removeSeasonRow(btn) { btn.closest('tr').remove(); updateSeasonNumbers(); }
+        function updateSeasonNumbers() { document.getElementById('editSeasonsBody').querySelectorAll('tr').forEach((row, idx) => { row.cells[0].innerText = idx + 1; }); }
 
-        function updateSeasonNumbers() {
-            const rows = document.getElementById('editSeasonsBody').querySelectorAll('tr');
-            rows.forEach((row, idx) => {
-                row.cells[0].innerText = idx + 1;
-            });
-        }
-
-        // НОВОЕ: Функция сохранения из модального окна, заменяющая старую цепочку prompt
         function saveEdit() {
-            const series = data[currentEditingIndex];
-            
-            // 1. Изменение названия
-            series.title = document.getElementById('editTitle').value.trim() || "Без названия";
-            
-            // Изменение ссылки на сайт
-            const linksText = document.getElementById('editLinks').value;
-            series.links = linksText.split('\n').map(l => l.trim()).filter(l => l !== '');
-            delete series.link; // Очищаем старое поле
+            const item = getItemById(currentEditingId, currentEditingType);
+            item.title = document.getElementById('editTitle').value.trim() || "Без названия";
+            item.links = document.getElementById('editLinks').value.split('\n').map(l => l.trim()).filter(l => l !== '');
+            delete item.link;
 
-            // 2. Изменение количества сезонов
-            const rows = document.getElementById('editSeasonsBody').querySelectorAll('tr');
-            const newSeasons = [];
-            
-            rows.forEach((row, idx) => {
-                const countInput = parseInt(row.querySelector('.season-count').value) || 10;
-                const isWatched = row.querySelector('.season-watched-cb').checked;
-                
-                let oldEpisodes = [];
-                // Если сезонов стало больше — добавляем новые
-                // Если сезонов стало меньше — удаляем с подтверждением
-                // Вся логика теперь обрабатывается извлечением строк из таблицы:
-                if (series.seasons[idx]) {
-                    oldEpisodes = series.seasons[idx].episodes;
-                }
-
-                let newEpisodes = new Array(countInput).fill(false);
-                for (let i = 0; i < countInput; i++) {
-                    if (isWatched) {
-                        newEpisodes[i] = true; // Применили галочку ко всему сезону
-                    } else if (i < oldEpisodes.length) {
-                        newEpisodes[i] = oldEpisodes[i]; // Восстановили старый прогресс
+            if (currentEditingType === 'series') {
+                const rows = document.getElementById('editSeasonsBody').querySelectorAll('tr');
+                const newSeasons = [];
+                rows.forEach((row, idx) => {
+                    const countInput = parseInt(row.querySelector('.season-count').value) || 10;
+                    const isWatched = row.querySelector('.season-watched-cb').checked;
+                    let oldEpisodes = item.seasons[idx] ? item.seasons[idx].episodes : [];
+                    let newEpisodes = new Array(countInput).fill(false);
+                    for (let i = 0; i < countInput; i++) {
+                        if (isWatched) newEpisodes[i] = true; 
+                        else if (i < oldEpisodes.length) newEpisodes[i] = oldEpisodes[i];
                     }
-                }
-
-                newSeasons.push({
-                    number: idx + 1,
-                    episodes: newEpisodes
+                    newSeasons.push({ number: idx + 1, episodes: newEpisodes });
                 });
-            });
-
-            series.seasons = newSeasons;
-            
-            closeModal('editModal');
-            render();
-        }
-
-        // --- НОВОЕ: Функции для поддержки Drag-and-Drop ---
-        function onDragStart(idx) {
-            draggedItemIndex = idx;
-            // Небольшая задержка, чтобы карточка визуально «оторвалась», но не исчезла сразу под курсором
-            setTimeout(() => {
-                document.querySelectorAll('.series-card')[idx].classList.add('dragging');
-            }, 0);
-        }
-
-        function onDragOver(e, element, idx) {
-            e.preventDefault(); // Разрешаем сброс элементов в эту зону
-            // НОВОЕ: Добавляем подсветку зоны приземления
-            if (draggedItemIndex !== idx) {
-                element.classList.add('drag-over');
+                item.seasons = newSeasons;
             }
+            closeModal('editModal'); render();
         }
 
-        // НОВОЕ: Функция очистки подсветки, когда мышка покидает карточку
-        function onDragLeave(e, element) {
-            element.classList.remove('drag-over');
+        function onDragStart(id, type) { draggedItemId = id; draggedItemType = type; setTimeout(() => { const el = document.querySelector(`[data-id="${id}"]`); if(el) el.classList.add('dragging'); }, 0); }
+        function onDragOver(e, element, id) { e.preventDefault(); if (draggedItemId !== id) element.classList.add('drag-over'); }
+        function onDragLeave(e, element) { element.classList.remove('drag-over'); }
+        function onDrop(targetId, type) {
+            if (!draggedItemId || draggedItemId === targetId || draggedItemType !== type) return;
+            const list = type === 'series' ? appData.series : appData.movies;
+            const fromIdx = list.findIndex(i => i.id === draggedItemId);
+            const toIdx = list.findIndex(i => i.id === targetId);
+            const [moved] = list.splice(fromIdx, 1); list.splice(toIdx, 0, moved);
+            draggedItemId = null; render();
         }
 
-        function onDrop(idx) {
-            if (draggedItemIndex === null || draggedItemIndex === idx) return;
-            
-            // Вырезаем перетаскиваемый элемент и вставляем его на новую позицию
-            const movedItem = data.splice(draggedItemIndex, 1)[0];
-            data.splice(idx, 0, movedItem);
-            
-            draggedItemIndex = null;
+        function toggleEpisode(seriesId, seaIdx, epIdx) {
+            const series = getItemById(seriesId, 'series');
+            const episodes = series.seasons[seaIdx].episodes;
+            if (!episodes[epIdx]) { for (let i = 0; i <= epIdx; i++) episodes[i] = true; } 
+            else { episodes[epIdx] = false; }
             render();
         }
-
-        function toggleEpisode(sIdx, seaIdx, epIdx) {
-            const episodes = data[sIdx].seasons[seaIdx].episodes;
-            const currentState = episodes[epIdx];
-
-            if (!currentState) {
-                for (let i = 0; i <= epIdx; i++) {
-                    episodes[i] = true;
-                }
-            } else {
-                episodes[epIdx] = false;
-            }
-
-            render();
-        }
-
-        function toggleCard(idx) {
-            data[idx].isOpen = !data[idx].isOpen;
-            render();
-        }
-
-        function deleteSeries(e, idx) {
+        
+        function markNextEpisode(e, seriesId) {
             e.stopPropagation();
-            if (confirm('Удалить этот сериал?')) {
-                data.splice(idx, 1);
-                render();
+            const series = getItemById(seriesId, 'series');
+            if (!series || !series.seasons) return;
+            
+            for (let sIdx = 0; sIdx < series.seasons.length; sIdx++) {
+                const season = series.seasons[sIdx];
+                for (let epIdx = 0; epIdx < season.episodes.length; epIdx++) {
+                    if (!season.episodes[epIdx]) {
+                        season.episodes[epIdx] = true;
+                        render();
+                        return;
+                    }
+                }
             }
         }
 
-function render() {
-            const container = document.getElementById('seriesList');
-            container.innerHTML = '';
+        function toggleMovieStatus(id) { const movie = getItemById(id, 'movies'); movie.isWatched = !movie.isWatched; render(); }
+        function toggleCard(id, type) { const item = getItemById(id, type); item.isOpen = !item.isOpen; render(); }
+        function deleteItem(e, id, type) { e.stopPropagation(); if (confirm('Удалить этот элемент?')) { const list = type === 'series' ? appData.series : appData.movies; const idx = list.findIndex(i => i.id === id); list.splice(idx, 1); render(); } }
 
-            data.forEach((series, sIdx) => {
-                let totalEpisodes = 0;
-                let watchedEpisodes = 0;
-
-                // Переменные для разделения сезонов
-                let activeSeasonsHtml = '';
-                let watchedSeasonsHtml = '';
-                let watchedCount = 0;
-
-                series.seasons.forEach((season, seaIdx) => {
-                    const seasonTotal = season.episodes.length;
-                    const seasonWatched = season.episodes.filter(ep => ep).length;
-                    const seasonPercent = seasonTotal > 0 ? Math.round((seasonWatched / seasonTotal) * 100) : 0;
-
-                    totalEpisodes += seasonTotal;
-                    watchedEpisodes += seasonWatched;
-
-                    let episodesHtml = season.episodes.map((watched, epIdx) => `
-                        <div class="episode ${watched ? 'watched' : ''}" 
-                             onclick="event.stopPropagation(); toggleEpisode(${sIdx}, ${seaIdx}, ${epIdx})">
-                            ${epIdx + 1}
-                        </div>`).join('');
-
-                    let seasonHtml = `
-                        <div class="season-block">
-                            <div class="season-header">
-                                <div class="season-title">Сезон ${season.number}</div>
-                                <div class="season-percent-text">${seasonPercent}%</div>
-                            </div>
-                            <div class="season-progress-container">
-                                <div class="season-progress-bar" style="width: ${seasonPercent}%"></div>
-                            </div>
-                            <div class="episodes-grid">${episodesHtml}</div>
-                        </div>`;
-
-                    // Проверяем, просмотрен ли сезон полностью
-                    if (seasonTotal > 0 && seasonWatched === seasonTotal) {
-                        watchedSeasonsHtml += seasonHtml;
-                        watchedCount++;
-                    } else {
-                        activeSeasonsHtml += seasonHtml;
-                    }
-                });
-
-                // Формируем итоговый контент сериала
-                let finalContentHtml = '';
-                
-                // Если есть полностью просмотренные сезоны, оборачиваем их в спойлер
-                if (watchedCount > 0) {
-                    finalContentHtml += `
-                        <details class="watched-seasons-spoiler">
-                            <summary>✅ Просмотренные сезоны (${watchedCount})</summary>
-                            <div class="watched-seasons-wrapper">
-                                ${watchedSeasonsHtml}
-                            </div>
-                        </details>
-                    `;
-                }
-                
-                // Добавляем активные сезоны ниже
-                finalContentHtml += activeSeasonsHtml;
-
-                const totalPercent = totalEpisodes > 0 ? Math.round((watchedEpisodes / totalEpisodes) * 100) : 0;
-
-                const card = document.createElement('div');
-                card.className = `series-card ${series.isOpen ? 'open' : ''}`;
-                
-                // Навешиваем события перетаскивания на карточку
-                card.draggable = true;
-                card.ondragstart = () => onDragStart(sIdx);
-                card.ondragover = (e) => onDragOver(e, card, sIdx); 
-                card.ondragleave = (e) => onDragLeave(e, card);    
-                card.ondrop = () => onDrop(sIdx);
-                card.ondragend = () => render(); 
-
-                // Генерация кнопок для нескольких ссылок
-                let linksHtml = '';
-                const currentLinks = series.links || (series.link ? [series.link] : []);
-                if (currentLinks.length > 0) {
-                    currentLinks.forEach((link, lIdx) => {
-                        if (link.trim()) {
-                            linksHtml += `<a href="${link}" target="_blank" class="btn-action btn-link" onclick="event.stopPropagation()">Сайт ${currentLinks.length > 1 ? lIdx + 1 : ''}</a>`;
-                        }
-                    });
-                }
-
-                card.innerHTML = `
-                    <div class="series-header">
-                        <div class="series-info" onclick="toggleCard(${sIdx})">
-                            <span class="arrow">▼</span>
-                            <strong>${escapeHtml(series.title)}</strong>
-                            <span class="series-progress-badge">${totalPercent}% (${watchedEpisodes}/${totalEpisodes})</span>
-                        </div>
-                        <div class="series-actions">
-                            ${linksHtml}
-                            <button class="btn-action btn-edit" onclick="editSeries(event, ${sIdx})">Редактировать</button>
-                            <button class="btn-action btn-delete" onclick="deleteSeries(event, ${sIdx})">Удалить</button>
-                        </div>
-                    </div>
-                    <div class="series-content">${finalContentHtml}</div>
-                `;
-                container.appendChild(card);
-            });
-
-            // Сохраняем в localStorage при каждом обновлении интерфейса
-            localStorage.setItem('tvShowData', JSON.stringify(data));
-        }
-
-        function saveJSON() {
-            if (data.length === 0) return alert("Нечего сохранять");
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'series_progress.json';
-            a.click();
-        }
-
-        // НОВОЕ: Логика отслеживания прокрутки страницы для отображения/скрытия кнопки "Наверх"
-        const scrollTopBtn = document.getElementById('scrollToTopBtn');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                scrollTopBtn.classList.add('visible');
-            } else {
-                scrollTopBtn.classList.remove('visible');
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
             }
         });
 
-        // НОВОЕ: Функция для плавной прокрутки страницы к самому верху
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+        function generateLinksHtml(item) {
+            let linksHtml = '';
+            const currentLinks = item.links || (item.link ? [item.link] : []);
+            const validLinks = currentLinks.filter(l => l.trim() !== '');
+
+            if (validLinks.length === 0) return '';
+
+            if (validLinks.length === 1) {
+                return `<a href="${validLinks[0]}" target="_blank" class="btn-action btn-link" onclick="event.stopPropagation()">Смотреть</a>`;
+            }
+
+            linksHtml += `<div class="dropdown" onclick="event.stopPropagation(); this.classList.toggle('active')">`;
+            linksHtml += `<button class="btn-action btn-link">Сайты ▼</button>`;
+            linksHtml += `<div class="dropdown-content">`;
+            validLinks.forEach((link, lIdx) => {
+                linksHtml += `<a href="${link}" target="_blank" onclick="event.stopPropagation()">Сайт ${lIdx + 1}</a>`;
             });
+            linksHtml += `</div></div>`;
+            
+            return linksHtml;
         }
 
-        // Отрисовываем интерфейс сразу при запуске скрипта
-        render();
+        function createCard(item, type, isWatchedTab) {
+            const card = document.createElement('div');
+            card.className = `series-card ${item.isOpen ? 'open' : ''}`;
+            card.dataset.id = item.id;
+            
+            if (!isWatchedTab) {
+                card.draggable = true;
+                card.ondragstart = () => onDragStart(item.id, type);
+                card.ondragover = (e) => onDragOver(e, card, item.id); 
+                card.ondragleave = (e) => onDragLeave(e, card);    
+                card.ondrop = () => onDrop(item.id, type);
+                card.ondragend = () => render(); 
+            } else { card.classList.add('no-drag'); }
 
+            const linksHtml = generateLinksHtml(item);
+
+            let quickAddHtml = '';
+            if (type === 'series' && !isWatchedTab) {
+                const hasUnwatched = item.seasons && item.seasons.some(season => season.episodes.includes(false));
+                if (hasUnwatched) {
+                    quickAddHtml = `<button class="btn-action btn-add-ep" onclick="markNextEpisode(event, '${item.id}')" title="Отметить следующую серию">+1 Серия</button>`;
+                }
+            }
+
+            if (type === 'series') {
+                let totalEpisodes = 0, watchedEpisodes = 0, activeHtml = '', watchedHtml = '', watchedCount = 0;
+                item.seasons.forEach((season, seaIdx) => {
+                    const seasonTotal = season.episodes.length;
+                    const seasonWatched = season.episodes.filter(ep => ep).length;
+                    const seasonPercent = seasonTotal > 0 ? Math.round((seasonWatched / seasonTotal) * 100) : 0;
+                    totalEpisodes += seasonTotal; watchedEpisodes += seasonWatched;
+
+                    let episodesHtml = season.episodes.map((watched, epIdx) => `<div class="episode ${watched ? 'watched' : ''}" onclick="event.stopPropagation(); toggleEpisode('${item.id}', ${seaIdx}, ${epIdx})">${epIdx + 1}</div>`).join('');
+                    let seasonHtml = `<div class="season-block"><div class="season-header"><div class="season-title">Сезон ${season.number}</div><div class="season-percent-text">${seasonPercent}%</div></div><div class="season-progress-container"><div class="season-progress-bar" style="width: ${seasonPercent}%"></div></div><div class="episodes-grid">${episodesHtml}</div></div>`;
+
+                    if (seasonTotal > 0 && seasonWatched === seasonTotal) { watchedHtml += seasonHtml; watchedCount++; } 
+                    else { activeHtml += seasonHtml; }
+                });
+
+                let contentHtml = '';
+                if (watchedCount > 0) { contentHtml += `<details class="watched-seasons-spoiler"><summary>✅ Просмотренные сезоны (${watchedCount})</summary><div class="watched-seasons-wrapper">${watchedHtml}</div></details>`; }
+                contentHtml += activeHtml;
+                const totalPercent = totalEpisodes > 0 ? Math.round((watchedEpisodes / totalEpisodes) * 100) : 0;
+
+                card.innerHTML = `<div class="series-header"><div class="series-info" onclick="toggleCard('${item.id}', 'series')"><span class="arrow">▼</span><strong>${escapeHtml(item.title)}</strong> ${isWatchedTab ? '<span class="type-badge">Сериал</span>' : ''}<span class="series-progress-badge">${totalPercent}% (${watchedEpisodes}/${totalEpisodes})</span></div><div class="series-actions">${quickAddHtml}${linksHtml}<button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'series')">Редактировать</button><button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'series')">Удалить</button></div></div><div class="series-content">${contentHtml}</div>`;
+            } else if (type === 'movies') {
+                const statusBtnClass = item.isWatched ? 'btn-delete' : 'btn-add';
+                const statusBtnText = item.isWatched ? '✖ Отменить статус просмотренного' : '✅ Отметить как просмотрено';
+                card.innerHTML = `<div class="series-header"><div class="series-info" onclick="toggleCard('${item.id}', 'movies')"><span class="arrow">▼</span><strong>${escapeHtml(item.title)}</strong> ${isWatchedTab ? '<span class="type-badge">Фильм</span>' : ''}<span class="series-progress-badge" style="color:${item.isWatched ? 'var(--watched)' : '#888'}">${item.isWatched ? 'Просмотрено' : 'Не просмотрено'}</span></div><div class="series-actions">${linksHtml}<button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'movies')">Редактировать</button><button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'movies')">Удалить</button></div></div><div class="series-content"><button class="btn ${statusBtnClass} movie-watched-toggle" onclick="toggleMovieStatus('${item.id}')">${statusBtnText}</button></div>`;
+            }
+            return card;
+        }
+
+        function render() {
+            const container = document.getElementById('seriesList');
+            container.innerHTML = '';
+            let itemsToRender = [];
+
+            if (currentTab === 'series') { itemsToRender = appData.series.filter(s => !isSeriesWatched(s)).map(s => ({ item: s, type: 'series' })); } 
+            else if (currentTab === 'movies') { itemsToRender = appData.movies.filter(m => !m.isWatched).map(m => ({ item: m, type: 'movies' })); } 
+            else if (currentTab === 'watched') {
+                const watchedSeries = appData.series.filter(s => isSeriesWatched(s)).map(s => ({ item: s, type: 'series' }));
+                const watchedMovies = appData.movies.filter(m => m.isWatched).map(m => ({ item: m, type: 'movies' }));
+                itemsToRender = [...watchedMovies, ...watchedSeries];
+            }
+
+            if (itemsToRender.length === 0) { container.innerHTML = `<p style="text-align:center; color:#888; padding: 20px;">В этом разделе пока ничего нет.</p>`; } 
+            else { itemsToRender.forEach(obj => { container.appendChild(createCard(obj.item, obj.type, currentTab === 'watched')); }); }
+
+            localStorage.setItem('tvShowData', JSON.stringify(appData));
+        }
+
+        function saveJSON() { const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'series_progress.json'; a.click(); }
+        const scrollTopBtn = document.getElementById('scrollToTopBtn');
+        window.addEventListener('scroll', () => { if (window.scrollY > 300) scrollTopBtn.classList.add('visible'); else scrollTopBtn.classList.remove('visible'); });
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        switchTab(currentTab);
+
+
+        
+        const particleCanvas = document.getElementById('particle-canvas');
+        const ctx = particleCanvas.getContext('2d');
+
+        const config = {
+            particleColor: 'rgba(255, 110, 0, 1)', 
+            lineColor: 'rgba(255, 110, 0, 0.15)',  
+            particleCount: 80,                     
+            maxDistance: 120,                      
+            minRadius: 1,                          
+            maxRadius: 3,                          
+            speedX: 0.5,                           
+            speedY: 0.5                            
+        };
+
+        let particles = [];
+
+        function resizeCanvas() {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = Math.random() * particleCanvas.height;
+                this.radius = Math.random() * (config.maxRadius - config.minRadius) + config.minRadius;
+                this.vx = (Math.random() - 0.5) * config.speedX;
+                this.vy = (Math.random() - 0.5) * config.speedY;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > particleCanvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > particleCanvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = config.particleColor;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const adjustedCount = Math.floor((particleCanvas.width * particleCanvas.height) / 15000);
+            const count = Math.min(adjustedCount, config.particleCount);
+            
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function drawLines() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < config.maxDistance) {
+                        const alpha = (1 - distance / config.maxDistance) * 0.25;
+                        ctx.strokeStyle = `rgba(255, 110, 0, ${alpha})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            drawLines();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        
+        resizeCanvas();
+        animate();
     </script>
 </body>
 </html>
