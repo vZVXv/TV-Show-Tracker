@@ -23,32 +23,19 @@
             --btn-link: #9c27b0;     
             --btn-delete: #ff3333;   
             --text-dark: #000000;    
-            --btn-info: #0288d1;     
+            --btn-info: #0288d1;
+            --anime-accent: #e91e63;
         }
 
-        html {
-            background-color: #121212; 
-        }
+        html { background-color: #121212; }
 
         body { 
-            font-family: 'Segoe UI', Tahoma, sans-serif; 
-            color: var(--text); 
-            max-width: 900px; 
-            margin: 20px auto; 
-            padding: 20px; 
-            position: relative;
-            z-index: 1;
+            font-family: 'Segoe UI', Tahoma, sans-serif; color: var(--text); 
+            max-width: 900px; margin: 20px auto; padding: 20px; 
+            position: relative; z-index: 1;
         }
 
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none; 
-        }
+        #particle-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
 
         h1 { text-align: center; color: var(--accent); }
         .season-percent-text { font-size: 0.8em; opacity: 0.8; }
@@ -59,6 +46,7 @@
         .tab-btn.active { background: var(--card-bg); color: var(--accent); border: 1px solid var(--border); border-bottom: 3px solid var(--accent); font-weight: bold; opacity: 1; }
 
         .controls { background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center; border: 1px solid var(--border); }
+        .status-filter { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; outline: none; flex-grow: 1; max-width: 250px; }
 
         .series-card { background: var(--card-bg); border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border); cursor: grab; transition: opacity 0.2s, border-color 0.2s; }
         .series-card.no-drag { cursor: default; }
@@ -66,34 +54,25 @@
         .series-card.dragging { opacity: 0.5; border: 1px dashed var(--accent); }
         .series-card.drag-over { border: 2px dashed var(--accent); background: #232323; }
 
-        .series-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); border-radius: 11px; transition: border-radius 0.2s; }
+        .series-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); border-radius: 11px; transition: border-radius 0.2s; gap: 15px; }
         .series-card.open .series-header { border-radius: 11px 11px 0 0; }
         .series-header:hover { background: var(--header-hover); }
         
-        .series-info { display: flex; align-items: center; gap: 15px; cursor: pointer; flex-grow: 1; }
-        .series-progress-badge { font-size: 0.85em; background: var(--badge-bg); padding: 4px 8px; border-radius: 4px; color: var(--watched); }
-        .type-badge { font-size: 0.75em; background: #444; padding: 3px 6px; border-radius: 4px; color: #ddd; margin-left: 10px; }
+        .series-info { display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1 1 0%; min-width: 0; }
+        .series-title-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; font-weight: bold; font-size: 1.05em; }
+        
+        .badge-new { background: #ff3333; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; margin-right: 8px; font-weight: bold; animation: pulse 2s infinite; vertical-align: middle; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
+        .series-progress-badge { font-size: 0.85em; background: var(--badge-bg); padding: 4px 8px; border-radius: 4px; color: var(--watched); flex-shrink: 0; white-space: nowrap; }
+
+        .series-actions { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; flex-shrink: 0; }
         .series-content { display: none; padding: 15px; border-top: 1px solid var(--border); cursor: default; max-height: 500px; overflow-y: auto; border-radius: 0 0 11px 11px; }
 
-
-
-
-::-webkit-scrollbar { 
-    width: 8px; 
-}
-::-webkit-scrollbar-track { 
-    background: var(--bg); 
-    border-radius: 4px; 
-}
-::-webkit-scrollbar-thumb { 
-    background: var(--border); 
-    border-radius: 4px; 
-}
-::-webkit-scrollbar-thumb:hover { 
-    background: var(--accent); 
-}
-
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         .series-card.open .series-content { display: block; }
 
@@ -103,7 +82,7 @@
         .season-progress-container { height: 4px; background: var(--progress-bg); width: 100%; border-radius: 2px; margin-bottom: 12px; overflow: hidden; }
         .season-progress-bar { height: 100%; background: var(--watched); transition: width 0.3s ease; }
 
-        .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 8px; }
+        .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 8px; margin-top: 10px; }
         .episode { border: 1px solid var(--border); padding: 10px 0; text-align: center; cursor: pointer; border-radius: 6px; transition: 0.2s; user-select: none; background: var(--episode-bg); }
         .episode:hover { border-color: var(--accent); }
         .episode.watched { background: var(--watched); color: var(--text-dark); border-color: var(--watched); font-weight: bold; }
@@ -113,12 +92,10 @@
         .btn-add { background: var(--btn-add); color: white; }
         .btn-info { background: var(--btn-info); color: white; }
 
-        .series-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .btn-action { background: transparent; border: 1px solid; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-left: 0; text-decoration: none; font-size: 0.9em; display: inline-block; }
+        .btn-action { background: transparent; border: 1px solid; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-left: 0; text-decoration: none; font-size: 0.9em; display: inline-block; white-space: nowrap; }
         
         .btn-add-ep { color: #4caf50; border-color: #4caf50; }
         .btn-add-ep:hover { background: #4caf50; color: #fff; }
-
         .btn-edit { color: var(--btn-edit); border-color: var(--btn-edit); }
         .btn-edit:hover { background: var(--btn-edit); color: var(--text-dark); }
         .btn-link { color: var(--btn-link); border-color: var(--btn-link); }
@@ -127,26 +104,25 @@
         .btn-delete:hover { background: var(--btn-delete); color: var(--text-dark); }
 
         .dropdown { position: relative; display: inline-block; }
-        .dropdown-content { display: none; position: absolute; background-color: var(--card-bg); min-width: 140px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.6); z-index: 100; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; top: 100%; left: 0; margin-top: 5px; }
+        .dropdown-content { display: none; position: absolute; background-color: var(--card-bg); min-width: 140px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.6); z-index: 100; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; top: 100%; left: auto; right: 0; margin-top: 5px; }
         .dropdown-content a { color: var(--text); padding: 10px 15px; text-decoration: none; display: block; border-bottom: 1px solid var(--border); font-size: 0.9em; transition: 0.2s; text-align: left; }
         .dropdown-content a:last-child { border-bottom: none; }
         .dropdown-content a:hover { background-color: var(--btn-link); color: white; }
         .dropdown.active .dropdown-content { display: block; }
 
-        input[type="file"] { color: var(--text); }
-        .arrow { transition: 0.3s; display: inline-block; }
+        input[type="file"], input[type="checkbox"], select { color: var(--text); }
+        .arrow { transition: 0.3s; display: inline-block; flex-shrink: 0; }
         .open .arrow { transform: rotate(180deg); }
         .app-version { font-size: 0.35em; color: #888; font-weight: normal; vertical-align: middle; margin-left: 10px; background: #252525; padding: 2px 8px; border-radius: 4px; border: 1px solid #333; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--card-bg); padding: 20px; border-radius: 12px; width: 90%; max-width: 600px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
-        .modal-header { font-size: 1.2em; color: var(--accent); margin-bottom: 15px; display: flex; justify-content: space-between; }
-        .close-modal { cursor: pointer; color: var(--text); }
+        .modal-header { font-size: 1.2em; color: var(--accent); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .close-modal { cursor: pointer; color: var(--text); font-size: 1.2em; }
         .edit-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         .edit-table th, .edit-table td { border: 1px solid var(--border); padding: 8px; text-align: left; }
         .edit-table th { background: var(--header-bg); color: var(--accent); }
-        
         
         .edit-input { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 5px; border-radius: 4px; box-sizing: border-box; }
         textarea.edit-input { resize: vertical; }
@@ -155,28 +131,26 @@
         .btn-scroll-top.visible { opacity: 1; visibility: visible; }
         .btn-scroll-top:hover { background: var(--watched); transform: scale(1.1); }
 
-        
         .watched-seasons-spoiler { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
-        
         .watched-seasons-spoiler summary { padding: 12px 15px; cursor: pointer; color: var(--watched); font-weight: bold; font-size: 0.9em; outline: none; user-select: none; background: rgba(0, 0, 0, 0.4); transition: background 0.2s; }
         .watched-seasons-spoiler summary:hover { background: rgba(0, 0, 0, 0.6); }
         .watched-seasons-wrapper { padding: 15px 15px 0 15px; border-top: 1px solid var(--border); }
-        .movie-watched-toggle { display: block; width: 100%; text-align: center; padding: 15px; font-size: 1.1em; margin-top: 10px; }
+
+        .instruction-list { padding-left: 20px; }
+        .instruction-list li { margin-bottom: 12px; line-height: 1.5; font-size: 0.95em; }
 
         @media (max-width: 768px) {
             body { padding: 10px; }
             .tabs { gap: 5px; }
             .tab-btn { padding: 10px; font-size: 0.95em; }
             .controls { flex-direction: column; align-items: stretch; gap: 10px; }
+            .status-filter { max-width: none; width: 100%; }
             .controls .btn { width: 100%; }
-            .series-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-            .series-info { width: 100%; justify-content: flex-start; }
-            .series-actions { width: 100%; display: flex; flex-wrap: wrap; gap: 8px; }
+            .series-header { flex-direction: column; align-items: stretch; gap: 12px; }
+            .series-info { width: 100%; }
+            .series-actions { width: 100%; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; }
             .btn-action { margin-left: 0; flex-grow: 1; text-align: center; padding: 8px 10px; }
-            .modal-content { width: 95%; padding: 15px; }
-            .edit-table { display: block; overflow-x: auto; white-space: nowrap; }
-            .edit-table th, .edit-table td { padding: 6px; font-size: 0.9em; }
-            .btn-scroll-top { bottom: 20px; right: 20px; width: 45px; height: 45px; font-size: 18px; }
+            .dropdown-content { right: auto; left: 0; width: 100%; }
         }
     </style>
 </head>
@@ -184,17 +158,25 @@
 
     <canvas id="particle-canvas"></canvas>
 
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.3.2</span></h1>
+    <h1>🎬 TV Show Tracker <span class="app-version">v1.5.9</span></h1>
 
     <div class="tabs">
         <button class="tab-btn active" id="tab-series" onclick="switchTab('series')">🎬 Сериалы</button>
         <button class="tab-btn" id="tab-movies" onclick="switchTab('movies')">🎥 Фильмы</button>
-        <button class="tab-btn" id="tab-watched" onclick="switchTab('watched')">✅ Просмотрено</button>
+        <button class="tab-btn" id="tab-anime" onclick="switchTab('anime')">🌸 Аниме</button>
+        <button class="tab-btn" id="tab-cartoons" onclick="switchTab('cartoons')">🦄 Мультики</button>
     </div>
 
     <div class="controls">
+        <select id="statusFilter" class="status-filter" onchange="render()">
+            <option value="watching">Смотрю</option>
+            <option value="plan-to-watch">В планах</option>
+            <option value="completed">Просмотрено</option>
+            <option value="on-hold">Отложено</option>
+            <option value="dropped">Брошено</option>
+        </select>
         <button class="btn btn-info" onclick="showInstructions()">ℹ️ Инструкция</button>
-        <button class="btn btn-save" onclick="showDataModal()">💾 Управление данными (JSON)</button>
+        <button class="btn btn-save" onclick="showDataModal()">💾 Управление данными</button>
         <button class="btn btn-add" id="mainAddBtn" onclick="addCurrentType()">+ Добавить</button>
     </div>
 
@@ -203,42 +185,61 @@
     <div id="dataModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <span>💾 Данные (Резервная копия)</span>
+                <span>💾 Управление данными</span>
                 <span class="close-modal" onclick="closeModal('dataModal')">✖</span>
             </div>
+            
             <div style="display: flex; flex-direction: column; gap: 20px;">
-                <div>
-                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--accent);">Загрузить из файла</h4>
-                    <p style="font-size: 0.9em; margin-bottom: 10px; color: #aaa;">Выберите ранее сохраненный файл .json, чтобы восстановить список.</p>
-                    <input type="file" id="fileInput" accept=".json" style="color: var(--text); width: 100%;">
+                
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--accent);">📦 Резервная копия трекера</h4>
+                    <p style="font-size: 0.85em; margin-bottom: 10px; color: #aaa;">Для сохранения и восстановления всех ваших списков.</p>
+                    <input type="file" id="backupInput" accept=".json" style="margin-bottom: 15px; width: 100%;">
+                    <button class="btn btn-save" style="width: 100%;" onclick="saveAndCloseModal()">⬇️ Скачать текущий бэкап (JSON)</button>
                 </div>
-                <hr style="border: none; border-top: 1px solid var(--border); width: 100%; margin: 0;">
-                <div>
-                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--accent);">Сохранить на устройство</h4>
-                    <p style="font-size: 0.9em; margin-bottom: 10px; color: #aaa;">Скачайте текущий прогресс в виде файла .json.</p>
-                    <button class="btn btn-save" style="width: 100%;" onclick="saveAndCloseModal()">💾 Скачать JSON файл</button>
+
+                <div style="background: rgba(233, 30, 99, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(233, 30, 99, 0.3);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: #e91e63;">🌸 Импорт списков Аниме</h4>
+                    <p style="font-size: 0.85em; margin-bottom: 15px; color: #aaa;">Лайфхак: сначала загрузите XML (для правильного количества серий), а затем JSON (для перевода названий на русский).</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.9em; font-weight: bold; display: block; margin-bottom: 5px;">1. Из MAL/Shikimori (Формат XML):</label>
+                        <input type="file" id="malXmlInput" accept=".xml" style="width: 100%;">
+                    </div>
+                    
+                    <div>
+                        <label style="font-size: 0.9em; font-weight: bold; display: block; margin-bottom: 5px;">2. Из Shikimori (Формат JSON):</label>
+                        <input type="file" id="shikiJsonInput" accept=".json" style="width: 100%;">
+                    </div>
                 </div>
+                
+                <div style="background: rgba(255, 51, 51, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(255, 51, 51, 0.3);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--btn-delete);">⚠️ Опасная зона</h4>
+                    <button class="btn btn-delete" style="width: 100%;" onclick="resetAllData()">🗑 Очистить все данные</button>
+                </div>
+
             </div>
         </div>
     </div>
 
     <div id="instructionModal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 700px;">
             <div class="modal-header">
                 <span>📖 Инструкция по использованию</span>
                 <span class="close-modal" onclick="closeModal('instructionModal')">✖</span>
             </div>
             <div>
-                <ul>
-                    <li><b>Вкладки:</b> Переключайтесь между активными сериалами, фильмами и завершенными тайтлами.</li>
-                    <li><b>Автоматизация:</b> Как только вы отмечаете фильм просмотренным или досматриваете все сезоны сериала, они автоматически перемещаются во вкладку "Просмотрено".</li>
-                    <li><b>Добавление:</b> Нажмите "+ Добавить", чтобы создать карточку в текущем разделе.</li>
-                    <li><b>Редактирование:</b> В окне редактирования можно вставить несколько ссылок (по одной на строке), управлять сезонами и названием.</li>
-                    <li><b>Быстрая отметка:</b> Кнопка "+1 Серия" автоматически отмечает следующую непросмотренную серию.</li>
-                    <li><b>Сортировка:</b> Зажмите карточку и перетащите её вверх или вниз (работает только в разделах "Сериалы" и "Фильмы").</li>
+                <ul class="instruction-list">
+                    <li><b style="color:var(--accent)">Добавление и редактирование:</b> Нажмите «+ Добавить» для создания карточки. Кнопка <b>✏️</b> открывает настройки: там можно перенести тайтл в другой раздел, изменить статус, указать ссылки для просмотра, добавить сезоны или настроить количество серий.</li>
+                    <li><b style="color:var(--accent)">Отметка просмотра:</b> Нажимайте на квадратики серий, чтобы отметить их. Кнопка <b style="color:#4caf50;">"+1 Серия"</b> сама находит первую непросмотренную серию и автоматически её отмечает. Когда все серии просмотрены, тайтл сам перейдет в статус «Просмотрено».</li>
+                    <li><b style="color:var(--accent)">Ссылки на просмотр:</b> В окне редактирования можно вставить несколько ссылок (каждую с новой строки). В карточке появится удобный выпадающий список со всеми сайтами.</li>
+                    <li><b style="color:var(--accent)">Полнометражные фильмы (Аниме):</b> Фильмы и спецвыпуски автоматически получают красивые цветные метки (<b>ФИЛЬМ</b>, <b>OVA</b>, <b>ONA</b>), а счетчик серий для фильмов скрывается. Вы также можете вручную отметить чекбокс «Полнометражка» в настройках аниме.</li>
+                    <li><b style="color:var(--accent)">Сортировка (Drag & Drop):</b> Зажмите левую кнопку мыши на любой карточке и перетащите её выше или ниже, чтобы выстроить свой личный топ (работает везде, кроме статусов "Отложено" и "Брошено").</li>
+                    <li><b style="color:var(--accent)">Умный импорт Аниме:</b> Для переноса базы с Shikimori загрузите сначала <b>XML</b> файл (подтянет типы OVA/Фильмы, статусы и точное количество серий), а сразу за ним загрузите <b>JSON</b> файл (переведет все названия на русский язык). Трекер сам склеит данные воедино.</li>
+                    <li><b style="color:var(--accent)">Управление данными (Бэкап):</b> Обязательно сохраняйте резервную копию трекера! Нажмите «Скачать текущий бэкап», чтобы получить JSON файл со всеми вашими сериалами, фильмами и мультфильмами. С его помощью можно легко перенести данные на другое устройство.</li>
                 </ul>
             </div>
-            <button class="btn btn-save" style="margin-top:15px; width:100%" onclick="closeModal('instructionModal')">Понятно</button>
+            <button class="btn btn-save" style="margin-top:15px; width:100%" onclick="closeModal('instructionModal')">Всё понятно!</button>
         </div>
     </div>
 
@@ -259,39 +260,94 @@
     <button id="scrollToTopBtn" class="btn-scroll-top" onclick="scrollToTop()">▲</button>
 
     <script>
-        
-        let appData = { series: [], movies: [] };
+        let appData = { series: [], movies: [], anime: [], cartoons: [] };
         let currentTab = 'series'; 
         let draggedItemId = null; 
         let draggedItemType = null;
         let currentEditingId = null; 
         let currentEditingType = null;
-
+        
+        const newlyAddedIds = new Set();
         const generateId = () => Math.random().toString(36).substr(2, 9);
+
+        const statusMapText = {
+            'watching': 'Смотрю',
+            'plan-to-watch': 'В планах',
+            'completed': 'Просмотрено',
+            'on-hold': 'Отложено',
+            'dropped': 'Брошено'
+        };
+
+        function checkSeriesCompletion(series) {
+            const allWatched = series.seasons.every(season => season.episodes.length > 0 && season.episodes.every(ep => ep === true));
+            if (allWatched && series.seasons.length > 0 && series.status !== 'dropped') {
+                series.status = 'completed';
+            } else if (series.status === 'completed' && !allWatched) {
+                series.status = 'watching';
+            }
+        }
+
+        function migrateData() {
+            const isSeriesWatched = (s) => s.seasons && s.seasons.length > 0 && s.seasons.every(season => season.episodes.length > 0 && season.episodes.every(ep => ep === true));
+
+            if (!appData.cartoons) appData.cartoons = [];
+
+            appData.series.forEach(s => { 
+                if (!s.id) s.id = generateId(); 
+                if (!s.status) s.status = isSeriesWatched(s) ? 'completed' : 'watching';
+            });
+            appData.cartoons.forEach(c => { 
+                if (!c.id) c.id = generateId(); 
+                if (!c.status) c.status = isSeriesWatched(c) ? 'completed' : 'watching';
+            });
+            appData.movies.forEach(m => { 
+                if (!m.id) m.id = generateId(); 
+                if (!m.status) {
+                    m.status = m.isWatched ? 'completed' : 'plan-to-watch';
+                    delete m.isWatched;
+                }
+            });
+            appData.anime.forEach(a => { 
+                if (!a.id) a.id = generateId(); 
+                if (a.score !== undefined) delete a.score;
+                if (!a.status) {
+                    a.status = a.isWatched ? 'completed' : 'watching';
+                    delete a.isWatched;
+                }
+                if (!a.episodes) {
+                    a.episodesTotal = parseInt(a.episodesTotal) || 0;
+                    a.episodes = new Array(a.episodesTotal).fill(false);
+                    let watched = parseInt(a.episodesWatched) || 0;
+                    for(let i = 0; i < watched; i++) if (i < a.episodes.length) a.episodes[i] = true;
+                }
+                if (a.isFeatureFilm === undefined) a.isFeatureFilm = false;
+                if (a.animeFormat === 'movie') a.isFeatureFilm = true;
+            });
+        }
 
         const savedData = localStorage.getItem('tvShowData');
         if (savedData) {
             try {
                 let parsed = JSON.parse(savedData);
                 if (Array.isArray(parsed)) { appData.series = parsed; } 
-                else { appData = parsed; if (!appData.movies) appData.movies = []; }
+                else { 
+                    appData = parsed; 
+                    if (!appData.movies) appData.movies = []; 
+                    if (!appData.anime) appData.anime = []; 
+                    if (!appData.cartoons) appData.cartoons = []; 
+                }
+                migrateData();
             } catch (e) { console.error("Ошибка чтения данных", e); }
         }
-        
-        appData.series.forEach(s => { if (!s.id) s.id = generateId(); });
-        appData.movies.forEach(m => { if (!m.id) m.id = generateId(); });
 
         function escapeHtml(text) {
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
         }
 
-        function isSeriesWatched(series) {
-            if (!series.seasons || series.seasons.length === 0) return false;
-            return series.seasons.every(season => season.episodes.length > 0 && season.episodes.every(ep => ep === true));
+        function getItemById(id, type) { 
+            return (type === 'series' ? appData.series : type === 'movies' ? appData.movies : type === 'anime' ? appData.anime : appData.cartoons).find(item => item.id === id); 
         }
-
-        function getItemById(id, type) { return (type === 'series' ? appData.series : appData.movies).find(item => item.id === id); }
 
         function switchTab(tabName) {
             currentTab = tabName;
@@ -299,40 +355,189 @@
             document.getElementById(`tab-${tabName}`).classList.add('active');
             
             const addBtn = document.getElementById('mainAddBtn');
-            if (tabName === 'series') { addBtn.style.display = 'inline-block'; addBtn.innerText = '+ Добавить сериал'; } 
-            else if (tabName === 'movies') { addBtn.style.display = 'inline-block'; addBtn.innerText = '+ Добавить фильм'; } 
-            else { addBtn.style.display = 'none'; }
+            const statusFilter = document.getElementById('statusFilter');
+            
+            if (tabName === 'series') { addBtn.innerText = '+ Добавить сериал'; } 
+            else if (tabName === 'movies') { addBtn.innerText = '+ Добавить фильм'; } 
+            else if (tabName === 'anime') { addBtn.innerText = '+ Добавить аниме'; } 
+            else if (tabName === 'cartoons') { addBtn.innerText = '+ Добавить мультик'; } 
+            
+            if (tabName === 'movies') { statusFilter.value = 'plan-to-watch'; }
+            else { statusFilter.value = 'watching'; }
+            
             render();
         }
 
         function addCurrentType() {
+            let filterVal = document.getElementById('statusFilter').value;
+            let newItem;
             if (currentTab === 'series') {
-                const newSeries = { id: generateId(), title: "Новый сериал", links: [], seasons: [{ number: 1, episodes: new Array(10).fill(false) }], isOpen: true };
-                appData.series.push(newSeries); render(); editItem({ stopPropagation: () => {} }, newSeries.id, 'series');
+                newItem = { id: generateId(), title: "Новый сериал", links: [], seasons: [{ number: 1, episodes: new Array(10).fill(false) }], status: filterVal, isOpen: true };
+                appData.series.unshift(newItem); 
+            } else if (currentTab === 'cartoons') {
+                newItem = { id: generateId(), title: "Новый мультик", links: [], seasons: [{ number: 1, episodes: new Array(10).fill(false) }], status: filterVal, isOpen: true };
+                appData.cartoons.unshift(newItem); 
             } else if (currentTab === 'movies') {
-                const newMovie = { id: generateId(), title: "Новый фильм", links: [], isWatched: false, isOpen: true };
-                appData.movies.push(newMovie); render(); editItem({ stopPropagation: () => {} }, newMovie.id, 'movies');
+                newItem = { id: generateId(), title: "Новый фильм", links: [], status: filterVal, isOpen: true };
+                appData.movies.unshift(newItem); 
+            } else if (currentTab === 'anime') {
+                newItem = { id: generateId(), title: "Новое аниме", episodesTotal: 12, episodes: new Array(12).fill(false), isFeatureFilm: false, links: [], status: filterVal, isOpen: true };
+                appData.anime.unshift(newItem); 
             }
+            newlyAddedIds.add(newItem.id);
+            render(); 
+            editItem({ stopPropagation: () => {} }, newItem.id, currentTab);
         }
 
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function showInstructions() { document.getElementById('instructionModal').classList.add('active'); }
         function showDataModal() { document.getElementById('dataModal').classList.add('active'); }
         function saveAndCloseModal() { saveJSON(); closeModal('dataModal'); }
+        
+        function resetAllData() {
+            if (confirm('Вы уверены? Все данные будут безвозвратно удалены!')) {
+                appData = { series: [], movies: [], anime: [], cartoons: [] };
+                localStorage.removeItem('tvShowData');
+                render();
+                closeModal('dataModal');
+            }
+        }
 
-        document.getElementById('fileInput').addEventListener('change', function (e) {
+        document.getElementById('backupInput').addEventListener('change', function (e) {
             const reader = new FileReader();
             reader.onload = (event) => {
                 try {
                     let parsed = JSON.parse(event.target.result);
-                    if (Array.isArray(parsed)) { appData = { series: parsed, movies: [] }; } 
-                    else { appData = parsed; if (!appData.movies) appData.movies = []; }
-                    appData.series.forEach(s => { if (!s.id) s.id = generateId(); });
-                    appData.movies.forEach(m => { if (!m.id) m.id = generateId(); });
-                    render(); closeModal('dataModal'); 
-                } catch (e) { alert("Ошибка в файле JSON"); }
+                    if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].target_title !== undefined) {
+                        alert("⚠️ Вы пытаетесь загрузить список Shikimori в раздел Полного Бэкапа. Пожалуйста, используйте кнопку импорта Shikimori ниже.");
+                        return;
+                    }
+                    if (Array.isArray(parsed)) { appData = { series: parsed, movies: [], anime: [], cartoons: [] }; } 
+                    else { 
+                        appData = parsed; 
+                        if (!appData.movies) appData.movies = []; 
+                        if (!appData.anime) appData.anime = []; 
+                        if (!appData.cartoons) appData.cartoons = [];
+                    }
+                    migrateData(); render(); closeModal('dataModal'); 
+                } catch (err) { alert("Ошибка при чтении файла бэкапа JSON"); }
             };
-            reader.readAsText(e.target.files[0]); e.target.value = ''; 
+            if(e.target.files[0]) reader.readAsText(e.target.files[0]); 
+            e.target.value = ''; 
+        });
+
+        document.getElementById('shikiJsonInput').addEventListener('change', function (e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    let parsed = JSON.parse(event.target.result);
+                    if (!Array.isArray(parsed) || (parsed.length > 0 && parsed[0].target_title === undefined)) {
+                        alert("⚠️ Этот файл не похож на экспорт из Shikimori.");
+                        return;
+                    }
+                    let addedCount = 0;
+                    let updatedCount = 0;
+                    const shikiStatusMap = { 'watching': 'watching', 'completed': 'completed', 'on_hold': 'on-hold', 'dropped': 'dropped', 'planned': 'plan-to-watch' };
+                    
+                    parsed.forEach(item => {
+                        if(item.target_type !== 'Anime') return;
+                        let titleRu = item.target_title_ru;
+                        let titleEn = item.target_title;
+                        if (!titleEn && !titleRu) return;
+                        
+                        let watched = parseInt(item.episodes) || 0;
+                        let status = shikiStatusMap[item.status] || 'plan-to-watch';
+
+                        let existingAnime = appData.anime.find(a => a.title === titleEn || (titleRu && a.title === titleRu));
+
+                        if (existingAnime) {
+                            if (titleRu && existingAnime.title !== titleRu) {
+                                existingAnime.title = titleRu;
+                                updatedCount++;
+                            }
+                        } else {
+                            let episodesTotal = (status === 'completed') ? watched : 0; 
+                            let episodesArray = new Array(episodesTotal > 0 ? episodesTotal : watched).fill(false);
+                            for(let i=0; i<watched; i++) episodesArray[i] = true;
+
+                            let newId = generateId();
+                            appData.anime.unshift({
+                                id: newId, title: titleRu || titleEn, episodesTotal: episodesTotal, 
+                                episodes: episodesArray, status: status, isFeatureFilm: false, links: [], isOpen: false
+                            });
+                            newlyAddedIds.add(newId);
+                            addedCount++;
+                        }
+                    });
+                    alert(`Обработка завершена!\nДобавлено новых аниме: ${addedCount}\nОбновлено названий на русские: ${updatedCount}`);
+                    migrateData(); render(); closeModal('dataModal'); 
+                } catch (err) { alert("Ошибка при чтении Shikimori JSON"); }
+            };
+            if(e.target.files[0]) reader.readAsText(e.target.files[0]); 
+            e.target.value = ''; 
+        });
+
+        document.getElementById('malXmlInput').addEventListener('change', function (e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(event.target.result, "text/xml");
+                    const animes = xmlDoc.getElementsByTagName("anime");
+                    let addedCount = 0;
+                    let updatedCount = 0;
+                    const statusMap = {
+                        'watching': 'watching', 'completed': 'completed', 'on-hold': 'on-hold',
+                        'dropped': 'dropped', 'plan to watch': 'plan-to-watch', 'planned': 'plan-to-watch'
+                    };
+                    for (let i = 0; i < animes.length; i++) {
+                        const node = animes[i];
+                        const getVal = (tag) => { const el = node.getElementsByTagName(tag)[0]; return el ? (el.textContent || "").trim() : ""; };
+                        const titleRu = getVal("series_title_ru") || getVal("my_title_ru");
+                        const titleEn = getVal("series_title") || getVal("title");
+                        const title = titleRu || titleEn;
+                        if (!title) continue;
+                        
+                        const total = parseInt(getVal("series_episodes") || getVal("episodes")) || 0;
+                        const watched = parseInt(getVal("my_watched_episodes") || getVal("watched_episodes")) || 0;
+                        
+                        let statusRaw = (getVal("my_status") || getVal("shiki_status") || "plan to watch").toLowerCase();
+                        let status = statusMap[statusRaw] || 'plan-to-watch';
+                        if (statusRaw === "completed" || (total > 0 && watched >= total)) status = 'completed';
+                        
+                        const seriesType = (getVal("series_type") || getVal("type") || "").toLowerCase();
+                        const isMovie = (seriesType === 'movie');
+                        
+                        let episodesArray = new Array(total > 0 ? total : watched).fill(false);
+                        for(let j = 0; j < watched; j++) episodesArray[j] = true;
+                        
+                        let existingAnime = appData.anime.find(a => a.title === title || a.title === titleEn);
+                        if (existingAnime) {
+                            if (existingAnime.episodesTotal === 0 && total > 0) {
+                                existingAnime.episodesTotal = total;
+                                while(existingAnime.episodes.length < total) existingAnime.episodes.push(false);
+                                updatedCount++;
+                            }
+                            if (seriesType) {
+                                existingAnime.animeFormat = seriesType;
+                                if (isMovie) existingAnime.isFeatureFilm = true;
+                            }
+                        } else {
+                            let newId = generateId();
+                            appData.anime.unshift({
+                                id: newId, title: title, episodesTotal: total, episodes: episodesArray,
+                                status: status, isFeatureFilm: isMovie, animeFormat: seriesType, links: [], isOpen: false
+                            });
+                            newlyAddedIds.add(newId);
+                            addedCount++;
+                        }
+                    }
+                    alert(`Успешно импортировано новых аниме (XML): ${addedCount}\nОбновлено данных у существующих: ${updatedCount}`);
+                    render(); closeModal('dataModal');
+                } catch (err) { alert("Ошибка при разборе XML файла."); console.error(err); }
+            };
+            if(e.target.files[0]) reader.readAsText(e.target.files[0]);
+            e.target.value = '';
         });
 
         function editItem(e, id, type) {
@@ -343,18 +548,48 @@
 
             let html = `
                 <table class="edit-table">
-                    <tr><td width="30%"><strong>Название</strong></td><td><input type="text" id="editTitle" class="edit-input" value="${escapeHtml(item.title)}"></td></tr>
+                    <tr><td width="35%"><strong>Раздел</strong></td>
+                        <td>
+                            <select id="editSection" class="edit-input">
+                                <option value="series" ${type==='series'?'selected':''}>Сериалы</option>
+                                <option value="cartoons" ${type==='cartoons'?'selected':''}>Мультики</option>
+                                <option value="movies" ${type==='movies'?'selected':''}>Фильмы</option>
+                                <option value="anime" ${type==='anime'?'selected':''}>Аниме</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td><strong>Категория</strong></td>
+                        <td>
+                            <select id="editStatus" class="edit-input">
+                                <option value="watching" ${item.status==='watching'?'selected':''}>Смотрю</option>
+                                <option value="plan-to-watch" ${item.status==='plan-to-watch'?'selected':''}>В планах</option>
+                                <option value="completed" ${item.status==='completed'?'selected':''}>Просмотрено</option>
+                                <option value="on-hold" ${item.status==='on-hold'?'selected':''}>Отложено</option>
+                                <option value="dropped" ${item.status==='dropped'?'selected':''}>Брошено</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td><strong>Название</strong></td><td><input type="text" id="editTitle" class="edit-input" value="${escapeHtml(item.title)}"></td></tr>
                     <tr><td><strong>Сайты</strong><br><small>(каждый с новой строки)</small></td><td><textarea id="editLinks" class="edit-input" rows="3" placeholder="https://site1.com">${links.join('\n')}</textarea></td></tr>
                 </table>`;
 
-            if (type === 'series') {
+            if (type === 'series' || type === 'cartoons') {
                 html += `<h4 style="margin-bottom: 10px; color: var(--accent);">Сезоны</h4><table class="edit-table" id="editSeasonsTable"><thead><tr><th>Сезон</th><th>Кол-во серий</th><th style="text-align: center;">Всё просмотрено</th><th style="text-align: center;">✖</th></tr></thead><tbody id="editSeasonsBody">`;
                 item.seasons.forEach((season, sIdx) => {
                     const allWatched = season.episodes.length > 0 && season.episodes.every(ep => ep === true);
                     html += `<tr data-season-idx="${sIdx}"><td>${season.number}</td><td><input type="number" class="edit-input season-count" value="${season.episodes.length}" min="1"></td><td style="text-align: center;"><input type="checkbox" class="season-watched-cb" ${allWatched ? 'checked' : ''}></td><td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td></tr>`;
                 });
                 html += `</tbody></table><button class="btn btn-add" style="padding: 5px 10px; font-size: 0.9em; width: 100%;" onclick="addSeasonRow()">+ Добавить сезон</button>`;
+            } else if (type === 'anime') {
+                html += `<h4 style="margin-bottom: 10px; color: var(--accent);">Настройки аниме</h4>
+                <div style="margin-bottom: 15px;">
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="editAnimeFeature" ${item.isFeatureFilm ? 'checked' : ''}> Полнометражка (фильм)
+                    </label>
+                </div>
+                <table class="edit-table" id="animeEpisodesTable"><tr><td><strong>Всего серий</strong></td><td><input type="number" id="editAnimeTotal" class="edit-input" value="${item.episodesTotal}" min="0"></td></tr></table>`;
             }
+
             document.getElementById('editModalBody').innerHTML = html;
             document.getElementById('editModal').classList.add('active');
         }
@@ -372,27 +607,68 @@
 
         function saveEdit() {
             const item = getItemById(currentEditingId, currentEditingType);
+            const newType = document.getElementById('editSection').value;
+            
             item.title = document.getElementById('editTitle').value.trim() || "Без названия";
             item.links = document.getElementById('editLinks').value.split('\n').map(l => l.trim()).filter(l => l !== '');
+            item.status = document.getElementById('editStatus').value;
             delete item.link;
 
-            if (currentEditingType === 'series') {
-                const rows = document.getElementById('editSeasonsBody').querySelectorAll('tr');
-                const newSeasons = [];
-                rows.forEach((row, idx) => {
-                    const countInput = parseInt(row.querySelector('.season-count').value) || 10;
-                    const isWatched = row.querySelector('.season-watched-cb').checked;
-                    let oldEpisodes = item.seasons[idx] ? item.seasons[idx].episodes : [];
-                    let newEpisodes = new Array(countInput).fill(false);
-                    for (let i = 0; i < countInput; i++) {
-                        if (isWatched) newEpisodes[i] = true; 
-                        else if (i < oldEpisodes.length) newEpisodes[i] = oldEpisodes[i];
+            if (newType === 'series' || newType === 'cartoons') {
+                if (!item.seasons) item.seasons = [{ number: 1, episodes: new Array(10).fill(false) }];
+                
+                if (currentEditingType === 'series' || currentEditingType === 'cartoons') {
+                    const rows = document.getElementById('editSeasonsBody').querySelectorAll('tr');
+                    const newSeasons = [];
+                    rows.forEach((row, idx) => {
+                        const countInput = parseInt(row.querySelector('.season-count').value) || 10;
+                        const isWatched = row.querySelector('.season-watched-cb').checked;
+                        let oldEpisodes = item.seasons[idx] ? item.seasons[idx].episodes : [];
+                        let newEpisodes = new Array(countInput).fill(false);
+                        for (let i = 0; i < countInput; i++) {
+                            if (isWatched) newEpisodes[i] = true; 
+                            else if (i < oldEpisodes.length) newEpisodes[i] = oldEpisodes[i];
+                        }
+                        newSeasons.push({ number: idx + 1, episodes: newEpisodes });
+                    });
+                    item.seasons = newSeasons;
+                    checkSeriesCompletion(item);
+                }
+            } else if (newType === 'anime') {
+                if (!item.episodes) { item.episodes = []; item.episodesTotal = 0; }
+                
+                if (currentEditingType === 'anime') {
+                    item.isFeatureFilm = document.getElementById('editAnimeFeature').checked;
+                    if (item.isFeatureFilm && (!item.animeFormat || item.animeFormat === 'tv')) {
+                        item.animeFormat = 'movie';
+                    } else if (!item.isFeatureFilm && item.animeFormat === 'movie') {
+                        item.animeFormat = 'tv';
                     }
-                    newSeasons.push({ number: idx + 1, episodes: newEpisodes });
-                });
-                item.seasons = newSeasons;
+                    
+                    const newTotal = parseInt(document.getElementById('editAnimeTotal').value) || 0;
+                    item.episodesTotal = newTotal;
+                    if (item.episodes.length < newTotal) { while(item.episodes.length < newTotal) item.episodes.push(false); } 
+                    else if (item.episodes.length > newTotal && newTotal !== 0) { item.episodes.length = newTotal; }
+                }
             }
-            closeModal('editModal'); render();
+
+            if (currentEditingType !== newType) {
+                const oldList = currentEditingType === 'series' ? appData.series : currentEditingType === 'movies' ? appData.movies : currentEditingType === 'anime' ? appData.anime : appData.cartoons;
+                const newList = newType === 'series' ? appData.series : newType === 'movies' ? appData.movies : newType === 'anime' ? appData.anime : appData.cartoons;
+                
+                const idx = oldList.findIndex(i => i.id === item.id);
+                if (idx > -1) {
+                    oldList.splice(idx, 1);
+                    newList.unshift(item);
+                }
+            }
+
+            closeModal('editModal');
+            if (currentEditingType !== newType && currentTab !== newType) {
+                switchTab(newType);
+            } else {
+                render();
+            }
         }
 
         function onDragStart(id, type) { draggedItemId = id; draggedItemType = type; setTimeout(() => { const el = document.querySelector(`[data-id="${id}"]`); if(el) el.classList.add('dragging'); }, 0); }
@@ -400,46 +676,72 @@
         function onDragLeave(e, element) { element.classList.remove('drag-over'); }
         function onDrop(targetId, type) {
             if (!draggedItemId || draggedItemId === targetId || draggedItemType !== type) return;
-            const list = type === 'series' ? appData.series : appData.movies;
+            const list = type === 'series' ? appData.series : type === 'movies' ? appData.movies : type === 'anime' ? appData.anime : appData.cartoons;
             const fromIdx = list.findIndex(i => i.id === draggedItemId);
             const toIdx = list.findIndex(i => i.id === targetId);
             const [moved] = list.splice(fromIdx, 1); list.splice(toIdx, 0, moved);
             draggedItemId = null; render();
         }
 
-        function toggleEpisode(seriesId, seaIdx, epIdx) {
-            const series = getItemById(seriesId, 'series');
-            const episodes = series.seasons[seaIdx].episodes;
+        function toggleEpisode(itemId, type, seaIdx, epIdx) {
+            const item = getItemById(itemId, type);
+            const episodes = item.seasons[seaIdx].episodes;
             if (!episodes[epIdx]) { for (let i = 0; i <= epIdx; i++) episodes[i] = true; } 
             else { episodes[epIdx] = false; }
+            checkSeriesCompletion(item);
             render();
         }
         
-        function markNextEpisode(e, seriesId) {
+        function markNextEpisode(e, itemId, type) {
             e.stopPropagation();
-            const series = getItemById(seriesId, 'series');
-            if (!series || !series.seasons) return;
-            
-            for (let sIdx = 0; sIdx < series.seasons.length; sIdx++) {
-                const season = series.seasons[sIdx];
+            const item = getItemById(itemId, type);
+            for (let sIdx = 0; sIdx < item.seasons.length; sIdx++) {
+                const season = item.seasons[sIdx];
                 for (let epIdx = 0; epIdx < season.episodes.length; epIdx++) {
                     if (!season.episodes[epIdx]) {
-                        season.episodes[epIdx] = true;
-                        render();
-                        return;
+                        season.episodes[epIdx] = true; 
+                        checkSeriesCompletion(item);
+                        render(); return;
                     }
                 }
             }
         }
 
-        function toggleMovieStatus(id) { const movie = getItemById(id, 'movies'); movie.isWatched = !movie.isWatched; render(); }
+        function toggleAnimeEpisode(id, epIdx) {
+            const anime = getItemById(id, 'anime');
+            if (!anime.episodes[epIdx]) { for (let i = 0; i <= epIdx; i++) anime.episodes[i] = true; } 
+            else { anime.episodes[epIdx] = false; }
+            
+            const watchedCount = anime.episodes.filter(Boolean).length;
+            if (anime.episodesTotal > 0 && watchedCount === anime.episodesTotal && anime.status !== 'dropped') anime.status = 'completed';
+            else if (anime.status === 'completed' && watchedCount < anime.episodesTotal) anime.status = 'watching';
+            render();
+        }
+
+        function markNextAnimeEpisode(e, id) {
+            e.stopPropagation();
+            const anime = getItemById(id, 'anime');
+            const nextIdx = anime.episodes.indexOf(false);
+            if (nextIdx !== -1) { anime.episodes[nextIdx] = true; } 
+            else { anime.episodes.push(true); anime.episodesTotal = anime.episodes.length; }
+            
+            const watchedCount = anime.episodes.filter(Boolean).length;
+            if (anime.episodesTotal > 0 && watchedCount === anime.episodesTotal && anime.status !== 'dropped') anime.status = 'completed';
+            render();
+        }
+
         function toggleCard(id, type) { const item = getItemById(id, type); item.isOpen = !item.isOpen; render(); }
-        function deleteItem(e, id, type) { e.stopPropagation(); if (confirm('Удалить этот элемент?')) { const list = type === 'series' ? appData.series : appData.movies; const idx = list.findIndex(i => i.id === id); list.splice(idx, 1); render(); } }
+        
+        function deleteItem(e, id, type) { 
+            e.stopPropagation(); 
+            if (confirm('Удалить этот элемент?')) { 
+                const list = type === 'series' ? appData.series : type === 'movies' ? appData.movies : type === 'anime' ? appData.anime : appData.cartoons; 
+                const idx = list.findIndex(i => i.id === id); list.splice(idx, 1); render(); 
+            } 
+        }
 
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown')) {
-                document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
-            }
+            if (!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
         });
 
         function generateLinksHtml(item) {
@@ -448,28 +750,23 @@
             const validLinks = currentLinks.filter(l => l.trim() !== '');
 
             if (validLinks.length === 0) return '';
-
-            if (validLinks.length === 1) {
-                return `<a href="${validLinks[0]}" target="_blank" class="btn-action btn-link" onclick="event.stopPropagation()">Смотреть</a>`;
-            }
+            if (validLinks.length === 1) return `<a href="${validLinks[0]}" target="_blank" class="btn-action btn-link" onclick="event.stopPropagation()">Смотреть</a>`;
 
             linksHtml += `<div class="dropdown" onclick="event.stopPropagation(); this.classList.toggle('active')">`;
-            linksHtml += `<button class="btn-action btn-link">Сайты ▼</button>`;
-            linksHtml += `<div class="dropdown-content">`;
-            validLinks.forEach((link, lIdx) => {
-                linksHtml += `<a href="${link}" target="_blank" onclick="event.stopPropagation()">Сайт ${lIdx + 1}</a>`;
-            });
+            linksHtml += `<button class="btn-action btn-link">Сайты ▼</button><div class="dropdown-content">`;
+            validLinks.forEach((link, lIdx) => { linksHtml += `<a href="${link}" target="_blank" onclick="event.stopPropagation()">Сайт ${lIdx + 1}</a>`; });
             linksHtml += `</div></div>`;
-            
             return linksHtml;
         }
 
-        function createCard(item, type, isWatchedTab) {
+        function createCard(item, type, filterState) {
             const card = document.createElement('div');
             card.className = `series-card ${item.isOpen ? 'open' : ''}`;
             card.dataset.id = item.id;
             
-            if (!isWatchedTab) {
+            const isCompletedList = filterState === 'completed';
+
+            if (!isCompletedList && filterState !== 'dropped' && filterState !== 'on-hold') {
                 card.draggable = true;
                 card.ondragstart = () => onDragStart(item.id, type);
                 card.ondragover = (e) => onDragOver(e, card, item.id); 
@@ -479,16 +776,15 @@
             } else { card.classList.add('no-drag'); }
 
             const linksHtml = generateLinksHtml(item);
+            const newBadge = newlyAddedIds.has(item.id) ? `<span class="badge-new">NEW</span>` : '';
 
-            let quickAddHtml = '';
-            if (type === 'series' && !isWatchedTab) {
-                const hasUnwatched = item.seasons && item.seasons.some(season => season.episodes.includes(false));
-                if (hasUnwatched) {
-                    quickAddHtml = `<button class="btn-action btn-add-ep" onclick="markNextEpisode(event, '${item.id}')" title="Отметить следующую серию">+1 Серия</button>`;
+            if (type === 'series' || type === 'cartoons') {
+                let quickAddHtml = '';
+                if (!isCompletedList && filterState !== 'dropped') {
+                    const hasUnwatched = item.seasons && item.seasons.some(season => season.episodes.includes(false));
+                    if (hasUnwatched) quickAddHtml = `<button class="btn-action btn-add-ep" onclick="markNextEpisode(event, '${item.id}', '${type}')" title="Отметить следующую серию">+1 Серия</button>`;
                 }
-            }
 
-            if (type === 'series') {
                 let totalEpisodes = 0, watchedEpisodes = 0, activeHtml = '', watchedHtml = '', watchedCount = 0;
                 item.seasons.forEach((season, seaIdx) => {
                     const seasonTotal = season.episodes.length;
@@ -496,7 +792,7 @@
                     const seasonPercent = seasonTotal > 0 ? Math.round((seasonWatched / seasonTotal) * 100) : 0;
                     totalEpisodes += seasonTotal; watchedEpisodes += seasonWatched;
 
-                    let episodesHtml = season.episodes.map((watched, epIdx) => `<div class="episode ${watched ? 'watched' : ''}" onclick="event.stopPropagation(); toggleEpisode('${item.id}', ${seaIdx}, ${epIdx})">${epIdx + 1}</div>`).join('');
+                    let episodesHtml = season.episodes.map((watched, epIdx) => `<div class="episode ${watched ? 'watched' : ''}" onclick="event.stopPropagation(); toggleEpisode('${item.id}', '${type}', ${seaIdx}, ${epIdx})">${epIdx + 1}</div>`).join('');
                     let seasonHtml = `<div class="season-block"><div class="season-header"><div class="season-title">Сезон ${season.number}</div><div class="season-percent-text">${seasonPercent}%</div></div><div class="season-progress-container"><div class="season-progress-bar" style="width: ${seasonPercent}%"></div></div><div class="episodes-grid">${episodesHtml}</div></div>`;
 
                     if (seasonTotal > 0 && seasonWatched === seasonTotal) { watchedHtml += seasonHtml; watchedCount++; } 
@@ -508,11 +804,56 @@
                 contentHtml += activeHtml;
                 const totalPercent = totalEpisodes > 0 ? Math.round((watchedEpisodes / totalEpisodes) * 100) : 0;
 
-                card.innerHTML = `<div class="series-header"><div class="series-info" onclick="toggleCard('${item.id}', 'series')"><span class="arrow">▼</span><strong>${escapeHtml(item.title)}</strong> ${isWatchedTab ? '<span class="type-badge">Сериал</span>' : ''}<span class="series-progress-badge">${totalPercent}% (${watchedEpisodes}/${totalEpisodes})</span></div><div class="series-actions">${quickAddHtml}${linksHtml}<button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'series')">Редактировать</button><button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'series')">✖</button></div></div><div class="series-content">${contentHtml}</div>`;
-            } else if (type === 'movies') {
-                const statusBtnClass = item.isWatched ? 'btn-delete' : 'btn-add';
-                const statusBtnText = item.isWatched ? '✖ Отменить статус просмотренного' : '✅ Отметить как просмотрено';
-                card.innerHTML = `<div class="series-header"><div class="series-info" onclick="toggleCard('${item.id}', 'movies')"><span class="arrow">▼</span><strong>${escapeHtml(item.title)}</strong> ${isWatchedTab ? '<span class="type-badge">Фильм</span>' : ''}<span class="series-progress-badge" style="color:${item.isWatched ? 'var(--watched)' : '#888'}">${item.isWatched ? 'Просмотрено' : 'Не просмотрено'}</span></div><div class="series-actions">${linksHtml}<button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'movies')">Редактировать</button><button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'movies')">✖</button></div></div><div class="series-content"><button class="btn ${statusBtnClass} movie-watched-toggle" onclick="toggleMovieStatus('${item.id}')">${statusBtnText}</button></div>`;
+                card.innerHTML = `<div class="series-header"><div class="series-info" onclick="toggleCard('${item.id}', '${type}')"><span class="arrow">▼</span><strong class="series-title-text" title="${escapeHtml(item.title)}">${newBadge}${escapeHtml(item.title)}</strong> <span class="series-progress-badge">${totalPercent}% (${watchedEpisodes}/${totalEpisodes})</span></div><div class="series-actions">${quickAddHtml}${linksHtml}<button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', '${type}')">✏️</button><button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', '${type}')">✖</button></div></div><div class="series-content">${contentHtml}</div>`;
+            } 
+            else if (type === 'movies') {
+                card.innerHTML = `<div class="series-header"><div class="series-info" onclick="toggleCard('${item.id}', 'movies')"><span class="arrow">▼</span><strong class="series-title-text" title="${escapeHtml(item.title)}">${newBadge}${escapeHtml(item.title)}</strong></div><div class="series-actions">${linksHtml}<button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'movies')">✏️</button><button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'movies')">✖</button></div></div><div class="series-content"><p style="color: #888; font-size: 0.9em; margin: 0;">В этой карточке только базовая информация.</p></div>`;
+            }
+            else if (type === 'anime') {
+                let quickAddHtml = '';
+                let episodesHtml = '';
+                let epsText = '';
+                let formatBadge = '';
+
+                if (item.animeFormat && item.animeFormat !== 'tv' && item.animeFormat !== '') {
+                    let fmt = item.animeFormat.toUpperCase();
+                    if (fmt === 'MOVIE') fmt = 'ФИЛЬМ';
+                    formatBadge = `<span style="background: var(--btn-link); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; margin-right: 8px; font-weight: bold; vertical-align: middle;">${fmt}</span>`;
+                } else if (item.isFeatureFilm) {
+                    formatBadge = `<span style="background: var(--btn-link); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75em; margin-right: 8px; font-weight: bold; vertical-align: middle;">ФИЛЬМ</span>`;
+                }
+
+                if (!item.isFeatureFilm) {
+                    const watchedCount = item.episodes ? item.episodes.filter(Boolean).length : 0;
+                    epsText = item.episodesTotal > 0 ? `${watchedCount}/${item.episodesTotal}` : `${watchedCount}/?`;
+                    
+                    if (item.status !== 'completed' && item.status !== 'dropped') {
+                        quickAddHtml = `<button class="btn-action btn-add-ep" onclick="markNextAnimeEpisode(event, '${item.id}')">+1 Серия</button>`;
+                    }
+                    if (item.episodes && item.episodes.length > 0) {
+                        episodesHtml = `<div class="episodes-grid">` + 
+                            item.episodes.map((watched, epIdx) => `<div class="episode ${watched ? 'watched' : ''}" onclick="event.stopPropagation(); toggleAnimeEpisode('${item.id}', ${epIdx})">${epIdx + 1}</div>`).join('') + 
+                            `</div>`;
+                    }
+                }
+
+                card.innerHTML = `
+                <div class="series-header">
+                    <div class="series-info" onclick="toggleCard('${item.id}', 'anime')">
+                        <span class="arrow">▼</span>
+                        <strong class="series-title-text" title="${escapeHtml(item.title)}">${newBadge}${formatBadge}${escapeHtml(item.title)}</strong> 
+                        ${epsText ? `<span class="series-progress-badge" style="color:var(--anime-accent);">Серии: ${epsText}</span>` : ''}
+                    </div>
+                    <div class="series-actions">
+                        ${quickAddHtml}
+                        ${linksHtml}
+                        <button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'anime')">✏️</button>
+                        <button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'anime')">✖</button>
+                    </div>
+                </div>
+                <div class="series-content">
+                    ${episodesHtml || '<p style="color: #888; font-size: 0.9em; margin: 0;">Режим полнометражного фильма.</p>'}
+                </div>`;
             }
             return card;
         }
@@ -520,18 +861,22 @@
         function render() {
             const container = document.getElementById('seriesList');
             container.innerHTML = '';
-            let itemsToRender = [];
+            
+            const filterSelect = document.getElementById('statusFilter');
+            const filterState = filterSelect.value;
+            const targetList = (currentTab === 'series') ? appData.series : (currentTab === 'movies') ? appData.movies : (currentTab === 'anime') ? appData.anime : appData.cartoons;
+            
+            const counts = { 'watching': 0, 'plan-to-watch': 0, 'completed': 0, 'on-hold': 0, 'dropped': 0 };
+            targetList.forEach(item => { if (counts[item.status] !== undefined) counts[item.status]++; });
 
-            if (currentTab === 'series') { itemsToRender = appData.series.filter(s => !isSeriesWatched(s)).map(s => ({ item: s, type: 'series' })); } 
-            else if (currentTab === 'movies') { itemsToRender = appData.movies.filter(m => !m.isWatched).map(m => ({ item: m, type: 'movies' })); } 
-            else if (currentTab === 'watched') {
-                const watchedSeries = appData.series.filter(s => isSeriesWatched(s)).map(s => ({ item: s, type: 'series' }));
-                const watchedMovies = appData.movies.filter(m => m.isWatched).map(m => ({ item: m, type: 'movies' }));
-                itemsToRender = [...watchedMovies, ...watchedSeries];
-            }
+            Array.from(filterSelect.options).forEach(opt => {
+                opt.text = `${statusMapText[opt.value]} (${counts[opt.value]})`;
+            });
 
-            if (itemsToRender.length === 0) { container.innerHTML = `<p style="text-align:center; color:#888; padding: 20px;">В этом разделе пока ничего нет.</p>`; } 
-            else { itemsToRender.forEach(obj => { container.appendChild(createCard(obj.item, obj.type, currentTab === 'watched')); }); }
+            const itemsToRender = targetList.filter(item => item.status === filterState).map(item => ({ item, type: currentTab }));
+
+            if (itemsToRender.length === 0) { container.innerHTML = `<p style="text-align:center; color:#888; padding: 20px;">В этой категории пока ничего нет.</p>`; } 
+            else { itemsToRender.forEach(obj => { container.appendChild(createCard(obj.item, obj.type, filterState)); }); }
 
             localStorage.setItem('tvShowData', JSON.stringify(appData));
         }
@@ -543,102 +888,41 @@
 
         switchTab(currentTab);
 
-
-        
         const particleCanvas = document.getElementById('particle-canvas');
         const ctx = particleCanvas.getContext('2d');
-
-        const config = {
-            particleColor: 'rgba(255, 110, 0, 1)', 
-            lineColor: 'rgba(255, 110, 0, 0.15)',  
-            particleCount: 80,                     
-            maxDistance: 120,                      
-            minRadius: 1,                          
-            maxRadius: 3,                          
-            speedX: 0.5,                           
-            speedY: 0.5                            
-        };
-
+        const config = { particleColor: 'rgba(255, 110, 0, 1)', lineColor: 'rgba(255, 110, 0, 0.15)', particleCount: 80, maxDistance: 120, minRadius: 1, maxRadius: 3, speedX: 0.5, speedY: 0.5 };
         let particles = [];
-
-        function resizeCanvas() {
-            particleCanvas.width = window.innerWidth;
-            particleCanvas.height = window.innerHeight;
-            initParticles();
-        }
-
+        function resizeCanvas() { particleCanvas.width = window.innerWidth; particleCanvas.height = window.innerHeight; initParticles(); }
         class Particle {
-            constructor() {
-                this.x = Math.random() * particleCanvas.width;
-                this.y = Math.random() * particleCanvas.height;
-                this.radius = Math.random() * (config.maxRadius - config.minRadius) + config.minRadius;
-                this.vx = (Math.random() - 0.5) * config.speedX;
-                this.vy = (Math.random() - 0.5) * config.speedY;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > particleCanvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > particleCanvas.height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = config.particleColor;
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const adjustedCount = Math.floor((particleCanvas.width * particleCanvas.height) / 15000);
-            const count = Math.min(adjustedCount, config.particleCount);
-            
-            for (let i = 0; i < count; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function drawLines() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < config.maxDistance) {
-                        const alpha = (1 - distance / config.maxDistance) * 0.25;
-                        ctx.strokeStyle = `rgba(255, 110, 0, ${alpha})`;
-                        ctx.lineWidth = 0.8;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+            constructor() { this.x = Math.random() * particleCanvas.width; this.y = Math.random() * particleCanvas.height; this.radius = Math.random() * (config.maxRadius - config.minRadius) + config.minRadius; this.vx = (Math.random() - 0.5) * config.speedX; this.vy = (Math.random() - 0.5) * config.speedY; }
+            update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > particleCanvas.width) this.vx *= -1; if (this.y < 0 || this.y > particleCanvas.height) this.vy *= -1; }
+            draw() { 
+                if (currentTab === 'anime') {
+                    ctx.font = `${this.radius * 6}px Arial`;
+                    ctx.fillStyle = `rgba(255, 183, 197, 0.8)`;
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText('🌸', this.x, this.y);
+                } else {
+                    ctx.beginPath(); 
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); 
+                    ctx.fillStyle = config.particleColor; 
+                    ctx.fill(); 
                 }
             }
         }
-
-        function animate() {
-            ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-
-            drawLines();
-            requestAnimationFrame(animate);
+        function initParticles() { particles = []; const count = Math.min(Math.floor((particleCanvas.width * particleCanvas.height) / 15000), config.particleCount); for (let i = 0; i < count; i++) particles.push(new Particle()); }
+        function drawLines() {
+            if (currentTab === 'anime') return; 
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < config.maxDistance) { ctx.strokeStyle = `rgba(255, 110, 0, ${(1 - distance / config.maxDistance) * 0.25})`; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke(); }
+                }
+            }
         }
-
-        window.addEventListener('resize', resizeCanvas);
-
-        
-        resizeCanvas();
-        animate();
+        function animate() { ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height); particles.forEach(p => { p.update(); p.draw(); }); drawLines(); requestAnimationFrame(animate); }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas(); animate();
     </script>
 </body>
 </html>
