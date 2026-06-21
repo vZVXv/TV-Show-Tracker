@@ -75,13 +75,26 @@
         .type-badge { font-size: 0.75em; background: #444; padding: 3px 6px; border-radius: 4px; color: #ddd; margin-left: 10px; }
 
         .series-content { display: none; padding: 15px; border-top: 1px solid var(--border); cursor: default; max-height: 500px; overflow-y: auto; border-radius: 0 0 11px 11px; }
-        .series-content::-webkit-scrollbar { width: 8px; }
-        
-        
-        .series-content::-webkit-scrollbar-track { background: var(--bg); border-radius: 4px; }
-        
-        .series-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        .series-content::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+
+
+
+::-webkit-scrollbar { 
+    width: 8px; 
+}
+::-webkit-scrollbar-track { 
+    background: var(--bg); 
+    border-radius: 4px; 
+}
+::-webkit-scrollbar-thumb { 
+    background: var(--border); 
+    border-radius: 4px; 
+}
+::-webkit-scrollbar-thumb:hover { 
+    background: var(--accent); 
+}
+
+
         .series-card.open .series-content { display: block; }
 
         .season-block { margin-bottom: 20px; }
@@ -171,7 +184,7 @@
 
     <canvas id="particle-canvas"></canvas>
 
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.3.0</span></h1>
+    <h1>🎬 TV Show Tracker <span class="app-version">v1.3.2</span></h1>
 
     <div class="tabs">
         <button class="tab-btn active" id="tab-series" onclick="switchTab('series')">🎬 Сериалы</button>
