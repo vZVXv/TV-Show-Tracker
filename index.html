@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
     <title>TV Show Tracker</title>
    <style>
        :root {
@@ -33,6 +34,11 @@
             font-family: 'Segoe UI', Tahoma, sans-serif; color: var(--text); 
             max-width: 900px; margin: 20px auto; padding: 20px; 
             position: relative; z-index: 1;
+        }
+
+        /* --- СКРЫТИЕ АНИМЕ КОНТЕНТА ПО УМОЛЧАНИЮ --- */
+        body:not(.anime-unlocked) .weeb-secret {
+            display: none !important;
         }
 
         #particle-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
@@ -159,13 +165,12 @@
 <body>
 
     <canvas id="particle-canvas"></canvas>
-
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.6.0</span></h1>
+    <h1 title="↑ ↑ ↓ ↓ ← → ← → B A">🎬 TV Show Tracker <span class="app-version">v1.6.1</span></h1>
 
     <div class="tabs">
         <button class="tab-btn active" id="tab-series" onclick="switchTab('series')">🎬 Сериалы</button>
         <button class="tab-btn" id="tab-movies" onclick="switchTab('movies')">🎥 Фильмы</button>
-        <button class="tab-btn" id="tab-anime" onclick="switchTab('anime')">🌸 Аниме</button>
+        <button class="tab-btn weeb-secret" id="tab-anime" onclick="switchTab('anime')">🌸 Аниме</button>
         <button class="tab-btn" id="tab-cartoons" onclick="switchTab('cartoons')">🦄 Мультики</button>
     </div>
 
@@ -200,7 +205,7 @@
                     <button class="btn btn-save" style="width: 100%;" onclick="saveAndCloseModal()">⬇️ Скачать текущий бэкап (JSON)</button>
                 </div>
 
-                <div style="background: rgba(33, 150, 243, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(33, 150, 243, 0.3);">
+                <div class="weeb-secret" style="background: rgba(33, 150, 243, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(33, 150, 243, 0.3);">
                     <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--btn-edit);">🔍 Настройки поиска (Аниме)</h4>
                     <p style="font-size: 0.85em; margin-bottom: 10px; color: #aaa;">Вставьте базовую ссылку для поиска. Название аниме подставится автоматически в конец ссылки.</p>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -209,7 +214,7 @@
                     </div>
                 </div>
 
-                <div style="background: rgba(233, 30, 99, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(233, 30, 99, 0.3);">
+                <div class="weeb-secret" style="background: rgba(233, 30, 99, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(233, 30, 99, 0.3);">
                     <h4 style="margin-top: 0; margin-bottom: 10px; color: #e91e63;">🌸 Импорт списков Аниме</h4>
                     <p style="font-size: 0.85em; margin-bottom: 15px; color: #aaa;">Лайфхак: сначала загрузите XML (для правильного количества серий), а затем JSON (для перевода названий на русский).</p>
                     
@@ -230,7 +235,7 @@
                     <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
                         <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('series')">🗑 Сериалы</button>
                         <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('movies')">🗑 Фильмы</button>
-                        <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('anime')">🗑 Аниме</button>
+                        <button class="btn-action btn-delete weeb-secret" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('anime')">🗑 Аниме</button>
                         <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('cartoons')">🗑 Мультики</button>
                     </div>
                     <button class="btn btn-delete" style="width: 100%;" onclick="resetAllData()">💥 Очистить вообще всё</button>
@@ -250,12 +255,11 @@
                 <ul class="instruction-list">
                     <li><b style="color:var(--accent)">Добавление и редактирование:</b> Нажмите «+ Добавить» для создания карточки. Кнопка <b>✏️</b> открывает настройки: там можно перенести тайтл в другой раздел, изменить статус, указать ссылки для просмотра, добавить сезоны или настроить количество серий.</li>
                     <li><b style="color:var(--accent)">Отметка просмотра:</b> Нажимайте на квадратики серий, чтобы отметить их. Кнопка <b style="color:#4caf50;">"+1 Серия"</b> сама находит первую непросмотренную серию и автоматически её отмечает. Когда все серии просмотрены, тайтл сам перейдет в статус «Просмотрено».</li>
-                    <li><b style="color:var(--accent)">Кнопка Поиска (Аниме):</b> В разделе Аниме есть кнопка <b>🔍</b>. Чтобы она работала, зайдите в «Управление данными» и вставьте базовую ссылку вашего любимого сайта для поиска.</li>
-																																																																																												   
+                    <li class="weeb-secret"><b style="color:var(--accent)">Кнопка Поиска (Аниме):</b> В разделе Аниме есть кнопка <b>🔍</b>. Чтобы она работала, зайдите в «Управление данными» и вставьте базовую ссылку вашего любимого сайта для поиска.</li>
                     <li><b style="color:var(--accent)">Ссылки на просмотр:</b> В окне редактирования можно вставить несколько ссылок (каждую с новой строки). В карточке появится удобный выпадающий список со всеми сайтами.</li>
-                    <li><b style="color:var(--accent)">Полнометражные фильмы (Аниме):</b> Фильмы и спецвыпуски автоматически получают красивые цветные метки (<b>ФИЛЬМ</b>, <b>OVA</b>, <b>ONA</b>), а счетчик серий для фильмов скрывается. Вы также можете вручную отметить чекбокс «Полнометражка» в настройках аниме.</li>
+                    <li class="weeb-secret"><b style="color:var(--accent)">Полнометражные фильмы (Аниме):</b> Фильмы и спецвыпуски автоматически получают красивые цветные метки (<b>ФИЛЬМ</b>, <b>OVA</b>, <b>ONA</b>), а счетчик серий для фильмов скрывается. Вы также можете вручную отметить чекбокс «Полнометражка» в настройках аниме.</li>
                     <li><b style="color:var(--accent)">Сортировка (Drag & Drop):</b> Зажмите левую кнопку мыши на любой карточке и перетащите её выше или ниже, чтобы выстроить свой личный топ (работает везде, кроме статусов "Отложено" и "Брошено").</li>
-                    <li><b style="color:var(--accent)">Умный импорт Аниме:</b> Для переноса базы с Shikimori загрузите сначала <b>XML</b> файл (подтянет типы OVA/Фильмы, статусы и точное количество серий), а сразу за ним загрузите <b>JSON</b> файл (переведет все названия на русский язык). Трекер сам склеит данные воедино.</li>
+                    <li class="weeb-secret"><b style="color:var(--accent)">Умный импорт Аниме:</b> Для переноса базы с Shikimori загрузите сначала <b>XML</b> файл (подтянет типы OVA/Фильмы, статусы и точное количество серий), а сразу за ним загрузите <b>JSON</b> файл (переведет все названия на русский язык). Трекер сам склеит данные воедино.</li>
                     <li><b style="color:var(--accent)">Управление данными (Бэкап):</b> Обязательно сохраняйте резервную копию трекера! Нажмите «Скачать текущий бэкап», чтобы получить JSON файл со всеми вашими сериалами, фильмами и мультфильмами. С его помощью можно легко перенести данные на другое устройство.</li>
                </ul>
             </div>
@@ -280,6 +284,44 @@
     <button id="scrollToTopBtn" class="btn-scroll-top" onclick="scrollToTop()">▲</button>
 
     <script>
+        // Инициализация пасхалки Konami Code
+        if (localStorage.getItem('animeUnlocked') === 'true') {
+            document.body.classList.add('anime-unlocked');
+        }
+
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+            const target = konamiCode[konamiIndex].length === 1 ? konamiCode[konamiIndex].toLowerCase() : konamiCode[konamiIndex];
+            
+            if (key === target) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    toggleAnimeLock();
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+
+        function toggleAnimeLock() {
+            let isUnlocked = document.body.classList.contains('anime-unlocked');
+            if (!isUnlocked) {
+                document.body.classList.add('anime-unlocked');
+                localStorage.setItem('animeUnlocked', 'true');
+                alert('🌸 Секретный режим "Аниме" разблокирован!');
+            } else {
+                document.body.classList.remove('anime-unlocked');
+                localStorage.setItem('animeUnlocked', 'false');
+                if (currentTab === 'anime') switchTab('series');
+                alert('🔒 Секретный режим спрятан обратно.');
+            }
+        }
+
+        // Базовые переменные трекера
         let appData = { series: [], movies: [], anime: [], cartoons: [] };
         let currentTab = 'series'; 
         let draggedItemId = null; 
@@ -606,7 +648,7 @@
                                 <option value="series" ${type==='series'?'selected':''}>Сериалы</option>
                                 <option value="cartoons" ${type==='cartoons'?'selected':''}>Мультики</option>
                                 <option value="movies" ${type==='movies'?'selected':''}>Фильмы</option>
-                                <option value="anime" ${type==='anime'?'selected':''}>Аниме</option>
+                                <option value="anime" class="weeb-secret" ${type==='anime'?'selected':''}>Аниме</option>
                             </select>
                         </td>
                     </tr>
@@ -951,7 +993,7 @@
             constructor() { this.x = Math.random() * particleCanvas.width; this.y = Math.random() * particleCanvas.height; this.radius = Math.random() * (config.maxRadius - config.minRadius) + config.minRadius; this.vx = (Math.random() - 0.5) * config.speedX; this.vy = (Math.random() - 0.5) * config.speedY; }
             update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > particleCanvas.width) this.vx *= -1; if (this.y < 0 || this.y > particleCanvas.height) this.vy *= -1; }
             draw() { 
-                if (currentTab === 'anime') {
+                if (currentTab === 'anime' && document.body.classList.contains('anime-unlocked')) {
                     ctx.font = `${this.radius * 6}px Arial`;
                     ctx.fillStyle = `rgba(255, 183, 197, 0.8)`;
                     ctx.textAlign = "center";
@@ -967,7 +1009,7 @@
         }
         function initParticles() { particles = []; const count = Math.min(Math.floor((particleCanvas.width * particleCanvas.height) / 15000), config.particleCount); for (let i = 0; i < count; i++) particles.push(new Particle()); }
         function drawLines() {
-            if (currentTab === 'anime') return; 
+            if (currentTab === 'anime' && document.body.classList.contains('anime-unlocked')) return; 
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, distance = Math.sqrt(dx * dx + dy * dy);
