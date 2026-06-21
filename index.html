@@ -102,6 +102,8 @@
         .btn-link:hover { background: var(--btn-link); color: white; }
         .btn-delete { color: var(--btn-delete); border-color: var(--btn-delete); }
         .btn-delete:hover { background: var(--btn-delete); color: var(--text-dark); }
+        .btn-info-outline { color: var(--btn-info); border-color: var(--btn-info); }
+        .btn-info-outline:hover { background: var(--btn-info); color: white; }
 
         .dropdown { position: relative; display: inline-block; }
         .dropdown-content { display: none; position: absolute; background-color: var(--card-bg); min-width: 140px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.6); z-index: 100; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; top: 100%; left: auto; right: 0; margin-top: 5px; }
@@ -158,7 +160,7 @@
 
     <canvas id="particle-canvas"></canvas>
 
-    <h1>🎬 TV Show Tracker <span class="app-version">v1.5.9</span></h1>
+    <h1>🎬 TV Show Tracker <span class="app-version">v1.6.0</span></h1>
 
     <div class="tabs">
         <button class="tab-btn active" id="tab-series" onclick="switchTab('series')">🎬 Сериалы</button>
@@ -198,6 +200,15 @@
                     <button class="btn btn-save" style="width: 100%;" onclick="saveAndCloseModal()">⬇️ Скачать текущий бэкап (JSON)</button>
                 </div>
 
+                <div style="background: rgba(33, 150, 243, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(33, 150, 243, 0.3);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--btn-edit);">🔍 Настройки поиска (Аниме)</h4>
+                    <p style="font-size: 0.85em; margin-bottom: 10px; color: #aaa;">Вставьте базовую ссылку для поиска. Название аниме подставится автоматически в конец ссылки.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="text" id="animeSearchUrlInput" class="edit-input" placeholder="Например: https://old.yummyani.me/search?word=" style="flex-grow: 1; min-width: 200px;">
+                        <button class="btn btn-save" onclick="saveSearchUrl()">Сохранить</button>
+                    </div>
+                </div>
+
                 <div style="background: rgba(233, 30, 99, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(233, 30, 99, 0.3);">
                     <h4 style="margin-top: 0; margin-bottom: 10px; color: #e91e63;">🌸 Импорт списков Аниме</h4>
                     <p style="font-size: 0.85em; margin-bottom: 15px; color: #aaa;">Лайфхак: сначала загрузите XML (для правильного количества серий), а затем JSON (для перевода названий на русский).</p>
@@ -214,8 +225,15 @@
                 </div>
                 
                 <div style="background: rgba(255, 51, 51, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(255, 51, 51, 0.3);">
-                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--btn-delete);">⚠️ Опасная зона</h4>
-                    <button class="btn btn-delete" style="width: 100%;" onclick="resetAllData()">🗑 Очистить все данные</button>
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--btn-delete);">⚠️ Опасная зона (Сброс данных)</h4>
+                    <p style="font-size: 0.85em; margin-bottom: 10px; color: #aaa;">Выборочное или полное удаление данных из трекера.</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
+                        <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('series')">🗑 Сериалы</button>
+                        <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('movies')">🗑 Фильмы</button>
+                        <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('anime')">🗑 Аниме</button>
+                        <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('cartoons')">🗑 Мультики</button>
+                    </div>
+                    <button class="btn btn-delete" style="width: 100%;" onclick="resetAllData()">💥 Очистить вообще всё</button>
                 </div>
 
             </div>
@@ -232,12 +250,14 @@
                 <ul class="instruction-list">
                     <li><b style="color:var(--accent)">Добавление и редактирование:</b> Нажмите «+ Добавить» для создания карточки. Кнопка <b>✏️</b> открывает настройки: там можно перенести тайтл в другой раздел, изменить статус, указать ссылки для просмотра, добавить сезоны или настроить количество серий.</li>
                     <li><b style="color:var(--accent)">Отметка просмотра:</b> Нажимайте на квадратики серий, чтобы отметить их. Кнопка <b style="color:#4caf50;">"+1 Серия"</b> сама находит первую непросмотренную серию и автоматически её отмечает. Когда все серии просмотрены, тайтл сам перейдет в статус «Просмотрено».</li>
+                    <li><b style="color:var(--accent)">Кнопка Поиска (Аниме):</b> В разделе Аниме есть кнопка <b>🔍</b>. Чтобы она работала, зайдите в «Управление данными» и вставьте базовую ссылку вашего любимого сайта для поиска.</li>
+																																																																																												   
                     <li><b style="color:var(--accent)">Ссылки на просмотр:</b> В окне редактирования можно вставить несколько ссылок (каждую с новой строки). В карточке появится удобный выпадающий список со всеми сайтами.</li>
                     <li><b style="color:var(--accent)">Полнометражные фильмы (Аниме):</b> Фильмы и спецвыпуски автоматически получают красивые цветные метки (<b>ФИЛЬМ</b>, <b>OVA</b>, <b>ONA</b>), а счетчик серий для фильмов скрывается. Вы также можете вручную отметить чекбокс «Полнометражка» в настройках аниме.</li>
                     <li><b style="color:var(--accent)">Сортировка (Drag & Drop):</b> Зажмите левую кнопку мыши на любой карточке и перетащите её выше или ниже, чтобы выстроить свой личный топ (работает везде, кроме статусов "Отложено" и "Брошено").</li>
                     <li><b style="color:var(--accent)">Умный импорт Аниме:</b> Для переноса базы с Shikimori загрузите сначала <b>XML</b> файл (подтянет типы OVA/Фильмы, статусы и точное количество серий), а сразу за ним загрузите <b>JSON</b> файл (переведет все названия на русский язык). Трекер сам склеит данные воедино.</li>
                     <li><b style="color:var(--accent)">Управление данными (Бэкап):</b> Обязательно сохраняйте резервную копию трекера! Нажмите «Скачать текущий бэкап», чтобы получить JSON файл со всеми вашими сериалами, фильмами и мультфильмами. С его помощью можно легко перенести данные на другое устройство.</li>
-                </ul>
+               </ul>
             </div>
             <button class="btn btn-save" style="margin-top:15px; width:100%" onclick="closeModal('instructionModal')">Всё понятно!</button>
         </div>
@@ -266,6 +286,7 @@
         let draggedItemType = null;
         let currentEditingId = null; 
         let currentEditingType = null;
+        let animeSearchBaseUrl = localStorage.getItem('animeSearchBaseUrl') || '';
         
         const newlyAddedIds = new Set();
         const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -391,16 +412,47 @@
 
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function showInstructions() { document.getElementById('instructionModal').classList.add('active'); }
-        function showDataModal() { document.getElementById('dataModal').classList.add('active'); }
+        
+        function showDataModal() { 
+            document.getElementById('animeSearchUrlInput').value = animeSearchBaseUrl;
+            document.getElementById('dataModal').classList.add('active'); 
+        }
+        
+        function saveSearchUrl() {
+            animeSearchBaseUrl = document.getElementById('animeSearchUrlInput').value.trim();
+            localStorage.setItem('animeSearchBaseUrl', animeSearchBaseUrl);
+            alert('Ссылка для поиска успешно сохранена!');
+            render();
+        }
+
         function saveAndCloseModal() { saveJSON(); closeModal('dataModal'); }
         
+        function resetSection(section) {
+            const sectionNames = { series: 'Сериалы', movies: 'Фильмы', anime: 'Аниме', cartoons: 'Мультики' };
+            if (confirm(`⚠️ Вы уверены, что хотите безвозвратно удалить весь раздел "${sectionNames[section]}"?`)) {
+                appData[section] = [];
+                render();
+            }
+        }
+
         function resetAllData() {
-            if (confirm('Вы уверены? Все данные будут безвозвратно удалены!')) {
+            if (confirm('⚠️ Вы уверены? ВСЕ данные будут безвозвратно удалены!')) {
                 appData = { series: [], movies: [], anime: [], cartoons: [] };
                 localStorage.removeItem('tvShowData');
                 render();
                 closeModal('dataModal');
             }
+        }
+
+        function searchAnime(e, id) {
+            e.stopPropagation();
+            if (!animeSearchBaseUrl) {
+                alert('Пожалуйста, сначала укажите базовую ссылку для поиска в меню "Управление данными"!');
+                return;
+            }
+            const item = getItemById(id, 'anime');
+            const query = encodeURIComponent(item.title);
+            window.open(animeSearchBaseUrl + query, '_blank');
         }
 
         document.getElementById('backupInput').addEventListener('change', function (e) {
@@ -814,6 +866,7 @@
                 let episodesHtml = '';
                 let epsText = '';
                 let formatBadge = '';
+                let searchBtnHtml = `<button class="btn-action btn-info-outline" onclick="searchAnime(event, '${item.id}')" title="Найти в интернете">🔍</button>`;
 
                 if (item.animeFormat && item.animeFormat !== 'tv' && item.animeFormat !== '') {
                     let fmt = item.animeFormat.toUpperCase();
@@ -846,6 +899,7 @@
                     </div>
                     <div class="series-actions">
                         ${quickAddHtml}
+                        ${searchBtnHtml}
                         ${linksHtml}
                         <button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'anime')">✏️</button>
                         <button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'anime')">✖</button>
