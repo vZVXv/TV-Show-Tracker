@@ -400,7 +400,7 @@
 </head>
 <body>
 
-    <h1 title="↑ ↑ ↓ ↓ ← → ← → B A">TV Show Tracker <span class="app-version">v2.0.0</span></h1>
+    <h1 title="↑ ↑ ↓ ↓ ← → ← → B A">TV Show Tracker <span class="app-version">v2.0.1</span></h1>
 
     <div class="tabs">
         <button class="tab-btn active" id="tab-series" onclick="switchTab('series')">Сериалы</button>
@@ -565,7 +565,7 @@
 
         // Главная база данных: списки (массивы) для всех разделов
         let appData = { series: [], movies: [], anime: [], cartoons: [] };
-        let currentTab = 'series'; // Какая вкладка открыта прямо сейчас
+        let currentTab = localStorage.getItem('lastOpenTab') || 'series'; // Какая вкладка открыта прямо сейчас
         let draggedItemId = null; // Какую карточку мы сейчас тащим мышкой
         let draggedItemType = null;
         let currentEditingId = null; // Какую карточку мы сейчас редактируем
@@ -665,8 +665,11 @@
         }
 
         // Функция для перехода по вкладкам
-        function switchTab(tabName) {
-            currentTab = tabName; // Запоминаем, где мы
+function switchTab(tabName) {
+    currentTab = tabName; // Запоминаем, где мы
+    localStorage.setItem('lastOpenTab', tabName); // Записываем открытую вкладку в память
+    
+    // Снимаем выделение со всех кнопок-вкладок и подсвечиваем нужную
             
             // Снимаем выделение со всех кнопок-вкладок и подсвечиваем нужную
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
