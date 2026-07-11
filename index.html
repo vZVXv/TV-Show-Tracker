@@ -23,7 +23,1398 @@
             --c-text: #ababab;
             --c-text-highlight: #fff;
             --c-text-link: #fff;
+            --c-text-link-hover: #ccc;<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Show Tracker</title>
+    <style>
+        /* Подключаем красивые шрифты из интернета */
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap');
+
+        /* Здесь мы задаем главные цвета сайта, чтобы их было легко менять в одном месте */
+        :root {
+            --c-background: #000;
+
+            --i-triangles-top: url('data:image/webp;base64,UklGRk4HAABXRUJQVlA4WAoAAAAUAAAAbQAAzwAAQUxQSGQDAAABkGtrD+JGmswYQ8YshzqGzuwuXHLScSrTCcOLMTzS8vYG6ZdcLUUEJEly40aFWW9NmGiC4A+ozeK///z3n/9TM/T8+WGojVbxchO5eSHvvY3w6lch4nuQAt/IPbARbv0qRNxedl3dEThUVzHw8OW2H43+KiIwjOj316x8RWp+jLziihFWioTBV/1ggg9VH0rgzI4JdqYJhXM0aoCRIwcncbjkquOWhpEit1PqpLYISfI4pEzwOImVuTyrzOwyYek6jaoSPeniwnfQwqquoRTYft11+cS2lo+KfGQbyu0ldf3iSp3eddRwdqeIyfdg5OaVrfVwVI3RQ4fLy42kYxlSsxa3JFjJs0juVlqJ9KZIVEchyreWk5AKoRO+oUTzHUT5Nb7gpTkV5paIzVqeiLzKJzadJzEFYiedbD5V6upxao9fY/k1BVbz4np0DsbY+ATpJkni2IwdNORysOyxpU3tOlYMhbzyIDXEZoajWppuSeIQ9Zg4CTPECdMtShyX8EmimYjFeb7wzbQRQ5lfbF5jp7FWNE831FAS/Ho8bVGPuZY1Jky3JHECQ8lRc7xKf3Ok6ZYkjk1/teWum9xvvouF6ZYkjl9Re5OtleyPs/Gq/SD6Kx6bcU4GBwQiJ1s5KiZxLXcHqx43sgJrGYcwLjCUzAZxiEuspeIpG0qcJ2dhgdixkQGQ2SA2C4vcxZ/GFa0lLDCU+Clbc3ZdYC0LioaynhVs2gEiaboBiUOWGE3sOyRMt0LinP0JIokmSbqlhiLJm5pcreQofhQ6H7zmNtPZ1KolpFGwuvagYUbK1oc3Wm1bxx8i6kcW+oA0cByDD38DrQa2sTHRRiGbNhstIrIhNdL+4pptK6097iJh5tqCuiTZuZKhLoCGrpuYy62pqzTk4m5qTIAYShgbgcgHLtbGO/JhkrnRlXRQZm8sJx0C2hs5CgecBsepwuGtwVGxbDBtcQwuG7pbHPGLHhRMPl8YfSyJnnThH4La6tlpeVb/Sa2tHvAotQVlO0XauKVhIMMlVx0aOXJwtnA0SgZiZxrGzA5Z4EPVB8JX/WACWimCKK6QDSI1PwR/LWIEQsnX+Zb4MUCXHW4vu67u5LowHCDCpe9BCnyT0KDLPQDEe0R4dT3Ci4QGXd57QLT6R9b/AHT9HgkCVlA4IFIAAADwBwCdASpuANAAPpFIoUylpCMiIGgAsBIJaW7hdfAAO6HVUmyYh1VJsmIdVSbJiHVUmyYh1VJsmIdVSbJiHVUmyYh1VJsmFgAA/v+TmAAAAAAAWE1QIGkDAAA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjYtYzE0MiA3OS4xNjA5MjQsIDIwMTcvMDcvMTMtMDE6MDY6MzkgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6ZGI0OTVkY2ItZDMyMS1hMzQ4LWJhODEtNWRkMGNlYjZhYzExIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkM4NTFDMENEMjI5NTExRURBMjAzQjI1MTNBQUJEREQ2IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkM4NTFDMENDMjI5NTExRURBMjAzQjI1MTNBQUJEREQ2IiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpmYjkxOTg3NC1mYmU4LWFkNDAtYTJhYi1kZDkyMjNmMTY3ZjkiIHN0UmVmOmRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDpkZWUxMjA1ZS04ZDEwLWE4NDMtYTZlYi1lNzYzZWJkNWVjM2MiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4A');
+			--i-triangles-bottom: url('data:image/webp;base64,UklGRkQHAABXRUJQVlA4WAoAAAAUAAAAbQAAzwAAQUxQSFoDAAABkGtrEyJF1XT3+AzuTuaSOWRO6JA50fjM+ovh8EjrmyLdVX8V0VpEuJYkGZCq797ppY3xB/S7RP13n6/75ePC0IGQR/ef6j7dS3gxLq8DoFOEXPoeo+g3CS/G5Z4CRBhdvE99uASMy456r79c9MjHZYc61OjM/IsRCJGild/mImG0uGmDzoIPwi90muBwglCaPLTA4LkDwzkf0sfNDhBOA1lXnal9QupgSptYuRlKczmuzNIGYbWxpEt9JQUmVa3XDZQFeB4vbGnSVfD5Z837W3a0dOnhHI0LztHUL2Jq4shRY+jMkdQID2xnzob0AqVfpf7pV4uW6T3S0f60DvEKP1Dq52uoZqGeHy2VuArL68Rme56I5reJrfVlDRoqSTbdef8RL9/NJllpUGBrXrwfx4+Ze0xoN0mMYzN8+nx2zukwGz/fbSZQyMv10XP15TziapwfLRLjEPtxb4bjkdBukXFcEpWmAJoqCQpVkN1GAmVljYK0tkJs7U1jA6WJvx+rwfsxWW0IQ2i3xDhBoMxRsObC9pjUbolxbHoKXghevicYod0S4/hr/HiMwjR2wt8zc9soevIemxHGnJyTETZeIexuhzEu9Htx9mOvwJKxYwfCiCBQZnaJo91ZQbSMaAdKI4tGSbQE2y0xjs3qGnc4q8TW7oychCBQGqsJ7kirjZJoUQyUHf7CmN0RRMvqC+TGQRe9l+8lEtqtYJxzMkp8jZ44ArvFgSKbicQBkd1aw9UzR+lTaH54nWWmuahVtpDuhtWIB90wUog+7aDFx7r2IQI/svQPSPRxbODwx5YaFgobaBllo2hDlog2ClJg+Wul2MaV9lYuErBri51LEupKZucCCLpuWrrcYq7Spi7uiDaBraYEoAVireEib+9YayaJW1f2GmXStpy9JqCw5WiwwSlspxps3spaxRYb07I2uMWmu6jFb/JBQfJ8YfOxRPI086oegjaW9B+50E9qr+oB72CKtDW1j2Qg66rjZgeAG/V8iPQ1eO7AmDwkCzqcQOEXOk3QWfBBLG6SDW0uYogU64xQV4xghof5Gxl/7/VTXuOkP4uL96kPl2hUZ/E9RtFv5J7akPt8FiLuP9V9uievw4a857MQ0X/3VB+BBZjFK9N///nvP/+jhgBWUDggUgAAAPAHAJ0BKm4A0AA+kUihTKWkIyIgaACwEglpbuF18AA7odVSbJiHVUmyYh1VJsmIdVSbJiHVUmyYh1VJsmIdVSbJiHVUmyYWAAD+/5OYAAAAAABYTVAgaQMAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkYjQ5NWRjYi1kMzIxLWEzNDgtYmE4MS01ZGQwY2ViNmFjMTEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUMzQkFGNjEyMjk1MTFFREIyMDk5NDREOEEyQUQ4RkIiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUMzQkFGNjAyMjk1MTFFREIyMDk5NDREOEEyQUQ4RkIiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOmVkN2E2ODdiLTA1NGItMTM0Zi05OTFhLTAzYTlkZTUxMjU5NiIgc3RSZWY6ZG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOmRlZTEyMDVlLThkMTAtYTg0My1hNmViLWU3NjNlYmQ1ZWMzYyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgA=');
+            
+		   --c-foreground: #131313aa;
+            --c-foreground-secondary: #181818aa;
+            --c-foreground-menu: #131313;
+            --c-border-light: #ababab;
+            --c-border-dark: #282828;
+            --c-text: #ababab;
+            --c-text-highlight: #fff;
+            --c-text-link: #fff;
             --c-text-link-hover: #ccc;
+
+            /* Эти переменные используют цвета выше для конкретных кнопок и фонов */
+            --bg: var(--c-background);          
+            --card-bg: var(--c-foreground);      
+            --text: var(--c-text);         
+            --accent: var(--c-text-link);       
+            --watched: #2db039; 
+            --border: var(--c-border-dark);          
+            --progress-bg: var(--c-foreground-secondary);     
+            --header-bg: transparent;    
+            --header-hover: rgba(255,255,255,0.03); 
+            --badge-bg: var(--c-border-dark);        
+            --episode-bg: var(--c-foreground-secondary);   
+            --btn-add: #2db039;      
+            --btn-edit: var(--c-border-light);     
+            --btn-link: #9c27b0;     
+            --btn-delete: #a12f31; 
+            --text-dark: #fff;    
+            --btn-info: #26448f; 
+            --anime-accent: var(--c-text-link);
+        }
+
+        /* Если мы открыли меню внутри карточки, она выходит на передний план, чтобы меню не перекрывалось */
+        .series-card:has(.dropdown.active) {
+            z-index: 10;
+        }
+
+        /* Главные настройки всей страницы */
+        html { 
+            background-color: var(--c-background); 
+            box-sizing: border-box;
+            color-scheme: dark;
+            overflow-y: scroll; /* Оставляем полосу прокрутки всегда, чтобы страница не дергалась */
+        }
+        *, *::before, *::after { box-sizing: inherit; }
+
+        /* Настройки текста и расположения всего контента по центру. Ширина увеличена для общего превью */
+        body { 
+            font-family: "Source Sans Pro", "Roboto", "Arial", sans-serif; 
+            color: var(--text); 
+            max-width: 1200px; /* Увеличено окно приложения */
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            position: relative; 
+            z-index: 1;
+            background-color: var(--c-background);
+            min-height: 100vh;
+        }
+
+        /* Рисуем полупрозрачные летающие треугольники на фоне */
+        body::before,
+        body::after,
+        .modal-overlay::before,
+        .modal-overlay::after {
+            content: "";
+            position: fixed;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeat center top / auto fixed;
+            opacity: 0.08;
+            pointer-events: none; /* Чтобы фон не мешал кликать по кнопкам */
+        }
+
+        /* Анимация для верхних треугольников */
+        body::before, .modal-overlay::before {
+            background-image: var(--i-triangles-top);
+            animation: 10s ease-in-out breath-in 1, 30s ease-in-out 10s breath infinite;
+        }
+        
+        /* Анимация для нижних треугольников */
+        body::after, .modal-overlay::after {
+            background-image: var(--i-triangles-bottom);
+            animation: 10s ease-in-out breath-in 1 reverse, 44s ease-in-out 10s breath-reverse infinite;
+        }
+
+/* Правила движения (дыхания) для фона */
+        @keyframes breath-in {
+            0%, 100%, 19%, 77% { opacity: 0.5; }
+            50%, 80% { opacity: 0.5; }
+            70% { opacity: 0.5; }
+            30%, 87% { opacity: 0.5; }
+            0%, 20%, 56%, 97%, 33%, 45%, 100% { background-position-x: 0%; }
+            30%, 40% { background-position-x: 250px; }
+            60%, 80% { background-position-x: -400px; }
+        }
+        @keyframes breath {
+            0%, 100%, 19%, 77% { opacity: 0.5; }
+            50%, 80% { opacity: 0.5; }
+            70% { opacity: 0.5; }
+            30%, 87% { opacity: 0.5; }
+            0% { background-position-x: 0px; }
+            50% { background-position-x: 330px; }
+            55% { background-position-x: 275px; }
+            100% { background-position-x: 660px; }
+        }
+        @keyframes breath-reverse {
+            0%, 100%, 19%, 77% { opacity: 0.5; }
+            50%, 80% { opacity: 0.5; }
+            70% { opacity: 0.5; }
+            30%, 87% { opacity: 0.5; }
+            0% { background-position-x: 0px; }
+            40% { background-position-x: -440px; }
+            43% { background-position-x: -605px; }
+            100% { background-position-x: -770px; }
+        }
+
+        /* Прячем всё, что связано с аниме, пока пользователь не введет секретный код */
+        body:not(.anime-unlocked) .weeb-secret { display: none !important; }
+
+        /* Внешний вид главного заголовка страницы */
+        h1 { text-align: center; color: var(--c-text-highlight); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; }
+        
+        /* Маленькая плашка с версией программы рядом с заголовком */
+        .app-version { 
+            display: inline-block;
+            font-size: 0.35em; 
+            color: var(--c-text); 
+            font-weight: normal; 
+            vertical-align: middle; 
+            margin-left: 10px; 
+            background: var(--c-foreground); 
+            padding: 4px 8px; 
+            border: 1px solid var(--c-border-dark); 
+            border-radius: 4px;
+            line-height: 1;
+        }
+
+        /* Текст с процентами просмотра (например, 50%) */
+        .season-percent-text { font-size: 0.85em; opacity: 0.8; color: var(--c-text-highlight); }
+
+        /* Настройка всех ссылок на сайте */
+        a { color: var(--c-text-highlight); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--c-text-link-hover); }
+
+        /* Вкладки (Сериалы, Фильмы, Аниме, Мультики) */
+        .tabs { 
+            display: flex; gap: 10px; margin-bottom: 20px; border-bottom: none; 
+            padding-bottom: 0; flex-wrap: wrap; justify-content: center;
+        }
+        
+        /* Внешний вид одной кнопки-вкладки */
+        .tab-btn { 
+            background: linear-gradient(135deg, var(--c-border-light), var(--c-border-dark));
+            color: var(--c-background); 
+            border: none; padding: 12px 24px; font-size: 1.1em; cursor: pointer; 
+            transition: transform 0.15s ease, color 0.15s; white-space: nowrap; 
+            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); /* Скошенные углы */
+            font-weight: bold; text-transform: uppercase; margin: 0;
+        }
+        
+        /* Эффект при наведении на вкладку: она немного поднимается вверх */
+        .tab-btn:hover { transform: translateY(-2px); z-index: 2; color: var(--c-text-link); }
+        
+        /* Внешний вид активной (выбранной) вкладки */
+        .tab-btn.active { 
+            background: var(--c-foreground); 
+            color: var(--c-text-link); 
+            z-index: 1;
+        }
+
+        /* Панель управления (там где фильтр и кнопка добавить) */
+        .controls { 
+            background: var(--c-foreground-menu); padding: 20px; 
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+            margin-bottom: 30px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center; 
+        }
+        
+        /* Выпадающий список (Смотрю, Брошено и т.д.) */
+        .status-filter { 
+            background: var(--bg); color: var(--text); border: 1px solid var(--border); 
+            padding: 10px 15px; font-family: inherit; font-weight: bold; cursor: pointer; 
+            outline: none; flex-grow: 1; max-width: 250px; text-transform: uppercase;
+        }
+
+        /* Дизайн карточки сериала/фильма */
+        .series-card { 
+            position: relative;
+            margin-bottom: 20px; cursor: grab; transition: opacity 0.2s, border-color 0.2s; 
+            padding-bottom: 2px; z-index: 1;
+        }
+        
+        /* Фон для карточки со скошенными углами */
+        .series-card::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            background: linear-gradient(to top, var(--c-foreground-secondary) 15px, var(--c-foreground) 0);
+            clip-path: polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+            pointer-events: none;
+        }
+        
+        /* Состояния карточки при перетаскивании мышкой */
+        .series-card.no-drag { cursor: default; }
+        .series-card:active:not(.no-drag) { cursor: grabbing; }
+        .series-card.dragging { opacity: 0.5; }
+        .series-card.drag-over { border: 1px dashed var(--c-border-light); } 
+
+        /* Шапка карточки (там где название) */
+        .series-header { position: relative; z-index: 10; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; gap: 15px; transition: 0.2s; }
+        .series-header:hover { background: var(--header-hover); }
+        
+        /* Блок с названием внутри шапки */
+        .series-info { display: flex; align-items: center; gap: 15px; cursor: pointer; flex: 1 1 0%; min-width: 0; }
+        .series-title-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; font-weight: normal; font-size: 1.3em; color: var(--c-text-link); }
+        
+        /* Красная мигающая метка "NEW" для новых сериалов */
+        .badge-new { background: #ff3333; color: white; padding: 2px 8px; font-size: 0.75em; margin-right: 10px; font-weight: bold; animation: pulse 2s infinite; vertical-align: middle; clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px)); }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* Плашка с прогрессом (например: 50% (5/10)) */
+        .series-progress-badge { font-size: 0.85em; background: var(--c-foreground); border: 2px solid var(--c-border-dark); padding: 4px 10px; color: var(--c-text); flex-shrink: 0; white-space: nowrap; text-transform: uppercase; }
+
+        /* Контейнер для кнопочек действий справа в карточке */
+        .series-actions { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; flex-shrink: 0; }
+        
+        /* Внутренняя часть карточки (где лежат кубики серий). Изначально скрыта. */
+        .series-content { 
+            position: relative; z-index: 1;
+            display: none; padding: 20px; border-top: 1px solid var(--border); cursor: default; max-height: 600px; overflow-y: auto; background: rgba(0,0,0,0.2); 
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+        
+        /* Показываем нутро карточки, если она открыта */
+        .series-card.open .series-content { display: block; }
+
+        /* Новая обертка для разделения на общее превью и блоки контента */
+        .series-content-layout {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        /* Стили для общего превью карточки (слева) */
+        .common-preview {
+            width: 250px; 
+            flex-shrink: 0; 
+            background: rgba(0,0,0,0.4); 
+            border: 1px solid var(--c-border-dark); 
+            clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* ДОБАВЛЕННЫЕ СВОЙСТВА ДЛЯ ФИКСАЦИИ ПРЕВЬЮ ПРИ ПРОКРУТКЕ */
+            position: sticky; 
+            top: 0; 
+        }
+        
+        /* Картинка в превью: contain гарантирует, что не обрежется, а max-height не даст разорвать карточку */
+        .common-preview img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* Контейнер для сезонов или информации правее от картинки */
+        .seasons-wrapper {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        /* Красивая полоса прокрутки для списков серий */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--c-background); }
+        ::-webkit-scrollbar-thumb { background: var(--c-border-dark); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--c-border-light); }
+
+        /* Оформление блоков сезонов и серий */
+        .season-block-wrapper { display: flex; gap: 15px; margin-bottom: 25px; align-items: flex-start; }
+        .season-block { flex-grow: 1; margin-bottom: 0; min-width: 0; }
+        
+        .season-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+        .season-title { font-size: 0.9em; color: var(--c-text-highlight); text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Полоска прогресса (зеленая линия под названием сезона) */
+        .season-progress-container { height: 4px; background: var(--progress-bg); width: 100%; margin-bottom: 15px; overflow: hidden; }
+        .season-progress-bar { height: 100%; background: var(--watched); transition: width 0.3s ease; }
+
+        /* Сетка кубиков с сериями */
+        .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 8px; margin-top: 10px; }
+        
+        /* Один кубик серии */
+        .episode { border: 2px solid var(--border); padding: 10px 0; text-align: center; cursor: pointer; transition: 0.2s; user-select: none; background: var(--episode-bg); font-weight: bold; color: var(--c-text); clip-path: polygon(0 4px, 4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%); }
+        .episode:hover { border-color: var(--c-text-highlight); color: var(--c-text-highlight); }
+        
+        /* Если серия просмотрена - красим в зеленый */
+        .episode.watched { background: var(--watched); color: var(--c-background); border-color: var(--watched); }
+
+        /* Универсальный дизайн для всех кнопок на сайте */
+        .btn, .btn-action { 
+            background: var(--c-foreground-secondary); 
+            border: 2px solid var(--border); 
+            color: var(--c-text-highlight); 
+            padding: 8px 16px; cursor: pointer; font-weight: bold; transition: 0.2s; 
+            text-transform: uppercase; font-family: inherit; font-size: 12px;
+            clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+            display: inline-block; white-space: nowrap; text-decoration: none;
+        }
+        .btn:hover, .btn-action:hover { border-color: var(--c-border-light); color: var(--c-text-link); }
+        
+        /* Цвета для разных типов кнопок (сохранить, удалить, добавить) */
+        .btn-save { border-color: var(--c-border-light); }
+        .btn-add { background: var(--btn-add); color: var(--c-background); border-color: var(--btn-add); }
+        .btn-add:hover { background: #2db039cc; color: #fff; border-color: #2db039cc; }
+        .btn-info { border-color: var(--btn-info); }
+        
+        .btn-action { padding: 6px 12px; font-size: 11px; margin-left: 0; }
+        .btn-add-ep { color: var(--watched); border-color: var(--watched); }
+        .btn-add-ep:hover { background: var(--watched); color: var(--c-background); }
+        .btn-edit { color: var(--c-text-highlight); }
+        .btn-link { color: var(--btn-link); border-color: var(--btn-link); }
+        .btn-link:hover { background: var(--btn-link); color: var(--c-text-highlight); }
+        .btn-delete { color: var(--btn-delete); border-color: var(--btn-delete); }
+        .btn-delete:hover { background: var(--btn-delete); color: var(--c-background); }
+        .btn-info-outline { color: var(--c-border-light); }
+
+        /* Выпадающее меню (если ссылок для просмотра несколько) */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { display: none; position: absolute; background-color: var(--c-foreground-menu); min-width: 140px; border: 2px solid var(--c-border-dark); z-index: 100; overflow: hidden; top: 100%; right: 0; margin-top: 5px; clip-path: polygon(0 6px, 6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%); }
+        .dropdown-content a { color: var(--c-text-highlight); padding: 12px 15px; text-decoration: none; display: block; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; font-weight: bold; transition: 0.2s; }
+        .dropdown-content a:last-child { border-bottom: none; }
+        
+        /* Подсветка конкретной ссылки при наведении мышки */
+        .dropdown-content a:hover { 
+            background-color: var(--btn-link); 
+            color: #ffffff; 
+        }
+        
+        /* Показываем выпадающее меню при нажатии */
+        .dropdown.active .dropdown-content { display: block; }
+
+        /* Оформление полей ввода текста и цифр (в окне редактирования) */
+        input[type="text"], input[type="number"], input[type="file"], textarea, select { 
+            background: var(--c-foreground); border: 2px solid var(--c-border-dark); 
+            color: var(--c-text-highlight); padding: 10px; font-family: inherit; font-size: 14px;
+            outline: none; transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus, select:focus { border-color: var(--c-border-light); }
+        
+        /* Стрелочка, которая крутится при открытии карточки */
+        .arrow { transition: 0.3s; display: inline-block; flex-shrink: 0; color: var(--c-text-link); }
+        .open .arrow { transform: rotate(180deg); }
+
+        /* Всплывающие окна (Модалки) - черный полупрозрачный фон поверх сайта */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        
+        /* Само окно по центру экрана */
+        .modal-content { 
+            background: linear-gradient(135deg, var(--c-border-light), var(--c-border-dark)); 
+            padding: 4px; width: 90%; max-width: 650px; 
+            clip-path: polygon(0 10px, 10px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+            max-height: 90vh; display: flex; flex-direction: column;
+        }
+        .modal-content > div:not(.modal-header) {
+            background: var(--c-foreground-menu);
+            padding: 25px; height: 100%; overflow-y: auto;
+            clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+        }
+        
+        /* Шапка всплывающего окна (там где заголовок и крестик закрытия) */
+        .modal-header { 
+            font-size: 1.4em; color: var(--c-text-highlight); background: var(--c-foreground-menu); 
+            padding: 15px 25px; margin-bottom: 0; display: flex; justify-content: space-between; align-items: center; 
+            font-weight: bold; text-transform: uppercase;
+        }
+        .close-modal { cursor: pointer; color: var(--c-text); font-size: 1.2em; transition: 0.2s; }
+        .close-modal:hover { color: var(--btn-delete); }
+        
+        /* Таблицы внутри окон (например, список сезонов в настройках) */
+        .edit-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .edit-table th, .edit-table td { border: 1px solid var(--c-border-dark); padding: 12px; text-align: left; }
+        .edit-table th { background: var(--c-foreground-secondary); color: var(--c-text-highlight); text-transform: uppercase; font-size: 0.85em; }
+        .edit-input { width: 100%; box-sizing: border-box; }
+        textarea.edit-input { resize: vertical; }
+
+        /* Кнопка "Наверх", которая появляется при скролле вниз */
+        .btn-scroll-top { position: fixed; bottom: 30px; right: 30px; background: var(--c-text-link); color: var(--c-background); border: none; width: 50px; height: 50px; font-size: 22px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.8); z-index: 999; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s, transform 0.2s, visibility 0.3s; opacity: 0; visibility: hidden; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
+        .btn-scroll-top.visible { opacity: 1; visibility: visible; }
+        .btn-scroll-top:hover { background: var(--c-text-highlight); transform: scale(1.1); }
+
+        /* Оформление спойлера (скрытого блока) для уже полностью просмотренных сезонов */
+        .watched-seasons-spoiler { background: var(--c-foreground-secondary); border: 1px solid var(--c-border-dark); margin-bottom: 20px; }
+        .watched-seasons-spoiler summary { padding: 12px 20px; cursor: pointer; color: var(--watched); font-weight: bold; font-size: 0.9em; outline: none; user-select: none; transition: background 0.2s; text-transform: uppercase; }
+        .watched-seasons-spoiler summary:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .watched-seasons-wrapper { padding: 20px 20px 0 20px; border-top: 1px solid var(--c-border-dark); background: rgba(0,0,0,0.3); }
+
+        /* Внешний вид текста в окне инструкции */
+        .instruction-list { padding-left: 20px; color: var(--c-text); }
+        .instruction-list li { margin-bottom: 12px; line-height: 1.6; font-size: 1em; }
+
+        /* Специальные настройки для мобильных телефонов (чтобы всё влезало в маленький экран) */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            .tabs { gap: 5px; flex-wrap: wrap; }
+            .tab-btn { padding: 10px; font-size: 0.95em; clip-path: none; border-radius: 4px; }
+            .controls { flex-direction: column; align-items: stretch; gap: 10px; clip-path: none; border-radius: 8px; }
+            .status-filter { max-width: none; width: 100%; }
+            .controls .btn { width: 100%; }
+            .series-card::before { clip-path: none; border-radius: 8px; border: 1px solid var(--c-border-dark); }
+            .series-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .series-info { width: 100%; }
+            .series-actions { width: 100%; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; }
+            .series-content { clip-path: none; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+            
+            /* На телефонах превью уходит наверх, а сезоны под него. Отключаем фиксацию (sticky) превью */
+            .series-content-layout { flex-direction: column; align-items: center; gap: 15px; }
+            .common-preview { width: 100%; max-width: 300px; position: static; } 
+            .seasons-wrapper { width: 100%; }
+
+            .btn-action { margin-left: 0; flex-grow: 1; text-align: center; padding: 10px; clip-path: none; border-radius: 4px; }
+            .dropdown-content { right: auto; left: 0; width: 100%; clip-path: none; border-radius: 4px; }
+            .modal-content > div:not(.modal-header) { clip-path: none; border-radius: 0 0 8px 8px; }
+            .modal-content { clip-path: none; border-radius: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1 title="↑ ↑ ↓ ↓ ← → ← → B A">TV Show Tracker <span class="app-version">v2.0.3</span></h1>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-series" onclick="switchTab('series')">Сериалы</button>
+        <button class="tab-btn" id="tab-movies" onclick="switchTab('movies')">Фильмы</button>
+        <button class="tab-btn weeb-secret" id="tab-anime" onclick="switchTab('anime')">Аниме</button>
+        <button class="tab-btn" id="tab-cartoons" onclick="switchTab('cartoons')">Мультики</button>
+    </div>
+
+    <div class="controls">
+        <select id="statusFilter" class="status-filter" onchange="render()">
+            <option value="watching">Смотрю</option>
+            <option value="plan-to-watch">В планах</option>
+            <option value="completed">Просмотрено</option>
+            <option value="on-hold">Отложено</option>
+            <option value="dropped">Брошено</option>
+        </select>
+        <button class="btn btn-info" onclick="showInstructions()">Инструкция</button>
+        <button class="btn btn-save" onclick="showDataModal()">Управление данными</button>
+        <button class="btn btn-add" id="mainAddBtn" onclick="addCurrentType()">+ Добавить</button>
+    </div>
+
+    <div id="seriesList"></div>
+
+    <div id="dataModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Управление данными</span>
+                <span class="close-modal" onclick="closeModal('dataModal')">✖</span>
+            </div>
+            
+            <div>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; margin-bottom: 20px; border: 1px solid var(--border);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--c-text-highlight); text-transform: uppercase;">Резервная копия трекера</h4>
+                    <p style="font-size: 0.85em; margin-bottom: 15px; color: var(--c-text);">Для сохранения и восстановления всех ваших списков.</p>
+                    <input type="file" id="backupInput" accept=".json" style="margin-bottom: 15px; width: 100%;">
+                    <button class="btn btn-save" style="width: 100%;" onclick="saveAndCloseModal()">Скачать текущий бэкап (JSON)</button>
+                </div>
+
+                <div class="weeb-secret" style="background: rgba(33, 150, 243, 0.05); padding: 20px; margin-bottom: 20px; border: 1px solid var(--btn-info);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--btn-info); text-transform: uppercase;">Настройки поиска (Аниме)</h4>
+                    <p style="font-size: 0.85em; margin-bottom: 15px; color: var(--c-text);">Вставьте базовую ссылку для поиска. Название аниме подставится автоматически в конец ссылки.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="text" id="animeSearchUrlInput" class="edit-input" placeholder="Например: https://old.yummyani.me/search?word=" style="flex-grow: 1; min-width: 200px;">
+                        <button class="btn btn-save" onclick="saveSearchUrl()">Сохранить</button>
+                    </div>
+                </div>
+
+                <div class="weeb-secret" style="background: rgba(255, 255, 255, 0.05); padding: 20px; margin-bottom: 20px; border: 1px solid var(--c-text-highlight);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--c-text-highlight); text-transform: uppercase;">Импорт списков Аниме</h4>
+                    <p style="font-size: 0.85em; margin-bottom: 15px; color: var(--c-text);">Лайфхак: сначала загрузите XML (для правильного количества серий), а затем JSON (для перевода названий на русский).</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.9em; font-weight: bold; display: block; margin-bottom: 8px; color: var(--c-text-highlight);">1. Из MAL/Shikimori (Формат XML):</label>
+                        <input type="file" id="malXmlInput" accept=".xml" style="width: 100%;">
+                    </div>
+                    
+                    <div>
+                        <label style="font-size: 0.9em; font-weight: bold; display: block; margin-bottom: 8px; color: var(--c-text-highlight);">2. Из Shikimori (Формат JSON):</label>
+                        <input type="file" id="shikiJsonInput" accept=".json" style="width: 100%;">
+                    </div>
+                </div>
+                
+                <div style="background: rgba(161, 47, 49, 0.1); padding: 20px; border: 1px solid var(--btn-delete);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--btn-delete); text-transform: uppercase;">Опасная зона (Сброс данных)</h4>
+                    <p style="font-size: 0.85em; margin-bottom: 15px; color: var(--c-text);">Выборочное или полное удаление данных из трекера.</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                        <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('series')">Сериалы</button>
+                        <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('movies')">Фильмы</button>
+                        <button class="btn-action btn-delete weeb-secret" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('anime')">Аниме</button>
+                        <button class="btn-action btn-delete" style="flex: 1; min-width: 130px; text-align: center;" onclick="resetSection('cartoons')">Мультики</button>
+                    </div>
+                    <button class="btn btn-delete" style="width: 100%;" onclick="resetAllData()">Очистить вообще всё</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="instructionModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <span>Инструкция по использованию</span>
+                <span class="close-modal" onclick="closeModal('instructionModal')">✖</span>
+            </div>
+            <div>
+                <ul class="instruction-list">
+                    <li><b style="color:var(--accent)">Добавление и редактирование:</b> Нажмите «+ Добавить» для создания карточки. Кнопка <b>✏️</b> открывает настройки: там можно перенести тайтл в другой раздел, изменить статус, указать ссылки для просмотра, добавить сезоны или настроить количество серий, а также установить общее превью.</li>
+                    <li><b style="color:var(--accent)">Отметка просмотра:</b> Нажимайте на квадратики серий, чтобы отметить их.<br> Кнопка <b style="color:var(--watched);">"+1 Серия"</b> сама находит первую непросмотренную серию и автоматически её отмечает. Когда все серии просмотрены, тайтл сам перейдет в статус «Просмотрено».</li>
+                    <li class="weeb-secret"><b style="color:var(--accent)">Кнопка Поиска (Аниме):</b> В разделе Аниме есть кнопка <b>🔍</b>. Чтобы она работала, зайдите в «Управление данными» и вставьте базовую ссылку вашего любимого сайта для поиска.</li>
+                    <li><b style="color:var(--accent)">Ссылки на просмотр:</b> В окне редактирования можно вставить несколько ссылок (каждую с новой строки). В карточке появится удобный выпадающий список со всеми сайтами.</li>
+                    <li class="weeb-secret"><b style="color:var(--accent)">Полнометражные фильмы (Аниме):</b> Фильмы и спецвыпуски автоматически получают красивые цветные метки (<b>ФИЛЬМ</b>, <b>OVA</b>, <b>ONA</b>), а счетчик серий для фильмов скрывается. Вы также можете вручную отметить чекбокс «Полнометражка» в настройках аниме.</li>
+                    <li><b style="color:var(--accent)">Сортировка (Drag & Drop):</b> Зажмите левую кнопку мыши на любой карточке и перетащите её выше или ниже, чтобы выстроить свой личный топ (работает везде, кроме статусов "Отложено" и "Брошено").</li>
+                    <li class="weeb-secret"><b style="color:var(--accent)">Умный импорт Аниме:</b> Для переноса базы с Shikimori загрузите сначала <b>XML</b> файл (подтянет типы OVA/Фильмы, статусы и точное количество серий), а сразу за ним загрузите <b>JSON</b> файл (переведет все названия на русский язык). Трекер сам склеит данные воедино.</li>
+                    <li><b style="color:var(--accent)">Управление данными (Бэкап):</b> Обязательно сохраняйте резервную копию трекера! Нажмите «Скачать текущий бэкап», чтобы получить JSON файл со всеми вашими сериалами, фильмами и мультфильмами. С его помощью можно легко перенести данные на другое устройство.</li>
+               </ul>
+            </div>
+            <button class="btn btn-save" style="margin-top:20px; width:100%" onclick="closeModal('instructionModal')">Всё понятно!</button>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Настройка</span>
+                <span class="close-modal" onclick="closeModal('editModal')">✖</span>
+            </div>
+            <div>
+                <div id="editModalBody"></div>
+                <div style="display: flex; gap: 15px; margin-top: 25px;">
+                    <button class="btn btn-save" style="flex-grow: 1;" onclick="saveEdit()">Сохранить изменения</button>
+                    <button class="btn btn-delete" style="flex-grow: 1;" onclick="closeModal('editModal')">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="scrollToTopBtn" class="btn-scroll-top" onclick="scrollToTop()">▲</button>
+
+    <script>
+        // Проверяем память браузера: вводил ли пользователь секретный код раньше?
+        // Если да, сразу открываем доступ к режиму Аниме.
+        if (localStorage.getItem('animeUnlocked') === 'true') {
+            document.body.classList.add('anime-unlocked');
+        }
+
+        // Тот самый секретный код из старых игр (Код Konami)
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0; // На каком символе кода мы сейчас находимся
+
+        // Слушаем нажатия на клавиатуре
+        document.addEventListener('keydown', (e) => {
+            const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+            const target = konamiCode[konamiIndex].length === 1 ? konamiCode[konamiIndex].toLowerCase() : konamiCode[konamiIndex];
+            
+            // Если нажата правильная кнопка кода
+            if (key === target) {
+                konamiIndex++;
+                // Если весь код введен правильно
+                if (konamiIndex === konamiCode.length) {
+                    toggleAnimeLock(); // Запускаем функцию открытия/закрытия секретного режима
+                    konamiIndex = 0; // Сбрасываем код для следующего раза
+                }
+            } else {
+                konamiIndex = 0; // Если ошиблись - начинаем код сначала
+            }
+        });
+
+        // Функция, которая прячет или показывает режим Аниме
+        function toggleAnimeLock() {
+            let isUnlocked = document.body.classList.contains('anime-unlocked');
+            if (!isUnlocked) {
+                document.body.classList.add('anime-unlocked');
+                localStorage.setItem('animeUnlocked', 'true');
+                alert('🌸 Секретный режим "Аниме" разблокирован!');
+            } else {
+                document.body.classList.remove('anime-unlocked');
+                localStorage.setItem('animeUnlocked', 'false');
+                if (currentTab === 'anime') switchTab('series');
+                alert('🔒 Секретный режим спрятан обратно.');
+            }
+        }
+
+        // Главная база данных: списки (массивы) для всех разделов
+        let appData = { series: [], movies: [], anime: [], cartoons: [] };
+        let currentTab = localStorage.getItem('lastOpenTab') || 'series'; // Какая вкладка открыта прямо сейчас
+        let draggedItemId = null; // Какую карточку мы сейчас тащим мышкой
+        let draggedItemType = null;
+        let currentEditingId = null; // Какую карточку мы сейчас редактируем
+        let currentEditingType = null;
+        
+        // Достаем из памяти ссылку для умного поиска
+        let animeSearchBaseUrl = localStorage.getItem('animeSearchBaseUrl') || '';
+        
+        const newlyAddedIds = new Set(); // Запоминаем новые сериалы, чтобы вешать на них плашку "NEW"
+        
+        // Создаем случайный уникальный номер для новой карточки
+        const generateId = () => Math.random().toString(36).substr(2, 9);
+
+        // Перевод статусов для отображения пользователю
+        const statusMapText = {
+            'watching': 'Смотрю',
+            'plan-to-watch': 'В планах',
+            'completed': 'Просмотрено',
+            'on-hold': 'Отложено',
+            'dropped': 'Брошено'
+        };
+
+        // Функция: проверяет, просмотрены ли все серии. Если да - переносит сериал в "Просмотрено"
+        function checkSeriesCompletion(series) {
+            const allWatched = series.seasons.every(season => season.episodes.length > 0 && season.episodes.every(ep => ep === true));
+            if (allWatched && series.seasons.length > 0 && series.status !== 'dropped') {
+                series.status = 'completed';
+            } else if (series.status === 'completed' && !allWatched) {
+                series.status = 'watching';
+            }
+        }
+
+        // Обновление старых сохранений (чтобы старая версия файла бэкапа работала в новой версии программы)
+        function migrateData() {
+            const isSeriesWatched = (s) => s.seasons && s.seasons.length > 0 && s.seasons.every(season => season.episodes.length > 0 && season.episodes.every(ep => ep === true));
+
+            if (!appData.cartoons) appData.cartoons = [];
+
+            // Функция для извлечения превью из старых сезонов в корень (общее превью)
+            const migratePreview = (item) => {
+                if (!item.previewUrl && item.seasons) {
+                    const firstSeasonWithPreview = item.seasons.find(s => s.previewUrl);
+                    if (firstSeasonWithPreview) item.previewUrl = firstSeasonWithPreview.previewUrl;
+                }
+                // Удаляем старые индивидуальные ссылки
+                if (item.seasons) {
+                    item.seasons.forEach(s => { delete s.previewUrl; });
+                }
+            };
+
+            appData.series.forEach(s => { 
+                if (!s.id) s.id = generateId(); 
+                if (!s.status) s.status = isSeriesWatched(s) ? 'completed' : 'watching';
+                migratePreview(s);
+            });
+            appData.cartoons.forEach(c => { 
+                if (!c.id) c.id = generateId(); 
+                if (!c.status) c.status = isSeriesWatched(c) ? 'completed' : 'watching';
+                migratePreview(c);
+            });
+            appData.movies.forEach(m => { 
+                if (!m.id) m.id = generateId(); 
+                if (!m.status) {
+                    m.status = m.isWatched ? 'completed' : 'plan-to-watch';
+                    delete m.isWatched;
+                }
+            });
+            appData.anime.forEach(a => { 
+                if (!a.id) a.id = generateId(); 
+                if (a.score !== undefined) delete a.score;
+                if (!a.status) {
+                    a.status = a.isWatched ? 'completed' : 'watching';
+                    delete a.isWatched;
+                }
+                if (!a.episodes) {
+                    a.episodesTotal = parseInt(a.episodesTotal) || 0;
+                    a.episodes = new Array(a.episodesTotal).fill(false);
+                    let watched = parseInt(a.episodesWatched) || 0;
+                    for(let i = 0; i < watched; i++) if (i < a.episodes.length) a.episodes[i] = true;
+                }
+                if (a.isFeatureFilm === undefined) a.isFeatureFilm = false;
+                if (a.animeFormat === 'movie') a.isFeatureFilm = true;
+            });
+        }
+
+        // При запуске пытаемся достать наши списки из памяти браузера
+        const savedData = localStorage.getItem('tvShowData');
+        if (savedData) {
+            try {
+                let parsed = JSON.parse(savedData);
+                if (Array.isArray(parsed)) { appData.series = parsed; } 
+                else { 
+                    appData = parsed; 
+                    if (!appData.movies) appData.movies = []; 
+                    if (!appData.anime) appData.anime = []; 
+                    if (!appData.cartoons) appData.cartoons = []; 
+                }
+                migrateData(); // Проверяем на ошибки и старые форматы
+            } catch (e) { console.error("Ошибка чтения данных", e); }
+        }
+
+        // Защита от опасных символов в названиях, чтобы сайт не сломался
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        // Поиск конкретного сериала в базе по его уникальному номеру (ID)
+        function getItemById(id, type) { 
+            return (type === 'series' ? appData.series : type === 'movies' ? appData.movies : type === 'anime' ? appData.anime : appData.cartoons).find(item => item.id === id); 
+        }
+
+        // Функция для перехода по вкладкам
+        function switchTab(tabName) {
+            currentTab = tabName; // Запоминаем, где мы
+            localStorage.setItem('lastOpenTab', tabName); // Записываем открытую вкладку в память
+            
+            // Снимаем выделение со всех кнопок-вкладок и подсвечиваем нужную
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            
+            const addBtn = document.getElementById('mainAddBtn');
+            const statusFilter = document.getElementById('statusFilter');
+            
+            // Меняем текст на зеленой кнопке "Добавить"
+            if (tabName === 'series') { addBtn.innerText = '+ Добавить сериал'; } 
+            else if (tabName === 'movies') { addBtn.innerText = '+ Добавить фильм'; } 
+            else if (tabName === 'anime') { addBtn.innerText = '+ Добавить аниме'; } 
+            else if (tabName === 'cartoons') { addBtn.innerText = '+ Добавить мультик'; } 
+            
+            // Фильмы по умолчанию показываем в разделе "В планах"
+            if (tabName === 'movies') { statusFilter.value = 'plan-to-watch'; }
+            else { statusFilter.value = 'watching'; }
+            
+            render(); // Перерисовываем список на экране
+        }
+
+        // Функция для создания новой карточки
+        function addCurrentType() {
+            let filterVal = document.getElementById('statusFilter').value; // Запоминаем текущий статус (например "В планах")
+            let newItem;
+            
+            // Создаем шаблон новой карточки в зависимости от открытой вкладки
+            // Превью теперь одно общее на всю карточку в корне объекта (previewUrl)
+            if (currentTab === 'series') {
+                newItem = { id: generateId(), title: "Новый сериал", previewUrl: "", links: [], seasons: [{ number: 1, episodes: new Array(10).fill(false) }], status: filterVal, isOpen: true };
+                appData.series.unshift(newItem); // Кладем в самое начало списка
+            } else if (currentTab === 'cartoons') {
+                newItem = { id: generateId(), title: "Новый мультик", previewUrl: "", links: [], seasons: [{ number: 1, episodes: new Array(10).fill(false) }], status: filterVal, isOpen: true };
+                appData.cartoons.unshift(newItem); 
+            } else if (currentTab === 'movies') {
+                newItem = { id: generateId(), title: "Новый фильм", previewUrl: "", links: [], status: filterVal, isOpen: true };
+                appData.movies.unshift(newItem); 
+            } else if (currentTab === 'anime') {
+                newItem = { id: generateId(), title: "Новое аниме", previewUrl: "", episodesTotal: 12, episodes: new Array(12).fill(false), isFeatureFilm: false, links: [], status: filterVal, isOpen: true };
+                appData.anime.unshift(newItem); 
+            }
+            
+            newlyAddedIds.add(newItem.id); // Вешаем плашку "NEW"
+            render(); // Рисуем новую карточку на экране
+            editItem({ stopPropagation: () => {} }, newItem.id, currentTab); // Сразу открываем окно настройки
+        }
+
+        // Функции для скрытия и показа всплывающих окон
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function showInstructions() { document.getElementById('instructionModal').classList.add('active'); }
+        
+        function showDataModal() { 
+            document.getElementById('animeSearchUrlInput').value = animeSearchBaseUrl;
+            document.getElementById('dataModal').classList.add('active'); 
+        }
+        
+        // Сохраняем пользовательскую ссылку для поиска в интернете
+        function saveSearchUrl() {
+            animeSearchBaseUrl = document.getElementById('animeSearchUrlInput').value.trim();
+            localStorage.setItem('animeSearchBaseUrl', animeSearchBaseUrl);
+            alert('Ссылка для поиска успешно сохранена!');
+            render();
+        }
+
+        // Сохраняем всё в файл и закрываем окно
+        function saveAndCloseModal() { saveJSON(); closeModal('dataModal'); }
+        
+        // Удаление целого раздела (вкладки)
+        function resetSection(section) {
+            const sectionNames = { series: 'Сериалы', movies: 'Фильмы', anime: 'Аниме', cartoons: 'Мультики' };
+            if (confirm(`⚠️ Вы уверены, что хотите безвозвратно удалить весь раздел "${sectionNames[section]}"?`)) {
+                appData[section] = [];
+                render();
+            }
+        }
+
+        // Полное удаление вообще всех данных из программы
+        function resetAllData() {
+            if (confirm('⚠️ Вы уверены? ВСЕ данные будут безвозвратно удалены!')) {
+                appData = { series: [], movies: [], anime: [], cartoons: [] };
+                localStorage.removeItem('tvShowData'); // Стираем память браузера
+                render();
+                closeModal('dataModal');
+            }
+        }
+
+        // Функция для кнопки лупы 🔍 (поиск в браузере)
+        function searchAnime(e, id) {
+            e.stopPropagation();
+            if (!animeSearchBaseUrl) {
+                alert('Пожалуйста, сначала укажите базовую ссылку для поиска в меню "Управление данными"!');
+                return;
+            }
+            const item = getItemById(id, 'anime');
+            const query = encodeURIComponent(item.title); // Кодируем название, чтобы ссылка не сломалась
+            window.open(animeSearchBaseUrl + query, '_blank'); // Открываем новую вкладку в браузере
+        }
+
+        // Читаем файл сохранения (бэкапа), если пользователь решил его загрузить
+        document.getElementById('backupInput').addEventListener('change', function (e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    let parsed = JSON.parse(event.target.result);
+                    // Проверка от дурака: если суют файл с Шикимори вместо бэкапа
+                    if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].target_title !== undefined) {
+                        alert("⚠️ Вы пытаетесь загрузить список Shikimori в раздел Полного Бэкапа. Пожалуйста, используйте кнопку импорта Shikimori ниже.");
+                        return;
+                    }
+                    if (Array.isArray(parsed)) { appData = { series: parsed, movies: [], anime: [], cartoons: [] }; } 
+                    else { 
+                        appData = parsed; 
+                        if (!appData.movies) appData.movies = []; 
+                        if (!appData.anime) appData.anime = []; 
+                        if (!appData.cartoons) appData.cartoons = [];
+                    }
+                    migrateData(); render(); closeModal('dataModal'); 
+                } catch (err) { alert("Ошибка при чтении файла бэкапа JSON"); }
+            };
+            if(e.target.files[0]) reader.readAsText(e.target.files[0]); 
+            e.target.value = ''; 
+        });
+
+        // Скрипт для загрузки списка из сайта Shikimori (JSON файл)
+        document.getElementById('shikiJsonInput').addEventListener('change', function (e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    let parsed = JSON.parse(event.target.result);
+                    if (!Array.isArray(parsed) || (parsed.length > 0 && parsed[0].target_title === undefined)) {
+                        alert("⚠️ Этот файл не похож на экспорт из Shikimori.");
+                        return;
+                    }
+                    let addedCount = 0;
+                    let updatedCount = 0;
+                    // Перевод статусов Шикимори в наши
+                    const shikiStatusMap = { 'watching': 'watching', 'completed': 'completed', 'on_hold': 'on-hold', 'dropped': 'dropped', 'planned': 'plan-to-watch' };
+                    
+                    parsed.forEach(item => {
+                        if(item.target_type !== 'Anime') return; // Нас интересует только аниме
+                        let titleRu = item.target_title_ru;
+                        let titleEn = item.target_title;
+                        if (!titleEn && !titleRu) return;
+                        
+                        let watched = parseInt(item.episodes) || 0;
+                        let status = shikiStatusMap[item.status] || 'plan-to-watch';
+
+                        // Ищем, есть ли уже такое аниме в нашем списке
+                        let existingAnime = appData.anime.find(a => a.title === titleEn || (titleRu && a.title === titleRu));
+
+                        if (existingAnime) {
+                            // Если есть, то обновляем английское название на русское
+                            if (titleRu && existingAnime.title !== titleRu) {
+                                existingAnime.title = titleRu;
+                                updatedCount++;
+                            }
+                        } else {
+                            // Если нет - создаем новое
+                            let episodesTotal = (status === 'completed') ? watched : 0; 
+                            let episodesArray = new Array(episodesTotal > 0 ? episodesTotal : watched).fill(false);
+                            for(let i=0; i<watched; i++) episodesArray[i] = true; // Закрашиваем уже просмотренные серии
+
+                            let newId = generateId();
+                            appData.anime.unshift({
+                                id: newId, title: titleRu || titleEn, episodesTotal: episodesTotal, previewUrl: "",
+                                episodes: episodesArray, status: status, isFeatureFilm: false, links: [], isOpen: false
+                            });
+                            newlyAddedIds.add(newId);
+                            addedCount++;
+                        }
+                    });
+                    alert(`Обработка завершена!\nДобавлено новых аниме: ${addedCount}\nОбновлено названий на русские: ${updatedCount}`);
+                    migrateData(); render(); closeModal('dataModal'); 
+                } catch (err) { alert("Ошибка при чтении Shikimori JSON"); }
+            };
+            if(e.target.files[0]) reader.readAsText(e.target.files[0]); 
+            e.target.value = ''; 
+        });
+
+        // Скрипт для загрузки списка из сайта MyAnimeList/Shikimori (XML файл)
+        document.getElementById('malXmlInput').addEventListener('change', function (e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    // Разбираем текст XML на элементы, чтобы было удобно читать
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(event.target.result, "text/xml");
+                    const animes = xmlDoc.getElementsByTagName("anime");
+                    let addedCount = 0;
+                    let updatedCount = 0;
+                    
+                    const statusMap = {
+                        'watching': 'watching', 'completed': 'completed', 'on-hold': 'on-hold',
+                        'dropped': 'dropped', 'plan to watch': 'plan-to-watch', 'planned': 'plan-to-watch'
+                    };
+                    
+                    for (let i = 0; i < animes.length; i++) {
+                        const node = animes[i];
+                        const getVal = (tag) => { const el = node.getElementsByTagName(tag)[0]; return el ? (el.textContent || "").trim() : ""; };
+                        const titleRu = getVal("series_title_ru") || getVal("my_title_ru");
+                        const titleEn = getVal("series_title") || getVal("title");
+                        const title = titleRu || titleEn;
+                        if (!title) continue;
+                        
+                        const total = parseInt(getVal("series_episodes") || getVal("episodes")) || 0;
+                        const watched = parseInt(getVal("my_watched_episodes") || getVal("watched_episodes")) || 0;
+                        
+                        let statusRaw = (getVal("my_status") || getVal("shiki_status") || "plan to watch").toLowerCase();
+                        let status = statusMap[statusRaw] || 'plan-to-watch';
+                        if (statusRaw === "completed" || (total > 0 && watched >= total)) status = 'completed';
+                        
+                        const seriesType = (getVal("series_type") || getVal("type") || "").toLowerCase();
+                        const isMovie = (seriesType === 'movie'); // Фильм или нет
+                        
+                        let episodesArray = new Array(total > 0 ? total : watched).fill(false);
+                        for(let j = 0; j < watched; j++) episodesArray[j] = true;
+                        
+                        let existingAnime = appData.anime.find(a => a.title === title || a.title === titleEn);
+                        if (existingAnime) {
+                            if (existingAnime.episodesTotal === 0 && total > 0) {
+                                existingAnime.episodesTotal = total;
+                                while(existingAnime.episodes.length < total) existingAnime.episodes.push(false);
+                                updatedCount++;
+                            }
+                            if (seriesType) {
+                                existingAnime.animeFormat = seriesType;
+                                if (isMovie) existingAnime.isFeatureFilm = true;
+                            }
+                        } else {
+                            let newId = generateId();
+                            appData.anime.unshift({
+                                id: newId, title: title, episodesTotal: total, episodes: episodesArray, previewUrl: "",
+                                status: status, isFeatureFilm: isMovie, animeFormat: seriesType, links: [], isOpen: false
+                            });
+                            newlyAddedIds.add(newId);
+                            addedCount++;
+                        }
+                    }
+                    alert(`Успешно импортировано новых аниме (XML): ${addedCount}\nОбновлено данных у существующих: ${updatedCount}`);
+                    render(); closeModal('dataModal');
+                } catch (err) { alert("Ошибка при разборе XML файла."); console.error(err); }
+            };
+            if(e.target.files[0]) reader.readAsText(e.target.files[0]);
+            e.target.value = '';
+        });
+
+        // Функция подготовки и открытия окна с настройками конкретной карточки (при нажатии на ✏️)
+        function editItem(e, id, type) {
+            if (e && e.stopPropagation) e.stopPropagation(); // Чтобы карточка случайно не свернулась
+            currentEditingId = id; currentEditingType = type;
+            const item = getItemById(id, type);
+            let links = item.links || (item.link ? [item.link] : []);
+
+            // Строим HTML код окна настроек. Вносим поле для общего превью
+            let html = `
+                <table class="edit-table">
+                    <tr><td width="35%"><strong>Раздел</strong></td>
+                        <td>
+                            <select id="editSection" class="edit-input">
+                                <option value="series" ${type==='series'?'selected':''}>Сериалы</option>
+                                <option value="cartoons" ${type==='cartoons'?'selected':''}>Мультики</option>
+                                <option value="movies" ${type==='movies'?'selected':''}>Фильмы</option>
+                                <option value="anime" class="weeb-secret" ${type==='anime'?'selected':''}>Аниме</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td><strong>Категория</strong></td>
+                        <td>
+                            <select id="editStatus" class="edit-input">
+                                <option value="watching" ${item.status==='watching'?'selected':''}>Смотрю</option>
+                                <option value="plan-to-watch" ${item.status==='plan-to-watch'?'selected':''}>В планах</option>
+                                <option value="completed" ${item.status==='completed'?'selected':''}>Просмотрено</option>
+                                <option value="on-hold" ${item.status==='on-hold'?'selected':''}>Отложено</option>
+                                <option value="dropped" ${item.status==='dropped'?'selected':''}>Брошено</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td><strong>Название</strong></td><td><input type="text" id="editTitle" class="edit-input" value="${escapeHtml(item.title)}"></td></tr>
+                    <tr><td><strong>Превью (URL)</strong><br><small>(Общая обложка)</small></td><td><input type="text" id="editItemPreview" class="edit-input" value="${escapeHtml(item.previewUrl || '')}" placeholder="https://..."></td></tr>
+                    <tr><td><strong>Сайты</strong><br><small>(каждый с новой строки)</small></td><td><textarea id="editLinks" class="edit-input" rows="3" placeholder="https://site1.com">${links.join('\n')}</textarea></td></tr>
+                </table>`;
+
+            // Если это сериал или мультик - добавляем блок с настройкой сезонов (убрана колонка превью)
+            if (type === 'series' || type === 'cartoons') {
+                html += `<h4 style="margin-bottom: 10px; color: var(--c-text-highlight); text-transform:uppercase;">Сезоны</h4><table class="edit-table" id="editSeasonsTable"><thead><tr><th>Сезон</th><th>Кол-во серий</th><th style="text-align: center;">Всё просмотрено</th><th style="text-align: center;">✖</th></tr></thead><tbody id="editSeasonsBody">`;
+                item.seasons.forEach((season, sIdx) => {
+                    const allWatched = season.episodes.length > 0 && season.episodes.every(ep => ep === true);
+                    html += `<tr data-season-idx="${sIdx}"><td>${season.number}</td><td><input type="number" class="edit-input season-count" value="${season.episodes.length}" min="1"></td><td style="text-align: center;"><input type="checkbox" class="season-watched-cb" ${allWatched ? 'checked' : ''}></td><td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td></tr>`;
+                });
+                html += `</tbody></table><button class="btn btn-add" style="padding: 8px 16px; width: 100%;" onclick="addSeasonRow()">+ Добавить сезон</button>`;
+            } 
+            // Если это Аниме - добавляем блок настроек аниме
+            else if (type === 'anime') {
+                html += `<h4 style="margin-bottom: 10px; color: var(--c-text-highlight); text-transform:uppercase;">Настройки аниме</h4>
+                <div style="margin-bottom: 15px;">
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="editAnimeFeature" ${item.isFeatureFilm ? 'checked' : ''}> Полнометражка (фильм)
+                    </label>
+                </div>
+                <table class="edit-table" id="animeEpisodesTable"><tr><td><strong>Всего серий</strong></td><td><input type="number" id="editAnimeTotal" class="edit-input" value="${item.episodesTotal}" min="0"></td></tr></table>`;
+            }
+
+            // Показываем собранное окно на экране
+            document.getElementById('editModalBody').innerHTML = html;
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        // Функция добавляет новую пустую строчку сезона в таблице настроек (без поля превью)
+        function addSeasonRow() {
+            const tbody = document.getElementById('editSeasonsBody');
+            const newSeasonNum = tbody.children.length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${newSeasonNum}</td><td><input type="number" class="edit-input season-count" value="10" min="1"></td><td style="text-align: center;"><input type="checkbox" class="season-watched-cb"></td><td style="text-align: center;"><button class="btn-action btn-delete" onclick="removeSeasonRow(this)">✖</button></td>`;
+            tbody.appendChild(tr); updateSeasonNumbers(); // Пересчитываем номера сезонов
+        }
+
+        // Удаление сезона и перерасчет номеров (чтобы после удаления 2 сезона, 3 стал 2-м)
+        function removeSeasonRow(btn) { btn.closest('tr').remove(); updateSeasonNumbers(); }
+        function updateSeasonNumbers() { document.getElementById('editSeasonsBody').querySelectorAll('tr').forEach((row, idx) => { row.cells[0].innerText = idx + 1; }); }
+
+        // Сохранение всего, что мы навводили в окне настроек
+        function saveEdit() {
+            const item = getItemById(currentEditingId, currentEditingType);
+            const newType = document.getElementById('editSection').value;
+            
+            item.title = document.getElementById('editTitle').value.trim() || "Без названия";
+            item.links = document.getElementById('editLinks').value.split('\n').map(l => l.trim()).filter(l => l !== '');
+            item.status = document.getElementById('editStatus').value;
+            item.previewUrl = document.getElementById('editItemPreview').value.trim(); // Сохраняем общую обложку
+            delete item.link;
+
+            // Сохраняем новые сезоны
+            if (newType === 'series' || newType === 'cartoons') {
+                if (!item.seasons) item.seasons = [{ number: 1, episodes: new Array(10).fill(false) }];
+                
+                if (currentEditingType === 'series' || currentEditingType === 'cartoons') {
+                    const rows = document.getElementById('editSeasonsBody').querySelectorAll('tr');
+                    const newSeasons = [];
+                    rows.forEach((row, idx) => {
+                        const countInput = parseInt(row.querySelector('.season-count').value) || 10;
+                        const isWatched = row.querySelector('.season-watched-cb').checked;
+                        let oldEpisodes = item.seasons[idx] ? item.seasons[idx].episodes : [];
+                        let newEpisodes = new Array(countInput).fill(false);
+                        for (let i = 0; i < countInput; i++) {
+                            if (isWatched) newEpisodes[i] = true; 
+                            else if (i < oldEpisodes.length) newEpisodes[i] = oldEpisodes[i]; // Переносим старые галочки
+                        }
+                        newSeasons.push({ number: idx + 1, episodes: newEpisodes });
+                    });
+                    item.seasons = newSeasons;
+                    checkSeriesCompletion(item);
+                }
+            } 
+            // Сохраняем новые настройки для аниме
+            else if (newType === 'anime') {
+                if (!item.episodes) { item.episodes = []; item.episodesTotal = 0; }
+                
+                if (currentEditingType === 'anime') {
+                    item.isFeatureFilm = document.getElementById('editAnimeFeature').checked;
+                    if (item.isFeatureFilm && (!item.animeFormat || item.animeFormat === 'tv')) {
+                        item.animeFormat = 'movie';
+                    } else if (!item.isFeatureFilm && item.animeFormat === 'movie') {
+                        item.animeFormat = 'tv';
+                    }
+                    
+                    const newTotal = parseInt(document.getElementById('editAnimeTotal').value) || 0;
+                    item.episodesTotal = newTotal;
+                    if (item.episodes.length < newTotal) { while(item.episodes.length < newTotal) item.episodes.push(false); } 
+                    else if (item.episodes.length > newTotal && newTotal !== 0) { item.episodes.length = newTotal; }
+                }
+            }
+
+            // Если в настройках мы перенесли сериал в другой раздел (например, в фильмы)
+            if (currentEditingType !== newType) {
+                const oldList = currentEditingType === 'series' ? appData.series : currentEditingType === 'movies' ? appData.movies : currentEditingType === 'anime' ? appData.anime : appData.cartoons;
+                const newList = newType === 'series' ? appData.series : newType === 'movies' ? appData.movies : newType === 'anime' ? appData.anime : appData.cartoons;
+                
+                const idx = oldList.findIndex(i => i.id === item.id);
+                if (idx > -1) {
+                    oldList.splice(idx, 1); // Удаляем из старого раздела
+                    newList.unshift(item);  // Добавляем в новый раздел
+                }
+            }
+
+            closeModal('editModal');
+            
+            // Если сменили раздел, автоматически переключаем вкладку, чтобы не потерять карточку
+            if (currentEditingType !== newType && currentTab !== newType) {
+                switchTab(newType);
+            } else {
+                render(); // Просто обновляем экран
+            }
+        }
+
+        // Функции для перетаскивания карточек мышкой (Drag & Drop)
+        function onDragStart(id, type) { draggedItemId = id; draggedItemType = type; setTimeout(() => { const el = document.querySelector(`[data-id="${id}"]`); if(el) el.classList.add('dragging'); }, 0); }
+        function onDragOver(e, element, id) { e.preventDefault(); if (draggedItemId !== id) element.classList.add('drag-over'); }
+        function onDragLeave(e, element) { element.classList.remove('drag-over'); }
+        
+        // Когда мы отпускаем карточку в нужном месте
+        function onDrop(targetId, type) {
+            if (!draggedItemId || draggedItemId === targetId || draggedItemType !== type) return;
+            const list = type === 'series' ? appData.series : type === 'movies' ? appData.movies : type === 'anime' ? appData.anime : appData.cartoons;
+            const fromIdx = list.findIndex(i => i.id === draggedItemId);
+            const toIdx = list.findIndex(i => i.id === targetId);
+            const [moved] = list.splice(fromIdx, 1); list.splice(toIdx, 0, moved); // Меняем элементы местами в массиве
+            draggedItemId = null; render();
+        }
+
+        // Клик по кубику серии: отмечает все предыдущие как просмотренные (зеленые)
+        function toggleEpisode(itemId, type, seaIdx, epIdx) {
+            const item = getItemById(itemId, type);
+            const episodes = item.seasons[seaIdx].episodes;
+            if (!episodes[epIdx]) { for (let i = 0; i <= epIdx; i++) episodes[i] = true; } 
+            else { episodes[epIdx] = false; } // Если была зеленая, станет серой
+            checkSeriesCompletion(item);
+            render();
+        }
+        
+        // Кнопка "+1 Серия". Сама ищет первый незеленый кубик и красит его в зеленый.
+        function markNextEpisode(e, itemId, type) {
+            e.stopPropagation();
+            const item = getItemById(itemId, type);
+            for (let sIdx = 0; sIdx < item.seasons.length; sIdx++) {
+                const season = item.seasons[sIdx];
+                for (let epIdx = 0; epIdx < season.episodes.length; epIdx++) {
+                    if (!season.episodes[epIdx]) {
+                        season.episodes[epIdx] = true; 
+                        checkSeriesCompletion(item);
+                        render(); return; // Завершаем, как только покрасили одну
+                    }
+                }
+            }
+        }
+
+        // То же самое, что toggleEpisode, только специально для аниме
+        function toggleAnimeEpisode(id, epIdx) {
+            const anime = getItemById(id, 'anime');
+            if (!anime.episodes[epIdx]) { for (let i = 0; i <= epIdx; i++) anime.episodes[i] = true; } 
+            else { anime.episodes[epIdx] = false; }
+            
+            const watchedCount = anime.episodes.filter(Boolean).length;
+            if (anime.episodesTotal > 0 && watchedCount === anime.episodesTotal && anime.status !== 'dropped') anime.status = 'completed';
+            else if (anime.status === 'completed' && watchedCount < anime.episodesTotal) anime.status = 'watching';
+            render();
+        }
+
+        // Кнопка "+1 Серия" для аниме
+        function markNextAnimeEpisode(e, id) {
+            e.stopPropagation();
+            const anime = getItemById(id, 'anime');
+            const nextIdx = anime.episodes.indexOf(false);
+            if (nextIdx !== -1) { anime.episodes[nextIdx] = true; } 
+            else { anime.episodes.push(true); anime.episodesTotal = anime.episodes.length; } // Если кубиков не хватает, создаст новый
+            
+            const watchedCount = anime.episodes.filter(Boolean).length;
+            if (anime.episodesTotal > 0 && watchedCount === anime.episodesTotal && anime.status !== 'dropped') anime.status = 'completed';
+            render();
+        }
+
+        // Свернуть или развернуть карточку (чтобы посмотреть кубики)
+        function toggleCard(id, type) { const item = getItemById(id, type); item.isOpen = !item.isOpen; render(); }
+        
+        // Удалить карточку совсем
+        function deleteItem(e, id, type) { 
+            e.stopPropagation(); 
+            if (confirm('Удалить этот элемент?')) { 
+                const list = type === 'series' ? appData.series : type === 'movies' ? appData.movies : type === 'anime' ? appData.anime : appData.cartoons; 
+                const idx = list.findIndex(i => i.id === id); list.splice(idx, 1); render(); 
+            } 
+        }
+
+        // Если мы кликнули где-то на сайте, то выпадающее меню с сайтами само закроется
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown.active').forEach(d => d.classList.remove('active'));
+        });
+
+        // Функция строит ссылки на сайты внутри карточки
+        function generateLinksHtml(item) {
+            let linksHtml = '';
+            const currentLinks = item.links || (item.link ? [item.link] : []);
+            const validLinks = currentLinks.filter(l => l.trim() !== ''); // Убираем пустые строки
+
+            if (validLinks.length === 0) return '';
+            // Если ссылка одна - делаем обычную кнопку
+            if (validLinks.length === 1) return `<a href="${validLinks[0]}" target="_blank" class="btn-action btn-link" onclick="event.stopPropagation()">Смотреть</a>`;
+
+            // Если ссылок несколько - делаем кнопку-меню
+            linksHtml += `<div class="dropdown" onclick="event.stopPropagation(); this.classList.toggle('active')">`;
+            linksHtml += `<button class="btn-action btn-link">Сайты ▼</button><div class="dropdown-content">`;
+            validLinks.forEach((link, lIdx) => { linksHtml += `<a href="${link}" target="_blank" onclick="event.stopPropagation()">Сайт ${lIdx + 1}</a>`; });
+            linksHtml += `</div></div>`;
+            return linksHtml;
+        }
+
+        // Функция-строитель карточек: создает HTML-код карточки для нужного раздела
+        function createCard(item, type, filterState) {
+            const card = document.createElement('div');
+            card.className = `series-card ${item.isOpen ? 'open' : ''}`;
+            card.dataset.id = item.id;
+            
+            const isCompletedList = filterState === 'completed';
+
+            // Настраиваем перетаскивание, если это не список брошенных или просмотренных
+            if (!isCompletedList && filterState !== 'dropped' && filterState !== 'on-hold') {
+                card.draggable = true;
+                card.ondragstart = () => onDragStart(item.id, type);
+                card.ondragover = (e) => onDragOver(e, card, item.id); 
+                card.ondragleave = (e) => onDragLeave(e, card);    
+                card.ondrop = () => onDrop(item.id, type);
+                card.ondragend = () => render(); 
+            } else { card.classList.add('no-drag'); }
+
+            const linksHtml = generateLinksHtml(item);
+            const newBadge = newlyAddedIds.has(item.id) ? `<span class="badge-new">NEW</span>` : '';
+
+            // Генерируем HTML для общего превью слева, если ссылка указана
+            let itemPreviewHtml = '';
+            if (item.previewUrl) {
+                itemPreviewHtml = `<div class="common-preview"><img src="${escapeHtml(item.previewUrl)}" alt="Превью" onerror="this.style.display='none'"></div>`;
+            }
+
+            // Строитель для Сериалов и Мультиков
+            if (type === 'series' || type === 'cartoons') {
+                let quickAddHtml = '';
+                if (!isCompletedList && filterState !== 'dropped') {
+                    const hasUnwatched = item.seasons && item.seasons.some(season => season.episodes.includes(false));
+                    if (hasUnwatched) quickAddHtml = `<button class="btn-action btn-add-ep" onclick="markNextEpisode(event, '${item.id}', '${type}')" title="Отметить следующую серию">+1 Серия</button>`;
+                }
+
+                let totalEpisodes = 0, watchedEpisodes = 0, activeHtml = '', watchedHtml = '', watchedCount = 0;
+                item.seasons.forEach((season, seaIdx) => {
+                    const seasonTotal = season.episodes.length;
+                    const seasonWatched = season.episodes.filter(ep => ep).length;
+                    const seasonPercent = seasonTotal > 0 ? Math.round((seasonWatched / seasonTotal) * 100) : 0;
+                    totalEpisodes += seasonTotal; watchedEpisodes += seasonWatched;
+
+                    let episodesHtml = season.episodes.map((watched, epIdx) => `<div class="episode ${watched ? 'watched' : ''}" onclick="event.stopPropagation(); toggleEpisode('${item.id}', '${type}', ${seaIdx}, ${epIdx})">${epIdx + 1}</div>`).join('');
+                    
+                    let seasonHtml = `<div class="season-block-wrapper"><div class="season-block"><div class="season-header"><div class="season-title">Сезон ${season.number}</div><div class="season-percent-text">${seasonPercent}%</div></div><div class="season-progress-container"><div class="season-progress-bar" style="width: ${seasonPercent}%"></div></div><div class="episodes-grid">${episodesHtml}</div></div></div>`;
+
+                    if (seasonTotal > 0 && seasonWatched === seasonTotal) { watchedHtml += seasonHtml; watchedCount++; } 
+                    else { activeHtml += seasonHtml; }
+                });
+
+                let contentHtml = '';
+                if (watchedCount > 0) { contentHtml += `<details class="watched-seasons-spoiler"><summary>Просмотренные сезоны (${watchedCount})</summary><div class="watched-seasons-wrapper">${watchedHtml}</div></details>`; }
+                contentHtml += activeHtml;
+                const totalPercent = totalEpisodes > 0 ? Math.round((watchedEpisodes / totalEpisodes) * 100) : 0;
+
+                card.innerHTML = `<div class="series-header"><div class="series-info" onclick="toggleCard('${item.id}', '${type}')"><span class="arrow">▼</span><strong class="series-title-text" title="${escapeHtml(item.title)}">${newBadge}${escapeHtml(item.title)}</strong> <span class="series-progress-badge">${totalPercent}% (${watchedEpisodes}/${totalEpisodes})</span></div><div class="series-actions">${quickAddHtml}${linksHtml}<button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', '${type}')">✏️</button><button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', '${type}')">✖</button></div></div><div class="series-content"><div class="series-content-layout">${itemPreviewHtml}<div class="seasons-wrapper">${contentHtml}</div></div></div>`;
+            } 
+            // Строитель для Фильмов (очень простой)
+            else if (type === 'movies') {
+                let contentHtml = `<p style="color: var(--c-text); font-size: 0.9em; margin: 0;">В этой карточке только базовая информация.</p>`;
+                card.innerHTML = `<div class="series-header"><div class="series-info" onclick="toggleCard('${item.id}', 'movies')"><span class="arrow">▼</span><strong class="series-title-text" title="${escapeHtml(item.title)}">${newBadge}${escapeHtml(item.title)}</strong></div><div class="series-actions">${linksHtml}<button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'movies')">✏️</button><button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'movies')">✖</button></div></div><div class="series-content"><div class="series-content-layout">${itemPreviewHtml}<div class="seasons-wrapper">${contentHtml}</div></div></div>`;
+            }
+            // Строитель для Аниме
+            else if (type === 'anime') {
+                let quickAddHtml = '';
+                let episodesHtml = '';
+                let epsText = '';
+                let formatBadge = '';
+                let searchBtnHtml = `<button class="btn-action btn-info-outline" onclick="searchAnime(event, '${item.id}')" title="Найти в интернете">🔍</button>`;
+
+                // Добавляем красивую цветную метку формата (ФИЛЬМ, OVA и т.д.)
+                if (item.animeFormat && item.animeFormat !== 'tv' && item.animeFormat !== '') {
+                    let fmt = item.animeFormat.toUpperCase();
+                    if (fmt === 'MOVIE') fmt = 'ФИЛЬМ';
+                    formatBadge = `<span style="background: var(--btn-link); color: var(--c-background); padding: 2px 8px; border-radius: 4px; font-size: 0.75em; margin-right: 10px; font-weight: bold; vertical-align: middle; clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));">${fmt}</span>`;
+                } else if (item.isFeatureFilm) {
+                    formatBadge = `<span style="background: var(--btn-link); color: var(--c-background); padding: 2px 8px; border-radius: 4px; font-size: 0.75em; margin-right: 10px; font-weight: bold; vertical-align: middle; clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));">${fmt}</span>`;
+                }
+
+                // Строим кубики только для сериалов, не для фильмов
+                if (!item.isFeatureFilm) {
+                    const watchedCount = item.episodes ? item.episodes.filter(Boolean).length : 0;
+                    epsText = item.episodesTotal > 0 ? `${watchedCount}/${item.episodesTotal}` : `${watchedCount}/?`;
+                    
+                    if (item.status !== 'completed' && item.status !== 'dropped') {
+                        quickAddHtml = `<button class="btn-action btn-add-ep" onclick="markNextAnimeEpisode(event, '${item.id}')">+1 Серия</button>`;
+                    }
+                    if (item.episodes && item.episodes.length > 0) {
+                        episodesHtml = `<div class="episodes-grid">` + 
+                            item.episodes.map((watched, epIdx) => `<div class="episode ${watched ? 'watched' : ''}" onclick="event.stopPropagation(); toggleAnimeEpisode('${item.id}', ${epIdx})">${epIdx + 1}</div>`).join('') + 
+                            `</div>`;
+                    }
+                }
+
+                let contentHtml = episodesHtml || '<p style="color: var(--c-text); font-size: 0.9em; margin: 0;">Режим полнометражного фильма.</p>';
+
+                card.innerHTML = `
+                <div class="series-header">
+                    <div class="series-info" onclick="toggleCard('${item.id}', 'anime')">
+                        <span class="arrow">▼</span>
+                        <strong class="series-title-text" title="${escapeHtml(item.title)}">${newBadge}${formatBadge}${escapeHtml(item.title)}</strong> 
+                        ${epsText ? `<span class="series-progress-badge" style="color:var(--anime-accent); border-color:var(--anime-accent)">Серии: ${epsText}</span>` : ''}
+                    </div>
+                    <div class="series-actions">
+                        ${quickAddHtml}
+                        ${searchBtnHtml}
+                        ${linksHtml}
+                        <button class="btn-action btn-edit" onclick="editItem(event, '${item.id}', 'anime')">✏️</button>
+                        <button class="btn-action btn-delete" onclick="deleteItem(event, '${item.id}', 'anime')">✖</button>
+                    </div>
+                </div>
+                <div class="series-content">
+                    <div class="series-content-layout">
+                        ${itemPreviewHtml}
+                        <div class="seasons-wrapper">${contentHtml}</div>
+                    </div>
+                </div>`;
+            }
+            return card;
+        }
+
+        // ГЛАВНАЯ ФУНКЦИЯ ПРОГРАММЫ. Она очищает экран и рисует все карточки заново
+        function render() {
+            const container = document.getElementById('seriesList');
+            container.innerHTML = ''; // Стираем всё, что было на экране
+            
+            const filterSelect = document.getElementById('statusFilter');
+            const filterState = filterSelect.value;
+            // Определяем, список какой вкладки будем рисовать
+            const targetList = (currentTab === 'series') ? appData.series : (currentTab === 'movies') ? appData.movies : (currentTab === 'anime') ? appData.anime : appData.cartoons;
+            
+            // Считаем сколько карточек в каждом статусе, чтобы написать цифры в выпадающем меню фильтра
+            const counts = { 'watching': 0, 'plan-to-watch': 0, 'completed': 0, 'on-hold': 0, 'dropped': 0 };
+            targetList.forEach(item => { if (counts[item.status] !== undefined) counts[item.status]++; });
+
+            Array.from(filterSelect.options).forEach(opt => {
+                opt.text = `${statusMapText[opt.value]} (${counts[opt.value]})`;
+            });
+
+            // Выбираем только те карточки, которые подходят под фильтр (например, только "Смотрю")
+            const itemsToRender = targetList.filter(item => item.status === filterState).map(item => ({ item, type: currentTab }));
+
+            // Если список пустой - пишем сообщение
+            if (itemsToRender.length === 0) { container.innerHTML = `<p style="text-align:center; color:var(--c-text); padding: 40px; border: 1px dashed var(--c-border-dark);">В этой категории пока ничего нет.</p>`; } 
+            else { 
+                // Если не пустой - по очереди строим каждую карточку и выводим на экран
+                itemsToRender.forEach(obj => { container.appendChild(createCard(obj.item, obj.type, filterState)); }); 
+            }
+
+            // В конце каждого действия сохраняем всё в память браузера, чтобы данные не пропали при закрытии страницы
+            localStorage.setItem('tvShowData', JSON.stringify(appData));
+        }
+
+        // Функция скачивает всю нашу базу в виде файла на компьютер
+        function saveJSON() { const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'series_progress.json'; a.click(); }
+        
+        // Показываем кнопку "наверх", если пользователь сильно промотал страницу вниз
+        const scrollTopBtn = document.getElementById('scrollToTopBtn');
+        window.addEventListener('scroll', () => { if (window.scrollY > 300) scrollTopBtn.classList.add('visible'); else scrollTopBtn.classList.remove('visible'); });
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        // Запускаем программу: выбираем нужную вкладку и рисуем ее
+        switchTab(currentTab);
+    </script>
+</body>
+</html>
 
             /* Эти переменные используют цвета выше для конкретных кнопок и фонов */
             --bg: var(--c-background);          
