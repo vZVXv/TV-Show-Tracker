@@ -446,7 +446,7 @@
 </head>
 <body>
 
-    <h1 title="↑ ↑ ↓ ↓ ← → ← → B A">TV Show Tracker <span class="app-version">v2.1.0</span></h1>
+    <h1 title="↑ ↑ ↓ ↓ ← → ← → B A">TV Show Tracker <span class="app-version">v2.1.7</span></h1>
 
     <div class="tabs">
         <button class="tab-btn active" id="tab-series" onclick="switchTab('series')">Сериалы</button>
@@ -1248,7 +1248,13 @@
             // Генерируем HTML для общего превью слева, если ссылка указана
             let itemPreviewHtml = '';
             if (item.previewUrl) {
-                itemPreviewHtml = `<div class="common-preview"><img src="${escapeHtml(item.previewUrl)}" alt="Превью" onerror="this.style.display='none'"></div>`;
+                // ИЗОБРАЖЕНИЕ РЕНДЕРИТСЯ ТОЛЬКО ЕСЛИ КАРТОЧКА ОТКРЫТА (item.isOpen === true)
+                if (item.isOpen) {
+                    itemPreviewHtml = `<div class="common-preview"><img src="${escapeHtml(item.previewUrl)}" alt="Превью" onerror="this.style.display='none'"></div>`;
+                } else {
+                    // Рендерим пустой блок, чтобы сохранить структуру и отступы, но предотвратить загрузку картинки
+                    itemPreviewHtml = `<div class="common-preview"></div>`;
+                }
             }
 
             // Строитель для Сериалов и Мультиков
@@ -1378,7 +1384,15 @@
         }
 
         // Функция скачивает всю нашу базу в виде файла на компьютер
-        function saveJSON() { const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'series_progress.json'; a.click(); }
+        function saveJSON() { 
+            const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' }); 
+            const a = document.createElement('a'); 
+            a.href = URL.createObjectURL(blob); 
+            a.download = 'series_progress.json'; 
+            document.body.appendChild(a); // ФИКС: Обязательно добавляем в DOM для поддержки всех браузеров
+            a.click(); 
+            document.body.removeChild(a); // Сразу удаляем
+        }
         
         // Показываем кнопку "наверх", если пользователь сильно промотал страницу вниз
         const scrollTopBtn = document.getElementById('scrollToTopBtn');
